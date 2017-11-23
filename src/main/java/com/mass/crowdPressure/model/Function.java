@@ -1,5 +1,5 @@
 package com.mass.crowdPressure.model;
 
-public class Position {
+public class Function {
 
 }
