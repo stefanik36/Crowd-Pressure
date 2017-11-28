@@ -3,9 +3,9 @@ package com.mass.crowdPressure.builders;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mass.crowdPressure.model.Position;
 import com.mass.crowdPressure.model.pedestrian.Pedestrian;
 import com.mass.crowdPressure.model.pedestrian.PedestrianInformation;
-import com.mass.crowdPressure.model.pedestrian.Position;
 
 public class PedestriansBuilder {
 

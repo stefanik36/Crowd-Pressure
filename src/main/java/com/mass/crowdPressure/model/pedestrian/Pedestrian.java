@@ -2,15 +2,16 @@ package com.mass.crowdPressure.model.pedestrian;
 
 import com.mass.crowdPressure.calculators.CollisionDistance;
 import com.mass.crowdPressure.calculators.DestinationDistance;
+import com.mass.crowdPressure.calculators.PedestrianCalculator;
 import com.mass.crowdPressure.model.Environment;
-import com.mass.crowdPressure.model.Function;
+import com.mass.crowdPressure.model.FunctionValue;
 
 public class Pedestrian {
 
 	private PedestrianInformation pedestrianInformation;
 	private Environment environment;
-	private CollisionDistance collisionDistance;
-	private DestinationDistance destinationDistance;
+
+	private PedestrianCalculator pedestrianCalculator;
 
 	private double desireDirection;
 	private double desireVelocity;
@@ -19,17 +20,15 @@ public class Pedestrian {
 	public Pedestrian(PedestrianInformation pedestrianInformation, Environment environment) {
 		this.environment = environment;
 		this.pedestrianInformation = pedestrianInformation;
-		collisionDistance = new CollisionDistance(pedestrianInformation, environment);
-		destinationDistance = new DestinationDistance();
+
+		this.pedestrianCalculator = new PedestrianCalculator(pedestrianInformation, environment);
 	}
 
 	public void prepareNextStep() {
-//		Function collistionDistanceFunction = collisionDistance.getCollistionDistanceFunction();
-//		Function distanceFunction = collisionDistance.getCollistionDistanceFunction();
-//		
-//		desireDirection = minimalizationOfDistance. (collistionDistance)
-				//calculate  desireDirection
-				//calculate desireVelocity
+		desireDirection = pedestrianCalculator.getDesireDirection();
+		desireVelocity = pedestrianCalculator.getDesireVelocity();
+		
+		
 		
 	}
 

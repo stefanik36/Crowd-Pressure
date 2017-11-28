@@ -1,4 +1,7 @@
 package com.mass.crowdPressure.model.pedestrian;
+
+import com.mass.crowdPressure.model.Position;
+
 /*
  * -all obstacles
  * -all other pedestrains
