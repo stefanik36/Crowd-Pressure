@@ -1,10 +1,7 @@
 package com.mass.crowdPressure.model.pedestrian;
 
-import com.mass.crowdPressure.calculators.CollisionDistance;
-import com.mass.crowdPressure.calculators.DestinationDistance;
 import com.mass.crowdPressure.calculators.PedestrianCalculator;
 import com.mass.crowdPressure.model.Environment;
-import com.mass.crowdPressure.model.FunctionValue;
 
 public class Pedestrian {
 
@@ -39,7 +36,6 @@ public class Pedestrian {
 		
 	}
 
-	// gettesrs and setters
 	public PedestrianInformation getPedestrianInformation() {
 		return pedestrianInformation;
 	}
