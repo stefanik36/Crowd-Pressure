@@ -1,5 +1,10 @@
 package com.mass.crowdPressure.model.pedestrian;
 
+import java.util.function.BiFunction;
+
+import com.app.COD;
+import com.app.CODFactory;
+import com.mass.crowdPressure.calculators.PedestrianCalculator;
 import com.mass.crowdPressure.model.Position;
 
 /*
@@ -43,20 +48,23 @@ import com.mass.crowdPressure.model.Position;
  */
 public class PedestrianInformation {
 
+//	private final static COD cod = CODFactory.setLevelOfDepression(2);
 	private static final double MASS_RADIUS_RATIO = 320.0;
 	private int id;
-	private double mass; 					// [kg]
-	private double radius; 					// [m]
-	private double comfortableSpeed;		// [m/sec]
-	private double visionAngle; 			// [degrees]
-	private double horizontDistance; 		// [m]
-	private double relaxationTime; 			// [sec]
+	private double mass; // [kg]
+	private double radius; // [m]
+	private double comfortableSpeed; // [m/sec]
+	private double visionAngle; // [degrees]
+	private double horizontDistance; // [m]
+	private double relaxationTime; // [sec]
 
-	private double visionCenter; 
-	private Position destinationPoint; 
-	private Position position; 
-	private double desiredDirection; 
-	private double desiredSpeed; 
+	private double visionCenter;
+	private double destinationAngle;
+	private Position destinationPoint;
+	private Position position;
+	private Position nextPosition;
+	private double desiredDirection;
+	private double desiredSpeed;
 
 	public PedestrianInformation(int id, double mass, double comfortableSpeed, double visionAngle,
 			double horizontDistance, double relaxationTime, double visionCenter, Position destinationPoint,
@@ -72,14 +80,15 @@ public class PedestrianInformation {
 		this.relaxationTime = relaxationTime;
 		this.destinationPoint = destinationPoint;
 		this.position = position;
+		this.nextPosition = position;
+		this.destinationAngle = PedestrianCalculator.calculateDestinationAngle.apply(nextPosition, destinationPoint);
+//		cod.i("DESTINATION ANGLE",destinationAngle);
 	}
-
 	
+	public void setDestinationAngle(double destinationAngle) {
+		this.destinationAngle = destinationAngle; 
+	}
 	
-	
-	
-	
-
 	// gettesrs and setters
 	public double getMass() {
 		return mass;
@@ -87,14 +96,11 @@ public class PedestrianInformation {
 
 	public void setMass(double mass) {
 		this.mass = mass;
+		this.radius = mass / MASS_RADIUS_RATIO;
 	}
 
 	public double getRadius() {
 		return radius;
-	}
-
-	public void setRadius(double radius) {
-		this.radius = radius;
 	}
 
 	public double getComfortableSpeed() {
@@ -171,6 +177,17 @@ public class PedestrianInformation {
 
 	public int getId() {
 		return id;
+	}
+
+	public double getDestinationAngle() {
+		return destinationAngle;
+	}
+	public Position getNextPosition() {
+		return nextPosition;
+	}
+
+	public void setNextPosition(Position nextPosition) {
+		this.nextPosition = nextPosition;
 	}
 
 }

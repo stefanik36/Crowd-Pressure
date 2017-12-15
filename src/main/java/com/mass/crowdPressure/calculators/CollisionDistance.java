@@ -1,5 +1,6 @@
 package com.mass.crowdPressure.calculators;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.OptionalDouble;
 import java.util.function.BiFunction;
@@ -26,19 +27,30 @@ public class CollisionDistance {
 		Position pedestrianPosition = pedestrianInformation.getPosition();
 
 		Double minimalDistance = pedestrianInformation.getHorizontDistance();
-		cod.i(environment.getPedestrians().stream().map(p -> p.getPedestrianInformation()).collect(Collectors.toList()));
+
+		if (environment != null) {
+			minimalDistance = neighboursDistance(environment, pedestrianCrossPoints, pedestrianPosition,
+					minimalDistance);
+		}
+		// TODO walls
+
+		return minimalDistance;
+	}
+
+	private Double neighboursDistance(Environment environment, PedestrianCrossPoints pedestrianCrossPoints,
+			Position pedestrianPosition, Double minimalDistance) {
+		// TODO neighbor pedestrian velocity
 		for (Pedestrian p : environment.getPedestrians()) {
-			cod.i(" :" + alpha, minimalDistance);
 			List<Position> crossPoints = pedestrianCrossPoints.getNeighborAllCrossPoints(p.getPedestrianInformation());
+
 			OptionalDouble neighborMin = crossPoints.stream().mapToDouble(cp -> distance.apply(pedestrianPosition, cp))
 					.min();
 			if ((neighborMin.isPresent()) && (neighborMin.getAsDouble() < minimalDistance)) {
 				minimalDistance = neighborMin.getAsDouble();
 			}
+			// cod.i(p.getPedestrianInformation().getId() + " :" + alpha,
+			// Arrays.asList(minimalDistance, crossPoints));
 		}
-
-		// TODO walls
-
 		return minimalDistance;
 	}
 

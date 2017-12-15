@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import com.app.COD;
 import com.app.CODFactory;
+import com.mass.crowdPressure.exceptions.AngleOutOfRangeException;
 import com.mass.crowdPressure.model.Environment;
 import com.mass.crowdPressure.model.FunctionValue;
 import com.mass.crowdPressure.model.Position;
@@ -33,11 +34,55 @@ public class PedestrianCalculatorTest {
 						environment)));
 
 		PedestrianInformation pedestrianInformation = new PedestrianInformation(0, 1, 1, 0.24, 10, 1, 0.25,
-				new Position(1, 1), new Position(6, 5));
+				new Position(14, 11), new Position(6, 5));
 		PedestrianCalculator pc = new PedestrianCalculator(pedestrianInformation, environment);
 
 		FunctionValue<Double, Double> ddfv = pc.getDestinationDistanceFunctionValues();
-		
+		// cod.i(ddfv);
 	}
 
+	@Test
+	public void getDesireDirectionTest() {
+
+		List<Pedestrian> pedestrians = new ArrayList<>();
+		Environment environment = new Environment(pedestrians, null);
+		pedestrians.addAll(Arrays.asList(new Pedestrian(
+				new PedestrianInformation(1, 640, 1, 1, 1, 1, 1, new Position(1, 1), new Position(11, 8)), environment),
+				new Pedestrian(
+						new PedestrianInformation(2, 640, 1, 1, 1, 1, 1, new Position(1, 1), new Position(7, 15)),
+						environment)));
+
+		PedestrianInformation pedestrianInformation = new PedestrianInformation(0, 1, 1, 0.24, 10, 1, 0.25,
+				new Position(14, 17), new Position(6, 5));
+		// cod.i(pedestrianInformation);
+		PedestrianCalculator pc = new PedestrianCalculator(pedestrianInformation, environment);
+
+		double dd = pc.getDesireDirection();
+		// cod.i(dd);
+		assertEquals(0.310, dd, 0.01);
+
+	}
+
+	@Test
+	public void getDesireDirectionTest2() {
+
+		List<Pedestrian> pedestrians = new ArrayList<>();
+		Environment environment = new Environment(pedestrians, null);
+		pedestrians.addAll(Arrays.asList(new Pedestrian(
+				new PedestrianInformation(1, 640, 1, 1, 1, 1, 1, new Position(1, 1), new Position(11, 8)), environment),
+				new Pedestrian(
+						new PedestrianInformation(2, 640, 1, 1, 1, 1, 1, new Position(1, 1), new Position(7, 15)),
+						environment)));
+
+		PedestrianInformation pedestrianInformation = new PedestrianInformation(0, 1, 1, 0.24, 10, 1, 0.25,
+				new Position(14, 11), new Position(6, 5));
+		// cod.i(pedestrianInformation);
+		PedestrianCalculator pc = new PedestrianCalculator(pedestrianInformation, environment);
+
+		double dd = pc.getDesireDirection();
+		// cod.i(dd);
+
+	}
+
+	
 }

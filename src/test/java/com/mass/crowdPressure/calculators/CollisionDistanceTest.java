@@ -17,6 +17,7 @@ import static org.mockito.Mockito.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CollisionDistanceTest {
 	private final static COD cod = CODFactory.setLevelOfDepression(2);
@@ -32,7 +33,7 @@ public class CollisionDistanceTest {
 		PedestrianInformation pedestrianInformation = new PedestrianInformation(0, 1, 1, 0.24, 5, 1, 0.25, new Position(1, 1), new Position(6, 5));
 		
 		CollisionDistance cd = new CollisionDistance();
-
+//		cod.i(environment.getPedestrians().stream().map(p -> p.getPedestrianInformation()).collect(Collectors.toList()));
 		double result = cd.getCollistionDistanceValue(environment, 0.25, pedestrianInformation);
 
 		// when(pedestrianInformation.getVisionCenter()).thenReturn(43.0);
