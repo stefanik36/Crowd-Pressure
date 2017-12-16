@@ -10,19 +10,35 @@ import com.app.COD;
 import com.app.CODFactory;
 import com.mass.crowdPressure.model.Position;
 import com.mass.crowdPressure.model.pedestrian.PedestrianInformation;
+import com.mass.crowdPressure.model.pedestrian.VariableInformation;
+import com.mass.crowdPressure.model.pedestrian.StaticInformation;
 
 public class PedestrianCrossPointsTest {
 	private final static COD cod = CODFactory.setLevelOfDepression(2);
 
 	@Test
 	public void calculateCrossPointUnderSqrtTest() {
-		PedestrianInformation pedestrianInformation = new PedestrianInformation(0, 5, 5, 0.2, 5, 5, 0.24,
-				new Position(100, 100), new Position(6, 5));
-		PedestrianInformation neighborInformation = new PedestrianInformation(1, 640, 5, 0.2, 5, 5, 0.24,
-				new Position(100, 100), new Position(11, 8));
+		
+		StaticInformation staticInformation0 = new StaticInformation(0, 5, 5, 0.24, 5, 5);
+		VariableInformation variableInformation0 = new VariableInformation(0.2, new Position(100, 100),
+				new Position(6, 5));
+		PedestrianInformation main = new PedestrianInformation(staticInformation0, variableInformation0);
+		
+		StaticInformation staticInformation1 = new StaticInformation(1, 640, 5, 0.24, 5, 5);
+		VariableInformation variableInformation1 = new VariableInformation(0.2, new Position(100, 100),
+				new Position(11, 8));
+		PedestrianInformation neighborInformation = new PedestrianInformation(staticInformation1, variableInformation1);
+		
+//		
+//		
+//
+//		PedestrianInformation pedestrianInformation = new PedestrianInformation(0, 5, 5, 0.2, 5, 5, 0.24,
+//				new Position(100, 100), new Position(6, 5));
+//		PedestrianInformation neighborInformation = new PedestrianInformation(1, 640, 5, 0.2, 5, 5, 0.24,
+//				new Position(100, 100), new Position(11, 8));
 		// cod.i(pedestrianInformation);
 		// cod.i(neighborInformation);
-		PedestrianCrossPoints pcp = new PedestrianCrossPoints(0.25, pedestrianInformation);
+		PedestrianCrossPoints pcp = new PedestrianCrossPoints(0.25, main);
 
 		double result = pcp.calculateCrossPointCoordUnderSqrt(neighborInformation);
 //		cod.i(result);
@@ -32,13 +48,25 @@ public class PedestrianCrossPointsTest {
 
 	@Test
 	public void calculateNeighborCrossPointsTest() {
-		PedestrianInformation pedestrianInformation = new PedestrianInformation(0, 5, 5, 0.2, 5, 5, 0.24,
-				new Position(100, 100), new Position(6, 5));
-		PedestrianInformation neighborInformation = new PedestrianInformation(1, 640, 5, 0.2, 5, 5, 0.24,
-				new Position(100, 100), new Position(11, 8));
+		StaticInformation staticInformation0 = new StaticInformation(0, 5, 5, 0.24, 5, 5);
+		VariableInformation variableInformation0 = new VariableInformation(0.2, new Position(100, 100),
+				new Position(6, 5));
+		PedestrianInformation main = new PedestrianInformation(staticInformation0, variableInformation0);
+		
+		StaticInformation staticInformation1 = new StaticInformation(1, 640, 5, 0.24, 5, 5);
+		VariableInformation variableInformation1 = new VariableInformation(0.2, new Position(100, 100),
+				new Position(11, 8));
+		PedestrianInformation neighborInformation = new PedestrianInformation(staticInformation1, variableInformation1);
+		
+		
+		
+//		PedestrianInformation pedestrianInformation = new PedestrianInformation(0, 5, 5, 0.2, 5, 5, 0.24,
+//				new Position(100, 100), new Position(6, 5));
+//		PedestrianInformation neighborInformation = new PedestrianInformation(1, 640, 5, 0.2, 5, 5, 0.24,
+//				new Position(100, 100), new Position(11, 8));
 		// cod.i(pedestrianInformation);
 		// cod.i(neighborInformation);
-		PedestrianCrossPoints pcp = new PedestrianCrossPoints(0.25, pedestrianInformation);
+		PedestrianCrossPoints pcp = new PedestrianCrossPoints(0.25, main);
 
 		List<Position> result = pcp.getNeighborAllCrossPoints(neighborInformation);
 //		 cod.i(result);

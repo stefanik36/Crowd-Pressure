@@ -17,7 +17,7 @@ public class Engine {
 	}
 	
 	public void start() {
-		int i = 100;
+		int i = 2;
 		while(i>0) {
 			try {
 				nextState();
@@ -36,6 +36,10 @@ public class Engine {
 		
 		for(Pedestrian p : environment.getPedestrians()) {  //i tu też
 			p.nextStep();
+
+			System.out.println(p.getPedestrianInformation().getVariableInformation().getDesiredDirection()
+					+ ":(" + p.getPedestrianInformation().getVariableInformation().getPosition().getX() + ","
+					+ p.getPedestrianInformation().getVariableInformation().getPosition().getY() + ")");
 		}
 		//te tu ^ też
 	}

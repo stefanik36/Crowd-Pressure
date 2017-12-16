@@ -17,8 +17,8 @@ public class PedestrianCrossPoints {
 
 	public PedestrianCrossPoints(Double alpha, PedestrianInformation pedestrianInformation) {
 		super();
-		xi = pedestrianInformation.getPosition().getX();
-		yi = pedestrianInformation.getPosition().getY();
+		xi = pedestrianInformation.getVariableInformation().getPosition().getX();
+		yi = pedestrianInformation.getVariableInformation().getPosition().getY();
 		tanA = Math.tan(alpha * Math.PI);
 		B = (yi - tanA * xi);
 	}
@@ -52,8 +52,8 @@ public class PedestrianCrossPoints {
 	}
 
 	double calculateNeighborCrossPointCoord(Double sqrt, PedestrianInformation neighborInformation) {
-		double xn = neighborInformation.getPosition().getX();
-		double yn = neighborInformation.getPosition().getY();
+		double xn = neighborInformation.getVariableInformation().getPosition().getX();
+		double yn = neighborInformation.getVariableInformation().getPosition().getY();
 		double result = sqrt;
 		result += xn;
 		result += tanA * yn;
@@ -63,9 +63,9 @@ public class PedestrianCrossPoints {
 	}
 
 	double calculateCrossPointCoordUnderSqrt(PedestrianInformation neighborInformation) {
-		double xn = neighborInformation.getPosition().getX();
-		double yn = neighborInformation.getPosition().getY();
-		double rn = neighborInformation.getRadius();
+		double xn = neighborInformation.getVariableInformation().getPosition().getX();
+		double yn = neighborInformation.getVariableInformation().getPosition().getY();
+		double rn = neighborInformation.getStaticInformation().getRadius();
 
 		double result = 0;
 		result += -xn * xn * tanA * tanA;
