@@ -14,11 +14,11 @@ import com.mass.crowdPressure.model.pedestrian.StaticInformation;
 public class PedestriansFactory {
 
 	private static final double DEFAULT_PEDESTRIAN_MASS = 360.0;
-	private static final double DEFAULT_PEDESTRIAN_COMFORTABLE_SPEED = 5;
+	private static final double DEFAULT_PEDESTRIAN_COMFORTABLE_SPEED = 0.1;
 	private static final double DEFAULT_PEDESTRIAN_VISION_ANGLE = 0.4;
 	private static final double DEFAULT_PEDESTRIAN_HORIZON_DISTANCE = 10;
 	private static final double DEFAULT_PEDESTRIAN_RELAXATION_TIME = 1;
-
+	private static int ID = 0;
 	public void addPedestrians(Environment environment, Symulation sym) {
 		if (sym.equals(Symulation.SYM_P1_W1)) {
 			addPedestrians1(environment, 1);
@@ -33,8 +33,16 @@ public class PedestriansFactory {
 		Position position = new Position(0, 0);
 		for (int id = 0; id < initNoPedestrians; id++) {
 			environment.getPedestrians()
-					.add(createPedestrian(id, environment, visionCenter, destinationPoint, position));
+					.add(createPedestrian(ID++, environment, visionCenter, destinationPoint, position));
 		}
+	}
+
+	public void addPedestrian(Environment environment, double x, double y){
+		double visionCenter = 0.25;
+		Position destinationPoint = new Position(5, 5);
+		Position position = new Position(x, y);
+			environment.getPedestrians()
+					.add(createPedestrian(ID++, environment, visionCenter, destinationPoint, position));
 	}
 
 	public void addPedestrians2(Environment environment, int initNoPedestrians) {

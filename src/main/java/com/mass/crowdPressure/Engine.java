@@ -35,9 +35,9 @@ public class Engine {
 		for(Pedestrian p : environment.getPedestrians()) {  //i tu też
 			p.nextStep();
 
-			System.out.println(p.getPedestrianInformation().getVariableInformation().getDesiredDirection()
-					+ ":(" + p.getPedestrianInformation().getVariableInformation().getPosition().getX() + ","
-					+ p.getPedestrianInformation().getVariableInformation().getPosition().getY() + ")");
+//			System.out.println(p.getPedestrianInformation().getVariableInformation().getDesiredDirection()
+//					+ ":(" + p.getPedestrianInformation().getVariableInformation().getPosition().getX() + ","
+//					+ p.getPedestrianInformation().getVariableInformation().getPosition().getY() + ")");
 		}
 		//te tu ^ też
 	}
