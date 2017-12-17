@@ -5,43 +5,38 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map.Entry;
-import java.util.function.BiFunction;
 
 import com.app.COD;
 import com.app.CODFactory;
 import com.mass.crowdPressure.exceptions.AngleOutOfRangeException;
 import com.mass.crowdPressure.model.DirectionInfo;
 import com.mass.crowdPressure.model.Environment;
-import com.mass.crowdPressure.model.FunctionValue;
 import com.mass.crowdPressure.model.Position;
+import com.mass.crowdPressure.model.Vector;
+import com.mass.crowdPressure.model.VectorXY;
 import com.mass.crowdPressure.model.pedestrian.PedestrianInformation;
 
 public class PedestrianCalculator {
 	private final static COD cod = CODFactory.setLevelOfDepression(2);
 	private PedestrianInformation pedestrianInformation;
-	private Environment environment;
-	private DestinationDistance destinationDistance;
-	private CollisionDistance collisionDistance;
+	private DestinationDistance destinationDistanceCal;
+	private CollisionDistance collisionDistanceCal;
+	private Force forceCal;
 
 	public PedestrianCalculator(PedestrianInformation pedestrianInformation, Environment environment) {
 		this.pedestrianInformation = pedestrianInformation;
-		this.environment = environment;
-		this.destinationDistance = new DestinationDistance();
-		this.collisionDistance = new CollisionDistance();
+		this.destinationDistanceCal = new DestinationDistance();
+		this.collisionDistanceCal = new CollisionDistance(environment);
+		this.forceCal = new Force(environment);
 	}
 
 	public DirectionInfo getDirectionInfo() {
-//		FunctionValue<Double, Double> destinationDistanceFunctionValues = getDestinationDistanceFunctionValues();
-//		return getKeyOfMinimum(destinationDistanceFunctionValues);
 		List<DirectionInfo> directionInfos = getDestinationDistanceFunctionValues();
 		return getMinimum(directionInfos);
 	}
 
 	List<DirectionInfo> getDestinationDistanceFunctionValues() {
 		List<DirectionInfo> directionInfos = new ArrayList<>();
-
-//		FunctionValue<Double, Double> destinationDistanceFunctionValues = new FunctionValue<>();
 		double start = pedestrianInformation.getVariableInformation().getVisionCenter()
 				- pedestrianInformation.getStaticInformation().getVisionAngle();
 		double step = Configuration.ANGLE_GRANULATION;
@@ -50,17 +45,13 @@ public class PedestrianCalculator {
 		double alpha;
 		for (Double i = start; i <= end; i = i + step) {
 			alpha = getAlpha(i);
-
-//			cod.i(alpha);
-			double collisionDistanceValue = collisionDistance.getCollistionDistanceValue(environment, alpha,
+			double collisionDistanceValue = collisionDistanceCal.getCollistionDistanceValue(alpha,
 					pedestrianInformation);
-			double destinationDistanceValue = destinationDistance.getDestinationDistanceFunction(alpha,
+			double destinationDistanceValue = destinationDistanceCal.getDestinationDistanceFunction(alpha,
 					pedestrianInformation.getVariableInformation().getDestinationAngle(),
 					pedestrianInformation.getStaticInformation().getHorizontDistance(), collisionDistanceValue);
-//			destinationDistanceFunctionValues.put(alpha, destinationDistanceValue);
 			directionInfos.add(new DirectionInfo(alpha, collisionDistanceValue, destinationDistanceValue));
 		}
-//		return destinationDistanceFunctionValues;
 		return directionInfos;
 	}
 
@@ -77,61 +68,70 @@ public class PedestrianCalculator {
 		return alpha;
 	}
 
-//	public double getKeyOfMinimum(FunctionValue<Double, Double> distanceFunction) {
-//		Entry<Double, Double> min = Collections.min(distanceFunction.getMap().entrySet(),
-//				Comparator.comparingDouble(Entry::getValue));
-//		return min.getKey();
-//	}
-
 	public DirectionInfo getMinimum(List<DirectionInfo> directionInfos) {
 		DirectionInfo min = Collections.min(directionInfos, new Comparator<DirectionInfo>() {
-
 			@Override
 			public int compare(DirectionInfo di1, DirectionInfo di2) {
 				return di1.getDestinationDistance().compareTo(di2.getDestinationDistance());
 			}
-
 		});
-
 		return min;
 	}
 
 	public Position getNextPosition() throws AngleOutOfRangeException {
 		double desiredDirection = pedestrianInformation.getVariableInformation().getDesiredDirection();
-		double desiredSpeed = pedestrianInformation.getVariableInformation().getDesiredSpeed();
+		double desiredSpeed = pedestrianInformation.getVariableInformation().getDesiredSpeed().getValue();
 		double x = pedestrianInformation.getVariableInformation().getPosition().getX();
 		double y = pedestrianInformation.getVariableInformation().getPosition().getY();
-		double pi = Math.PI;
-		// cod.i("bef: ",pedestrianInformation.getVariableInformation().getPosition());
 
-//		cod.i(desiredDirection);
-		double alpha = desiredDirection * pi;
-		if (desiredDirection < 0.5) {
-			return new Position(x + desiredSpeed * Math.cos(alpha), y + desiredSpeed * Math.sin(alpha));
-		} else if (desiredDirection == 0.5) {
-			return new Position(x, y + desiredSpeed);
-		} else if (desiredDirection <= 1.0) {
-			return new Position(x - desiredSpeed * Math.cos(pi - alpha), y + desiredSpeed * Math.sin(pi - alpha));
-		} else if (desiredDirection <= 1.5) {
-			return new Position(x - desiredSpeed * Math.cos(alpha - pi), y - desiredSpeed * Math.sin(alpha - pi));
-		} else if (desiredDirection == 1.5) {
-			return new Position(x, y - desiredSpeed);
-		} else if (desiredDirection < 2.0) {
-			return new Position(x + desiredSpeed * Math.cos(2 * pi - alpha),
-					y - desiredSpeed * Math.sin(2 * pi - alpha));
-		}
+		VectorXY shift = GemoetricCalculator.changeVector(new Vector(desiredDirection, desiredSpeed));
 
-		throw new AngleOutOfRangeException();
+		return new Position(x + shift.getX(), y + shift.getY());
+
 	}
 
-	public double getDesireVelocity() {
-		// TODO Auto-generated method stub
+	public Vector getDesireVelocity(double collisionDistance, double alpha) {
 		double result = pedestrianInformation.getStaticInformation().getComfortableSpeed();
+		Vector v = new Vector(alpha, Arrays.asList(goalVelocity(), collisionVelocity(collisionDistance), result)
+				.stream().mapToDouble(d -> d).min().getAsDouble());
+		return v;
+	}
+
+	private double collisionVelocity(double collisionDistance) {
+		return collisionDistance / pedestrianInformation.getStaticInformation().getRelaxationTime();
+	}
+
+	private double goalVelocity() {
 		double distance = GemoetricCalculator.distance.apply(
 				pedestrianInformation.getVariableInformation().getPosition(),
 				pedestrianInformation.getVariableInformation().getDestinationPoint());
-		result = result < distance ? result : distance;
-		return result;
+		return distance / pedestrianInformation.getStaticInformation().getRelaxationTime();
+	}
+
+	public Vector getDesireAcceleration(Vector vdes) throws AngleOutOfRangeException {
+		Vector acceleration = GemoetricCalculator.subtractVectors(vdes,
+				pedestrianInformation.getVariableInformation().getDesiredSpeed());
+
+		Vector nForce = getForcesSum(forceCal.getForceNeighbours(pedestrianInformation));
+		nForce.setValue(nForce.getValue() / pedestrianInformation.getStaticInformation().getMass());
+
+		Vector wForce = getForcesSum(forceCal.getForceWalls(pedestrianInformation));
+		wForce.setValue(wForce.getValue() / pedestrianInformation.getStaticInformation().getMass());
+
+		acceleration
+				.setValue(acceleration.getValue() / pedestrianInformation.getStaticInformation().getRelaxationTime());
+		acceleration = GemoetricCalculator.addVectors(acceleration, nForce);
+		acceleration = GemoetricCalculator.addVectors(acceleration, wForce);
+		return acceleration;
+	}
+
+	private Vector getForcesSum(List<Vector> forces) throws AngleOutOfRangeException {
+		Vector force = new Vector(0.0, 0.0);
+		cod.i(forces);
+		for (Vector f : forces) {
+			force = GemoetricCalculator.addVectors(force, f);
+		}
+		return force;
 	}
 
 }

@@ -17,9 +17,13 @@ import com.mass.crowdPressure.model.pedestrian.PedestrianInformation;
 public class CollisionDistance {
 
 	private final static COD cod = CODFactory.setLevelOfDepression(2);
+	private Environment environment;
 
-	public double getCollistionDistanceValue(Environment environment, Double alpha,
-			PedestrianInformation pedestrianInformation) {
+	public CollisionDistance(Environment environment) {
+		this.environment = environment;
+	}
+
+	public double getCollistionDistanceValue(Double alpha, PedestrianInformation pedestrianInformation) {
 		Double minimalDistance = pedestrianInformation.getStaticInformation().getHorizontDistance();
 		int id = pedestrianInformation.getStaticInformation().getId();
 		if (environment == null) {
@@ -32,32 +36,31 @@ public class CollisionDistance {
 
 		Position pedestrianPosition = pedestrianInformation.getVariableInformation().getPosition();
 
-		minimalDistance = neighboursDistance(environment, pedestrianCrossPoints, pedestrianPosition, minimalDistance,
-				id);
-//		System.out.print("alpha: " + alpha + "  ");
-		minimalDistance = getWallDistance(environment, wallCrossPoint, pedestrianPosition, minimalDistance);
+		minimalDistance = neighboursDistance(pedestrianCrossPoints, pedestrianPosition, minimalDistance, id);
+		// System.out.print("alpha: " + alpha + " ");
+		minimalDistance = getWallDistance(wallCrossPoint, pedestrianPosition, minimalDistance);
 		// System.out.println("" + alpha + ": "+minimalDistance);
 
 		return minimalDistance;
 	}
 
-	private double getWallDistance(Environment environment, WallCrossPoint wallCrossPoint, Position pedestrianPosition,
-			Double minimalDistance) {
+	private double getWallDistance(WallCrossPoint wallCrossPoint, Position pedestrianPosition, Double minimalDistance) {
 		for (Wall w : environment.getMap().getWalls()) {
 			List<Position> crossPoints = wallCrossPoint.getWallCrossPoints(w);
 			minimalDistance = getMinDistance(pedestrianPosition, minimalDistance, crossPoints);
 
-//			if (!crossPoints.isEmpty()) {
-//				cod.i("cp md pp", Arrays.asList(crossPoints.get(0), minimalDistance, pedestrianPosition));
-//			} else {
-//				cod.i("cp md pp", Arrays.asList(null, minimalDistance, pedestrianPosition));
-//			}
+			// if (!crossPoints.isEmpty()) {
+			// cod.i("cp md pp", Arrays.asList(crossPoints.get(0), minimalDistance,
+			// pedestrianPosition));
+			// } else {
+			// cod.i("cp md pp", Arrays.asList(null, minimalDistance, pedestrianPosition));
+			// }
 		}
 		return minimalDistance;
 	}
 
-	private Double neighboursDistance(Environment environment, PedestrianCrossPoints pedestrianCrossPoints,
-			Position pedestrianPosition, Double minimalDistance, int id) {
+	private Double neighboursDistance(PedestrianCrossPoints pedestrianCrossPoints, Position pedestrianPosition,
+			Double minimalDistance, int id) {
 		// TODO neighbor pedestrian velocity
 		for (Pedestrian p : environment.getPedestrians()) {
 			if (p.getPedestrianInformation().getStaticInformation().getId() != id) {

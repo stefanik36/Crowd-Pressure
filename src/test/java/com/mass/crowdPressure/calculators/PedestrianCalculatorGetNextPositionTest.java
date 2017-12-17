@@ -2,19 +2,16 @@ package com.mass.crowdPressure.calculators;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Arrays;
-
 import org.junit.Test;
 
 import com.app.COD;
 import com.app.CODFactory;
 import com.mass.crowdPressure.exceptions.AngleOutOfRangeException;
-import com.mass.crowdPressure.model.Environment;
 import com.mass.crowdPressure.model.Position;
-import com.mass.crowdPressure.model.pedestrian.Pedestrian;
+import com.mass.crowdPressure.model.Vector;
 import com.mass.crowdPressure.model.pedestrian.PedestrianInformation;
-import com.mass.crowdPressure.model.pedestrian.VariableInformation;
 import com.mass.crowdPressure.model.pedestrian.StaticInformation;
+import com.mass.crowdPressure.model.pedestrian.VariableInformation;
 
 public class PedestrianCalculatorGetNextPositionTest {
 	private final static COD cod = CODFactory.setLevelOfDepression(2);
@@ -28,7 +25,7 @@ public class PedestrianCalculatorGetNextPositionTest {
 		PedestrianInformation main = new PedestrianInformation(staticInformation0, variableInformation0);
 
 		main.getVariableInformation().setDesiredDirection(0);
-		main.getVariableInformation().setDesiredSpeed(2);
+		main.getVariableInformation().setDesiredSpeed(new Vector(0, 2));
 		PedestrianCalculator pc = new PedestrianCalculator(main, null);
 		Position result = pc.getNextPosition();
 		assertEquals(2.0, result.getX(), 0.01);
@@ -43,7 +40,7 @@ public class PedestrianCalculatorGetNextPositionTest {
 		PedestrianInformation main = new PedestrianInformation(staticInformation0, variableInformation0);
 
 		main.getVariableInformation().setDesiredDirection(1);
-		main.getVariableInformation().setDesiredSpeed(2);
+		main.getVariableInformation().setDesiredSpeed(new Vector(1, 2));
 		PedestrianCalculator pc = new PedestrianCalculator(main, null);
 		Position result = pc.getNextPosition();
 		assertEquals(-2.0, result.getX(), 0.01);
@@ -58,7 +55,8 @@ public class PedestrianCalculatorGetNextPositionTest {
 		PedestrianInformation main = new PedestrianInformation(staticInformation0, variableInformation0);
 
 		main.getVariableInformation().setDesiredDirection(0.75);
-		main.getVariableInformation().setDesiredSpeed(5);
+//		main.getVariableInformation().setDesiredSpeed(5);
+		main.getVariableInformation().setDesiredSpeed(new Vector(0.75, 5));
 		PedestrianCalculator pc = new PedestrianCalculator(main, null);
 		Position result = pc.getNextPosition();
 		assertEquals(-3.535, result.getX(), 0.01);
@@ -73,7 +71,8 @@ public class PedestrianCalculatorGetNextPositionTest {
 		PedestrianInformation main = new PedestrianInformation(staticInformation0, variableInformation0);
 
 		main.getVariableInformation().setDesiredDirection(0.5);
-		main.getVariableInformation().setDesiredSpeed(2);
+//		main.getVariableInformation().setDesiredSpeed(2);
+		main.getVariableInformation().setDesiredSpeed(new Vector(0.5, 2));
 		PedestrianCalculator pc = new PedestrianCalculator(main, null);
 		Position result = pc.getNextPosition();
 		assertEquals(0.0, result.getX(), 0.01);
@@ -88,7 +87,8 @@ public class PedestrianCalculatorGetNextPositionTest {
 		PedestrianInformation main = new PedestrianInformation(staticInformation0, variableInformation0);
 
 		main.getVariableInformation().setDesiredDirection(0.25);
-		main.getVariableInformation().setDesiredSpeed(5);
+//		main.getVariableInformation().setDesiredSpeed(5);
+		main.getVariableInformation().setDesiredSpeed(new Vector(0.25, 5));
 		PedestrianCalculator pc = new PedestrianCalculator(main, null);
 		Position result = pc.getNextPosition();
 		// cod.i(result);
@@ -104,7 +104,8 @@ public class PedestrianCalculatorGetNextPositionTest {
 		PedestrianInformation main = new PedestrianInformation(staticInformation0, variableInformation0);
 
 		main.getVariableInformation().setDesiredDirection(1.25);
-		main.getVariableInformation().setDesiredSpeed(5);
+//		main.getVariableInformation().setDesiredSpeed(5);
+		main.getVariableInformation().setDesiredSpeed(new Vector(1.25, 5));
 		PedestrianCalculator pc = new PedestrianCalculator(main, null);
 		Position result = pc.getNextPosition();
 		assertEquals(-3.535, result.getX(), 0.01);
@@ -119,7 +120,8 @@ public class PedestrianCalculatorGetNextPositionTest {
 		PedestrianInformation main = new PedestrianInformation(staticInformation0, variableInformation0);
 
 		main.getVariableInformation().setDesiredDirection(1.5);
-		main.getVariableInformation().setDesiredSpeed(2);
+//		main.getVariableInformation().setDesiredSpeed(2);
+		main.getVariableInformation().setDesiredSpeed(new Vector(1.5, 2));
 		PedestrianCalculator pc = new PedestrianCalculator(main, null);
 		Position result = pc.getNextPosition();
 		// cod.i(result);
@@ -135,7 +137,8 @@ public class PedestrianCalculatorGetNextPositionTest {
 		PedestrianInformation main = new PedestrianInformation(staticInformation0, variableInformation0);
 
 		main.getVariableInformation().setDesiredDirection(1.75);
-		main.getVariableInformation().setDesiredSpeed(5);
+//		main.getVariableInformation().setDesiredSpeed(5);
+		main.getVariableInformation().setDesiredSpeed(new Vector(1.75, 5));
 		PedestrianCalculator pc = new PedestrianCalculator(main, null);
 		Position result = pc.getNextPosition();
 		// cod.i(result);

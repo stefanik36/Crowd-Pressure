@@ -1,14 +1,20 @@
 package com.mass.crowdPressure.calculators;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import com.app.COD;
 import com.app.CODFactory;
 import com.mass.crowdPressure.calculators.figures.LinePointAngle;
 import com.mass.crowdPressure.calculators.figures.LineTwoPoints;
+import com.mass.crowdPressure.exceptions.AngleOutOfRangeException;
+import com.mass.crowdPressure.model.Line;
 import com.mass.crowdPressure.model.Position;
+import com.mass.crowdPressure.model.Vector;
+import com.mass.crowdPressure.model.VectorXY;
 
 public class GemoetricCalculator {
 
@@ -40,12 +46,52 @@ public class GemoetricCalculator {
 		return Optional.empty();
 	};
 
+	public static final VectorXY changeVector(Vector v) throws AngleOutOfRangeException {
+		double angle = v.getAngle();
+		double pi = Math.PI;
+		double alpha = angle * Math.PI;
+		double value = v.getValue();
+
+		if (angle < 0.5) {
+			return new VectorXY(value * Math.cos(alpha), value * Math.sin(alpha));
+		} else if (angle == 0.5) {
+			return new VectorXY(0, value);
+		} else if (angle <= 1.0) {
+			return new VectorXY(-value * Math.cos(pi - alpha), value * Math.sin(pi - alpha));
+		} else if (angle <= 1.5) {
+			return new VectorXY(-value * Math.cos(alpha - pi), -value * Math.sin(alpha - pi));
+		} else if (angle == 1.5) {
+			return new VectorXY(0, -value);
+		} else if (angle < 2.0) {
+			return new VectorXY(value * Math.cos(2 * pi - alpha), -value * Math.sin(2 * pi - alpha));
+		}
+
+		throw new AngleOutOfRangeException();
+	};
+
+	public static final Vector changeVector(VectorXY v) {
+		double x = v.getX();
+		double y = v.getY();
+		return new Vector(calculateAngle.apply(new Position(0, 0), new Position(x, y)),
+				Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
+
+	};
+
 	public static BiFunction<Position, Position, Double> distance = (Position a, Position b) -> {
 		return Math.sqrt(Math.pow((b.getX() - a.getX()), 2) + Math.pow((b.getY() - a.getY()), 2));
 	};
+	
+	public static BiFunction<Position, Line, Optional<Double>> distanceStraightPoint = (Position p, Line l) -> {
+		
+		//TODO
+		return Optional.empty();
+	};
+	
+//	public static double AngleThreepoints(Position a, Position b, Position c) {
+//		
+//	}
 
-	public static BiFunction<Position, Position, Double> calculateDestinationAngle = (Position pos,
-			Position destinationPoint) -> {
+	public static BiFunction<Position, Position, Double> calculateAngle = (Position pos, Position destinationPoint) -> {
 
 		double result = (pos.getY() - destinationPoint.getY()) / (pos.getX() - destinationPoint.getX());
 		result = Math.atan(result) / Math.PI;
@@ -63,4 +109,22 @@ public class GemoetricCalculator {
 	public static BiFunction<Double, Double, Boolean> isBigger = (Double d1, Double d2) -> {
 		return d1 < d2;
 	};
+
+	public static VectorXY subtractVectors(VectorXY v1, VectorXY v2) {
+		return new VectorXY(v1.getX() - v2.getX(), v1.getY() - v2.getY());
+	};
+
+	public static Vector subtractVectors(Vector v1, Vector v2) throws AngleOutOfRangeException {
+		cod.i(Arrays.asList(v1,v2));
+		return changeVector(subtractVectors(changeVector(v1), changeVector(v2)));
+	};
+
+	public static VectorXY addVectors(VectorXY v1, VectorXY v2) {
+		return new VectorXY(v1.getX() + v2.getX(), v1.getY() + v2.getY());
+	};
+
+	public static Vector addVectors(Vector v1, Vector v2) throws AngleOutOfRangeException {
+		return changeVector(addVectors(changeVector(v1), changeVector(v2)));
+	};
+
 }

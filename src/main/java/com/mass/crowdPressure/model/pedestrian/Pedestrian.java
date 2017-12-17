@@ -1,7 +1,5 @@
 package com.mass.crowdPressure.model.pedestrian;
 
-import java.util.Arrays;
-
 import com.app.COD;
 import com.app.CODFactory;
 import com.mass.crowdPressure.calculators.Configuration;
@@ -10,6 +8,8 @@ import com.mass.crowdPressure.calculators.PedestrianCalculator;
 import com.mass.crowdPressure.exceptions.AngleOutOfRangeException;
 import com.mass.crowdPressure.model.DirectionInfo;
 import com.mass.crowdPressure.model.Environment;
+import com.mass.crowdPressure.model.Vector;
+import com.mass.crowdPressure.model.VectorXY;
 
 public class Pedestrian {
 
@@ -31,12 +31,15 @@ public class Pedestrian {
 		}
 
 		DirectionInfo desiredDirectionInfo = pedestrianCalculator.getDirectionInfo();
-		double deiredSpeed = pedestrianCalculator.getDesireVelocity();
+		Vector desiredVelocity = pedestrianCalculator.getDesireVelocity(desiredDirectionInfo.getCollisionDistance(),desiredDirectionInfo.getAlpha());
+		cod.i(desiredVelocity);
+		Vector desiredAcceleration = pedestrianCalculator.getDesireAcceleration(desiredVelocity);
 		pedestrianInformation.getVariableInformation().setDesiredDirection(desiredDirectionInfo.getAlpha());
-		pedestrianInformation.getVariableInformation().setDesiredSpeed(deiredSpeed);
+		pedestrianInformation.getVariableInformation().setDesiredSpeed(desiredVelocity);
+		pedestrianInformation.getVariableInformation().setDesiredAcceleration(desiredAcceleration);
 		pedestrianInformation.getVariableInformation().setNextPosition(pedestrianCalculator.getNextPosition());
 		pedestrianInformation.getVariableInformation()
-				.setDestinationAngle(GemoetricCalculator.calculateDestinationAngle.apply(
+				.setDestinationAngle(GemoetricCalculator.calculateAngle.apply(
 						pedestrianInformation.getVariableInformation().getNextPosition(),
 						pedestrianInformation.getVariableInformation().getDestinationPoint()));
 	}
