@@ -1,11 +1,8 @@
 package com.mass.crowdPressure;
 
-import java.util.List;
-
 import com.mass.crowdPressure.calculators.Configuration;
 import com.mass.crowdPressure.exceptions.AngleOutOfRangeException;
 import com.mass.crowdPressure.model.Environment;
-import com.mass.crowdPressure.model.map.Map;
 import com.mass.crowdPressure.model.pedestrian.Pedestrian;
 
 public class Engine {
@@ -44,7 +41,6 @@ public class Engine {
 		}
 		//te tu ^ też
 	}
-
 
 
 	public Environment getEnvironment() {

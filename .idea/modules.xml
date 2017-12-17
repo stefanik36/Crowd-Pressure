@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Crowd-Pressure.iml" filepath="$PROJECT_DIR$/Crowd-Pressure.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Crowd-Pressure_main.iml" filepath="$PROJECT_DIR$/.idea/modules/Crowd-Pressure_main.iml" group="Crowd-Pressure" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Crowd-Pressure_test.iml" filepath="$PROJECT_DIR$/.idea/modules/Crowd-Pressure_test.iml" group="Crowd-Pressure" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/IdeaProjects-Crowd-Pressure.iml" filepath="$PROJECT_DIR$/.idea/modules/IdeaProjects-Crowd-Pressure.iml" />
+    </modules>
+  </component>
+</project>

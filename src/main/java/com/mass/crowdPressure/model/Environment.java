@@ -32,6 +32,6 @@ public class Environment {
 		this.map = map;
 	}
 
-	
-	
+
+
 }

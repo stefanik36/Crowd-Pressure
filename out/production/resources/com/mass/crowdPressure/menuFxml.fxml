@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.HBox?>
+
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="33.0" prefWidth="601.0" xmlns="http://javafx.com/javafx/8.0.162-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mass.crowdPressure.MenuController">
+   <children>
+      <Button fx:id="button" mnemonicParsing="false" onAction="#pauseStartButton" text="Button" />
+      <Button mnemonicParsing="false" text="Button" />
+      <Button mnemonicParsing="false" text="Button" />
+   </children>
+</HBox>

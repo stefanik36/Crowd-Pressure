@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.mass.crowdPressure.builders.MapFactory;
 import com.mass.crowdPressure.builders.PedestriansFactory;
-import com.mass.crowdPressure.calculators.Configuration;
 import com.mass.crowdPressure.model.Environment;
 import com.mass.crowdPressure.model.map.Map;
 import com.mass.crowdPressure.model.pedestrian.Pedestrian;
@@ -13,7 +12,7 @@ import com.mass.crowdPressure.model.pedestrian.Pedestrian;
 public class Initializer {
 
 
-	public void create() {
+	static public Engine createEngine() {
 
 		// create map
 		MapFactory mapFactory = new MapFactory();
@@ -28,10 +27,8 @@ public class Initializer {
 		PedestriansFactory pedestriansBuilder = new PedestriansFactory();
 		pedestriansBuilder.addPedestrians(environment,Symulation.SYM_P1_W1);
 
-		// create engine
+		return new Engine(environment);
 
-		Engine engine = new Engine(environment);
-		engine.start();
 
 	}
 
