@@ -65,7 +65,7 @@ public class CrowdSimulationGUI {
                         drawPedestrians(engine.getEnvironment().getPedestrians());
                         engine.nextState();
 
-                    }catch (Exception ex){
+                    } catch (Exception ex) {
                         ex.printStackTrace();
                     }
 
@@ -76,12 +76,12 @@ public class CrowdSimulationGUI {
         simLoop.getKeyFrames().add(frame);
     }
 
-        public void clearAll(){
-        gc.clearRect(0,0,windowWidth, windowWidth);
+    public void clearAll() {
+        gc.clearRect(0, 0, windowWidth, windowWidth);
     }
 
-    private void drawMap(Map map){
-        for (Wall w: map.getWalls()){
+    private void drawMap(Map map) {
+        for (Wall w : map.getWalls()) {
             Position start = ((StraightWall) w).getStartPosition();
             Position end = ((StraightWall) w).getEndPosition();
             gc.strokeLine(scale(start.getX()), scale(start.getY()),
@@ -90,31 +90,33 @@ public class CrowdSimulationGUI {
 
 
     }
-    private void drawPedestrians(List<Pedestrian> pedestrians){
+
+    private void drawPedestrians(List<Pedestrian> pedestrians) {
         gc.setFill(Color.RED);
-        for (Pedestrian p: pedestrians) {
-            double x =  scale(p.getPedestrianInformation().getVariableInformation().getPosition().getX());
+        for (Pedestrian p : pedestrians) {
+            double x = scale(p.getPedestrianInformation().getVariableInformation().getPosition().getX());
             double y = scale(p.getPedestrianInformation().getVariableInformation().getPosition().getY());
-            gc.fillArc(x,y,8,8,0,360,ArcType.OPEN);
+            gc.fillArc(x, y, 8, 8, 0, 360, ArcType.OPEN);
         }
         gc.setFill(Color.BLACK);
     }
 
-    private double scale(double value){ return value * 100;}
-
+    private double scale(double value) {
+        return value * 100;
+    }
 
 
     public void initialize(Stage primaryStage) throws IOException {
         primaryStage.setTitle(windowTitle);
         root = new Group();
-        Scene theScene = new Scene( root );
-        primaryStage.setScene( theScene );
-        Canvas canvas = new Canvas( windowWidth, windowHigh);
-        root.getChildren().add( canvas );
+        Scene theScene = new Scene(root);
+        primaryStage.setScene(theScene);
+        Canvas canvas = new Canvas(windowWidth, windowHigh);
+        root.getChildren().add(canvas);
 
         gc = canvas.getGraphicsContext2D();
-        gc.strokeLine(0,0,1000,5);
-        gc.strokeLine(0,0,5,1000);
+        gc.strokeLine(0, 0, 1000, 5);
+        gc.strokeLine(0, 0, 5, 1000);
 
         canvas.setLayoutY(50);
         canvas.setLayoutX(10);
@@ -127,22 +129,21 @@ public class CrowdSimulationGUI {
     private void buildMenu() throws IOException {
 
         FXMLLoader fxmlLoader = new FXMLLoader(CrowdSimulationGUI.class.getResource("menu.fxml"));
-        Parent menu = (Parent)fxmlLoader.load();
+        Parent menu = (Parent) fxmlLoader.load();
 
         MenuController controller = fxmlLoader.<MenuController>getController();
         controller.setGraphicContext(gc);
         controller.setSimLoop(simLoop);
-        
+
         root.getChildren().add(menu);
     }
 
 
-
-    public void start(){
+    public void start() {
         simLoop.play();
     }
 
-    public void stop(){
+    public void stop() {
         simLoop.stop();
     }
 
