@@ -104,7 +104,7 @@ public class CrowdSimulationGUI {
 
 
 
-    public void initialize(Stage primaryStage){
+    public void initialize(Stage primaryStage) throws IOException {
         primaryStage.setTitle(windowTitle);
         root = new Group();
         Scene theScene = new Scene( root );
@@ -124,27 +124,16 @@ public class CrowdSimulationGUI {
     }
 
 
-    private void buildMenu(){
+    private void buildMenu() throws IOException {
 
-//        new FXMLLoader().load(getClass().getResource("menu.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(CrowdSimulationGUI.class.getResource("menu.fxml"));
+        Parent menu = (Parent)fxmlLoader.load();
 
-        HBox stats = new HBox();
-        stats.setSpacing(5);
-        stats.setTranslateX(10);
-        stats.setTranslateY(10);
-        stats.getChildren().add( ButtonBuilder.create()
-                .text("Freeze/Resume")
-                .onMousePressed((EventHandler<MouseEvent>) arg0 -> {
-                    switch (simLoop.getStatus()) {
-                        case RUNNING:
-                            simLoop.pause();
-                            break;
-                        case PAUSED:
-                            simLoop.play();
-                            break;
-                    }
-                }).build());
-        root.getChildren().add(stats);
+        MenuController controller = fxmlLoader.<MenuController>getController();
+        controller.setGraphicContext(gc);
+        controller.setSimLoop(simLoop);
+        
+        root.getChildren().add(menu);
     }
 
 

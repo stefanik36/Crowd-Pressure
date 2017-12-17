@@ -1,6 +1,9 @@
 package com.mass.crowdPressure;
 
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.canvas.Canvas;
 import javafx.stage.Stage;
 
 public class App extends Application{
@@ -14,6 +17,8 @@ public class App extends Application{
 	public void start(Stage stage) throws Exception {
 	    gui.setEngine(Initializer.createEngine());
 		gui.initialize(stage);
-		gui.start();
+//		gui.start();
+
+
 	}
 }
