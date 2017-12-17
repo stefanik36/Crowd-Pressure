@@ -14,11 +14,11 @@ import com.mass.crowdPressure.model.pedestrian.StaticInformation;
 public class PedestriansFactory {
 
 	private static final double DEFAULT_PEDESTRIAN_MASS = 360.0;
-	private static final double DEFAULT_PEDESTRIAN_COMFORTABLE_SPEED = 5;
+	private static final double DEFAULT_PEDESTRIAN_COMFORTABLE_SPEED = 0.1;
 	private static final double DEFAULT_PEDESTRIAN_VISION_ANGLE = 0.4;
 	private static final double DEFAULT_PEDESTRIAN_HORIZON_DISTANCE = 10;
 	private static final double DEFAULT_PEDESTRIAN_RELAXATION_TIME = 1;
-
+	private static int ID = 0;
 	public void addPedestrians(Environment environment, Symulation sym) {
 		if (sym.equals(Symulation.SYM_P1_W1)) {
 			addPedestrians1(environment, 1);
@@ -28,12 +28,21 @@ public class PedestriansFactory {
 	}
 
 	public void addPedestrians1(Environment environment, int initNoPedestrians) {
+		double visionCenter = 0.25;
 		Position destinationPoint = new Position(5, 5);
 		Position position = new Position(0, 0);
 		for (int id = 0; id < initNoPedestrians; id++) {
 			environment.getPedestrians()
-					.add(createPedestrian(id, environment, destinationPoint, position));
+					.add(createPedestrian(ID++, environment, visionCenter, destinationPoint, position));
 		}
+	}
+
+	public void addPedestrian(Environment environment, double x, double y){
+		double visionCenter = 0.25;
+		Position destinationPoint = new Position(5, 5);
+		Position position = new Position(x, y);
+			environment.getPedestrians()
+					.add(createPedestrian(ID++, environment, visionCenter, destinationPoint, position));
 	}
 
 	public void addPedestrians2(Environment environment, int initNoPedestrians) {
@@ -44,19 +53,6 @@ public class PedestriansFactory {
 			environment.getPedestrians()
 					.add(createPedestrian(id, environment, visionCenter, destinationPoint, position));
 		}
-	}
-
-	private Pedestrian createPedestrian(int id, Environment environment, Position destinationPoint, Position position) {
-
-		StaticInformation staticInformation = new StaticInformation(id, DEFAULT_PEDESTRIAN_MASS,
-				DEFAULT_PEDESTRIAN_COMFORTABLE_SPEED, DEFAULT_PEDESTRIAN_VISION_ANGLE,
-				DEFAULT_PEDESTRIAN_HORIZON_DISTANCE, DEFAULT_PEDESTRIAN_RELAXATION_TIME);
-
-		VariableInformation variableInformation = new VariableInformation(destinationPoint, position);
-
-		PedestrianInformation pedestrianInformation = new PedestrianInformation(staticInformation, variableInformation);
-
-		return new Pedestrian(pedestrianInformation, environment);
 	}
 
 	private Pedestrian createPedestrian(int id, Environment environment, double visionCenter, Position destinationPoint,
