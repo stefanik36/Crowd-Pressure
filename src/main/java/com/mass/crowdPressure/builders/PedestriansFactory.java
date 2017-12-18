@@ -28,7 +28,6 @@ public class PedestriansFactory {
 	}
 
 	public void addPedestrians1(Environment environment, int initNoPedestrians) {
-		double visionCenter = 0.25;
 		Position destinationPoint = new Position(5, 5);
 		Position position = new Position(0, 0);
 		for (int id = 0; id < initNoPedestrians; id++) {
@@ -53,6 +52,19 @@ public class PedestriansFactory {
 			environment.getPedestrians()
 					.add(createPedestrian(id, environment, visionCenter, destinationPoint, position));
 		}
+	}
+
+	private Pedestrian createPedestrian(int id, Environment environment, Position destinationPoint, Position position) {
+
+		StaticInformation staticInformation = new StaticInformation(id, DEFAULT_PEDESTRIAN_MASS,
+				DEFAULT_PEDESTRIAN_COMFORTABLE_SPEED, DEFAULT_PEDESTRIAN_VISION_ANGLE,
+				DEFAULT_PEDESTRIAN_HORIZON_DISTANCE, DEFAULT_PEDESTRIAN_RELAXATION_TIME);
+
+		VariableInformation variableInformation = new VariableInformation(destinationPoint, position);
+
+		PedestrianInformation pedestrianInformation = new PedestrianInformation(staticInformation, variableInformation);
+
+		return new Pedestrian(pedestrianInformation, environment);
 	}
 
 	private Pedestrian createPedestrian(int id, Environment environment, double visionCenter, Position destinationPoint,

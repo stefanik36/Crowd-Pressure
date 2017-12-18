@@ -1,28 +1,24 @@
 package com.mass.crowdPressure.calculators;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import org.junit.Test;
 
 import com.app.COD;
 import com.app.CODFactory;
-import com.mass.crowdPressure.exceptions.AngleOutOfRangeException;
 import com.mass.crowdPressure.model.DirectionInfo;
 import com.mass.crowdPressure.model.Environment;
-import com.mass.crowdPressure.model.FunctionValue;
 import com.mass.crowdPressure.model.Position;
 import com.mass.crowdPressure.model.map.Map;
 import com.mass.crowdPressure.model.map.StraightWall;
 import com.mass.crowdPressure.model.pedestrian.Pedestrian;
 import com.mass.crowdPressure.model.pedestrian.PedestrianInformation;
-import com.mass.crowdPressure.model.pedestrian.VariableInformation;
 import com.mass.crowdPressure.model.pedestrian.StaticInformation;
+import com.mass.crowdPressure.model.pedestrian.VariableInformation;
 
 public class PedestrianCalculatorTest {
 	private final static COD cod = CODFactory.setLevelOfDepression(2);

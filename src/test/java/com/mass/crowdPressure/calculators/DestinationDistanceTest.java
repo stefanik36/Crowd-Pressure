@@ -1,12 +1,11 @@
 package com.mass.crowdPressure.calculators;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
 import com.app.COD;
 import com.app.CODFactory;
-import com.mass.crowdPressure.model.FunctionValue;
 
 public class DestinationDistanceTest {
 	private final static COD cod = CODFactory.setLevelOfDepression(2);

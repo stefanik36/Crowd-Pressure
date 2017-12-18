@@ -27,7 +27,7 @@ public class WallCrossPoint {
 	public List<Position> getWallCrossPoints(Wall w) {
 		if (w instanceof StraightWall) {
 			StraightWall sw = (StraightWall) w;
-			Optional<Position> op = GemoetricCalculator.crossPointTwoLines.apply(
+			Optional<Position> op = GeometricCalculator.crossPointTwoLines.apply(
 					new LinePointAngle(pedestrianPosition, alpha),
 					new LineTwoPoints(sw.getStartPosition(), sw.getEndPosition()));
 			if (op.isPresent()) {

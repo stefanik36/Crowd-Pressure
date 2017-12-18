@@ -1,12 +1,12 @@
 package com.mass.crowdPressure.model.pedestrian;
 
-import java.util.Arrays;
-
 import com.app.COD;
 import com.app.CODFactory;
 import com.mass.crowdPressure.calculators.Configuration;
-import com.mass.crowdPressure.calculators.GemoetricCalculator;
+import com.mass.crowdPressure.calculators.GeometricCalculator;
 import com.mass.crowdPressure.calculators.PedestrianCalculator;
+import com.mass.crowdPressure.calculators.figures.Vector;
+import com.mass.crowdPressure.calculators.figures.VectorXY;
 import com.mass.crowdPressure.exceptions.AngleOutOfRangeException;
 import com.mass.crowdPressure.model.DirectionInfo;
 import com.mass.crowdPressure.model.Environment;
@@ -31,12 +31,15 @@ public class Pedestrian {
 		}
 
 		DirectionInfo desiredDirectionInfo = pedestrianCalculator.getDirectionInfo();
-		double deiredSpeed = pedestrianCalculator.getDesireVelocity();
+		Vector desiredVelocity = pedestrianCalculator.getDesireVelocity(desiredDirectionInfo.getCollisionDistance(),desiredDirectionInfo.getAlpha());
+		cod.i(desiredVelocity);
+		Vector desiredAcceleration = pedestrianCalculator.getDesireAcceleration(desiredVelocity);
 		pedestrianInformation.getVariableInformation().setDesiredDirection(desiredDirectionInfo.getAlpha());
-		pedestrianInformation.getVariableInformation().setDesiredSpeed(deiredSpeed);
+		pedestrianInformation.getVariableInformation().setDesiredSpeed(desiredVelocity);
+		pedestrianInformation.getVariableInformation().setDesiredAcceleration(desiredAcceleration);
 		pedestrianInformation.getVariableInformation().setNextPosition(pedestrianCalculator.getNextPosition());
 		pedestrianInformation.getVariableInformation()
-				.setDestinationAngle(GemoetricCalculator.calculateDestinationAngle.apply(
+				.setDestinationAngle(GeometricCalculator.calculateAngle.apply(
 						pedestrianInformation.getVariableInformation().getNextPosition(),
 						pedestrianInformation.getVariableInformation().getDestinationPoint()));
 	}
@@ -53,8 +56,8 @@ public class Pedestrian {
 				.setVisionCenter(pedestrianInformation.getVariableInformation().getDesiredDirection());
 
 		pedestrianInformation.getVariableInformation()
-				.setFinished(GemoetricCalculator.isBigger.apply(
-						GemoetricCalculator.distance.apply(pedestrianInformation.getVariableInformation().getPosition(),
+				.setFinished(GeometricCalculator.isBigger.apply(
+						GeometricCalculator.distance.apply(pedestrianInformation.getVariableInformation().getPosition(),
 								pedestrianInformation.getVariableInformation().getDestinationPoint()),
 						Configuration.MAX_DISTANCE_TO_GOAL));
 
