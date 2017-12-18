@@ -32,7 +32,7 @@ public class Pedestrian {
 
 		DirectionInfo desiredDirectionInfo = pedestrianCalculator.getDirectionInfo();
 		Vector desiredVelocity = pedestrianCalculator.getDesireVelocity(desiredDirectionInfo.getCollisionDistance(),desiredDirectionInfo.getAlpha());
-		cod.i(desiredVelocity);
+//		cod.i(desiredVelocity);
 		Vector desiredAcceleration = pedestrianCalculator.getDesireAcceleration(desiredVelocity);
 		pedestrianInformation.getVariableInformation().setDesiredDirection(desiredDirectionInfo.getAlpha());
 		pedestrianInformation.getVariableInformation().setDesiredSpeed(desiredVelocity);

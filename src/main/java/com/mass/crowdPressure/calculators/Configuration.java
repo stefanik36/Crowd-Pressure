@@ -8,5 +8,7 @@ public class Configuration {
 	public static final Double MAX_DISTANCE_TO_GOAL = 0.01;
 	public static final int STEPS = 10;
 	public static final Double K_PARAMETER = 5 * Math.pow(10, 3);
+	
+	public static final boolean FORCES = true;
 
 }
