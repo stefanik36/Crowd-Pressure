@@ -1,7 +1,5 @@
 package com.mass.crowdPressure.model.pedestrian;
 
-import com.mass.crowdPressure.model.Position;
-
 /*
  * -all obstacles
  * -all other pedestrains
@@ -42,135 +40,30 @@ import com.mass.crowdPressure.model.Position;
  * 
  */
 public class PedestrianInformation {
+	private StaticInformation staticInformation;
+	private VariableInformation variableInformation;
 
-	private static final double MASS_RADIUS_RATIO = 320.0;
-	private int id;
-	private double mass; 					// [kg]
-	private double radius; 					// [m]
-	private double comfortableSpeed;		// [m/sec]
-	private double visionAngle; 			// [degrees]
-	private double horizontDistance; 		// [m]
-	private double relaxationTime; 			// [sec]
-
-	private double visionCenter; 
-	private Position destinationPoint; 
-	private Position position; 
-	private double desiredDirection; 
-	private double desiredSpeed; 
-
-	public PedestrianInformation(int id, double mass, double comfortableSpeed, double visionAngle,
-			double horizontDistance, double relaxationTime, double visionCenter, Position destinationPoint,
-			Position position) {
+	public PedestrianInformation(StaticInformation staticInformation,
+			VariableInformation variableInformation) {
 		super();
-		this.id = id;
-		this.mass = mass;
-		this.radius = mass / MASS_RADIUS_RATIO;
-		this.comfortableSpeed = comfortableSpeed;
-		this.visionAngle = visionAngle;
-		this.visionCenter = visionCenter;
-		this.horizontDistance = horizontDistance;
-		this.relaxationTime = relaxationTime;
-		this.destinationPoint = destinationPoint;
-		this.position = position;
+		this.staticInformation = staticInformation;
+		this.variableInformation = variableInformation;
 	}
 
-	
-	
-	
-	
-	
-
-	// gettesrs and setters
-	public double getMass() {
-		return mass;
+	public StaticInformation getStaticInformation() {
+		return staticInformation;
 	}
 
-	public void setMass(double mass) {
-		this.mass = mass;
+	public void setStaticInformation(StaticInformation staticInformation) {
+		this.staticInformation = staticInformation;
 	}
 
-	public double getRadius() {
-		return radius;
+	public VariableInformation getVariableInformation() {
+		return variableInformation;
 	}
 
-	public void setRadius(double radius) {
-		this.radius = radius;
-	}
-
-	public double getComfortableSpeed() {
-		return comfortableSpeed;
-	}
-
-	public void setComfortableSpeed(double comfortableSpeed) {
-		this.comfortableSpeed = comfortableSpeed;
-	}
-
-	public double getVisionAngle() {
-		return visionAngle;
-	}
-
-	public void setVisionAngle(double visionAngle) {
-		this.visionAngle = visionAngle;
-	}
-
-	public double getHorizontDistance() {
-		return horizontDistance;
-	}
-
-	public void setHorizontDistance(double horizontDistance) {
-		this.horizontDistance = horizontDistance;
-	}
-
-	public double getRelaxationTime() {
-		return relaxationTime;
-	}
-
-	public void setRelaxationTime(double relaxationTime) {
-		this.relaxationTime = relaxationTime;
-	}
-
-	public double getVisionCenter() {
-		return visionCenter;
-	}
-
-	public void setVisionCenter(double visionCenter) {
-		this.visionCenter = visionCenter;
-	}
-
-	public Position getDestinationPoint() {
-		return destinationPoint;
-	}
-
-	public void setDestinationPoint(Position destinationPoint) {
-		this.destinationPoint = destinationPoint;
-	}
-
-	public Position getPosition() {
-		return position;
-	}
-
-	public void setPosition(Position position) {
-		this.position = position;
-	}
-
-	public double getDesiredDirection() {
-		return desiredDirection;
-	}
-
-	public void setDesiredDirection(double desiredDirection) {
-		this.desiredDirection = desiredDirection;
-	}
-
-	public double getDesiredSpeed() {
-		return desiredSpeed;
-	}
-
-	public void setDesiredSpeed(double desiredSpeed) {
-		this.desiredSpeed = desiredSpeed;
-	}
-
-	public int getId() {
-		return id;
+	public void setVariableInformation(VariableInformation variableInformation) {
+		this.variableInformation = variableInformation;
 	}
 
 }

@@ -1,45 +1,71 @@
 package com.mass.crowdPressure.model.pedestrian;
 
-import com.mass.crowdPressure.calculators.CollisionDistance;
-import com.mass.crowdPressure.calculators.DestinationDistance;
+import com.app.COD;
+import com.app.CODFactory;
+import com.mass.crowdPressure.calculators.Configuration;
+import com.mass.crowdPressure.calculators.GeometricCalculator;
 import com.mass.crowdPressure.calculators.PedestrianCalculator;
+import com.mass.crowdPressure.calculators.figures.Vector;
+import com.mass.crowdPressure.calculators.figures.VectorXY;
+import com.mass.crowdPressure.exceptions.AngleOutOfRangeException;
+import com.mass.crowdPressure.model.DirectionInfo;
 import com.mass.crowdPressure.model.Environment;
-import com.mass.crowdPressure.model.FunctionValue;
 
 public class Pedestrian {
 
+	private final static COD cod = CODFactory.setLevelOfDepression(2);
 	private PedestrianInformation pedestrianInformation;
 	private Environment environment;
-
 	private PedestrianCalculator pedestrianCalculator;
-
-	private double desireDirection;
-	private double desireVelocity;
-
 
 	public Pedestrian(PedestrianInformation pedestrianInformation, Environment environment) {
 		this.environment = environment;
 		this.pedestrianInformation = pedestrianInformation;
-
 		this.pedestrianCalculator = new PedestrianCalculator(pedestrianInformation, environment);
 	}
 
-	public void prepareNextStep() {
-		desireDirection = pedestrianCalculator.getDesireDirection();
-		desireVelocity = pedestrianCalculator.getDesireVelocity();
-		
-		
-		
-	}
+	public void prepareNextStep() throws AngleOutOfRangeException {
+		if (pedestrianInformation.getVariableInformation().isFinished()) {
+			cod.i("PEDESTRIAN: " + pedestrianInformation.getStaticInformation().getId() + " FINISHED");
+			return;
+		}
 
+		DirectionInfo desiredDirectionInfo = pedestrianCalculator.getDirectionInfo();
+		Vector desiredVelocity = pedestrianCalculator.getDesireVelocity(desiredDirectionInfo.getCollisionDistance(),desiredDirectionInfo.getAlpha());
+		cod.i(desiredVelocity);
+		Vector desiredAcceleration = pedestrianCalculator.getDesireAcceleration(desiredVelocity);
+		pedestrianInformation.getVariableInformation().setDesiredDirection(desiredDirectionInfo.getAlpha());
+		pedestrianInformation.getVariableInformation().setDesiredSpeed(desiredVelocity);
+		pedestrianInformation.getVariableInformation().setDesiredAcceleration(desiredAcceleration);
+		pedestrianInformation.getVariableInformation().setNextPosition(pedestrianCalculator.getNextPosition());
+		pedestrianInformation.getVariableInformation()
+				.setDestinationAngle(GeometricCalculator.calculateAngle.apply(
+						pedestrianInformation.getVariableInformation().getNextPosition(),
+						pedestrianInformation.getVariableInformation().getDestinationPoint()));
+	}
 
 	public void nextStep() {
-		//move in direction desireDirection and value desireVelocity
-		//set new position, itd
-		
+		if (pedestrianInformation.getVariableInformation().isFinished()) {
+			return;
+		}
+		// cod.i("pos",pedestrianInformation.getVariableInformation().getPosition());
+		// cod.i("next",pedestrianInformation.getVariableInformation().getNextPosition());
+		pedestrianInformation.getVariableInformation()
+				.setPosition(pedestrianInformation.getVariableInformation().getNextPosition());
+		pedestrianInformation.getVariableInformation()
+				.setVisionCenter(pedestrianInformation.getVariableInformation().getDesiredDirection());
+
+		pedestrianInformation.getVariableInformation()
+				.setFinished(GeometricCalculator.isBigger.apply(
+						GeometricCalculator.distance.apply(pedestrianInformation.getVariableInformation().getPosition(),
+								pedestrianInformation.getVariableInformation().getDestinationPoint()),
+						Configuration.MAX_DISTANCE_TO_GOAL));
+
+		// cod.i("af pos",pedestrianInformation.getVariableInformation().getPosition());
+		// cod.i("af
+		// next",pedestrianInformation.getVariableInformation().getNextPosition());
 	}
 
-	// gettesrs and setters
 	public PedestrianInformation getPedestrianInformation() {
 		return pedestrianInformation;
 	}

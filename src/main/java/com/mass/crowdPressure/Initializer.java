@@ -1,23 +1,36 @@
 package com.mass.crowdPressure;
 
-import com.mass.crowdPressure.builders.MapBuilder;
-import com.mass.crowdPressure.builders.PedestriansBuilder;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.mass.crowdPressure.builders.MapFactory;
+import com.mass.crowdPressure.builders.PedestriansFactory;
+import com.mass.crowdPressure.calculators.Configuration;
 import com.mass.crowdPressure.model.Environment;
+import com.mass.crowdPressure.model.map.Map;
+import com.mass.crowdPressure.model.pedestrian.Pedestrian;
 
 public class Initializer {
 
-	private static final int INIT_NO_PEDESTRIANS = 10;
 
 	public void create() {
-		// create pedestrians
-		PedestriansBuilder pedestriansBuilder = new PedestriansBuilder();
 
 		// create map
-		MapBuilder mapBuilder = new MapBuilder();
+		MapFactory mapFactory = new MapFactory();
+		Map map = mapFactory.getMap(Symulation.SYM_P1_W1);
+
+		
+		List<Pedestrian> pedestrians = new ArrayList<>();
+		
+		Environment environment = new Environment(pedestrians, map);
+		
+		// create pedestrians
+		PedestriansFactory pedestriansBuilder = new PedestriansFactory();
+		pedestriansBuilder.addPedestrians(environment,Symulation.SYM_P1_W1);
+
 		// create engine
 
-		Engine engine = new Engine(
-				new Environment(pedestriansBuilder.getPedestrians(INIT_NO_PEDESTRIANS), mapBuilder.getMap()));
+		Engine engine = new Engine(environment);
 		engine.start();
 
 	}

@@ -32,5 +32,6 @@ dependencies {
     compileOnly "org.projectlombok:lombok:1.16.16"
     //provided 'org.projectlombok:lombok:1.16.18'
 	testCompile group: 'org.mockito', name: 'mockito-core', version: '2.1.0'
+	
     compile files('src/resources/libs/Cover-Of-Darkness-all.jar')
 }
