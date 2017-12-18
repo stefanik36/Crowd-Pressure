@@ -1,12 +1,7 @@
 package com.mass.crowdPressure;
 
-<<<<<<< HEAD
-=======
-import java.util.List;
-
 import com.app.COD;
 import com.app.CODFactory;
->>>>>>> develop
 import com.mass.crowdPressure.calculators.Configuration;
 import com.mass.crowdPressure.exceptions.AngleOutOfRangeException;
 import com.mass.crowdPressure.model.Environment;
@@ -40,26 +35,16 @@ public class Engine {
 		}
 		// ale tu trzeba te ^ joinować
 
-<<<<<<< HEAD
-//			System.out.println(p.getPedestrianInformation().getVariableInformation().getDesiredDirection()
-//					+ ":(" + p.getPedestrianInformation().getVariableInformation().getPosition().getX() + ","
-//					+ p.getPedestrianInformation().getVariableInformation().getPosition().getY() + ")");
-=======
 		for (Pedestrian p : environment.getPedestrians()) { // i tu też
 			p.nextStep();
-			cod.i("pi: ", p.getPedestrianInformation());
-			System.out.println(p.getPedestrianInformation().getVariableInformation().getDesiredDirection() + ":("
-					+ p.getPedestrianInformation().getVariableInformation().getPosition().getX() + ","
-					+ p.getPedestrianInformation().getVariableInformation().getPosition().getY() + ")");
->>>>>>> develop
+//			cod.i("pi: ", p.getPedestrianInformation());
+//			System.out.println(p.getPedestrianInformation().getVariableInformation().getDesiredDirection() + ":("
+//					+ p.getPedestrianInformation().getVariableInformation().getPosition().getX() + ","
+//					+ p.getPedestrianInformation().getVariableInformation().getPosition().getY() + ")");
 		}
 		// te tu ^ też
 	}
 
-<<<<<<< HEAD
-
-=======
->>>>>>> develop
 	public Environment getEnvironment() {
 		return environment;
 	}

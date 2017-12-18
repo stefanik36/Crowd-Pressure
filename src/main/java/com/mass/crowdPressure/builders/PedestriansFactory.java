@@ -32,16 +32,15 @@ public class PedestriansFactory {
 		Position position = new Position(0, 0);
 		for (int id = 0; id < initNoPedestrians; id++) {
 			environment.getPedestrians()
-					.add(createPedestrian(ID++, environment, visionCenter, destinationPoint, position));
+					.add(createPedestrian(ID++, environment, destinationPoint, position));
 		}
 	}
 
 	public void addPedestrian(Environment environment, double x, double y){
-		double visionCenter = 0.25;
 		Position destinationPoint = new Position(5, 5);
 		Position position = new Position(x, y);
 			environment.getPedestrians()
-					.add(createPedestrian(ID++, environment, visionCenter, destinationPoint, position));
+					.add(createPedestrian(ID++, environment, destinationPoint, position));
 	}
 
 	public void addPedestrians2(Environment environment, int initNoPedestrians) {

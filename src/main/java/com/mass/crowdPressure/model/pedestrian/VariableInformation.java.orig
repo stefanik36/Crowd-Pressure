@@ -1,8 +1,15 @@
 package com.mass.crowdPressure.model.pedestrian;
 
 import com.mass.crowdPressure.calculators.Configuration;
+<<<<<<< HEAD
+import com.mass.crowdPressure.calculators.GemoetricCalculator;
+=======
 import com.mass.crowdPressure.calculators.GeometricCalculator;
+import com.mass.crowdPressure.calculators.GeometricCalculatorTest;
+import com.mass.crowdPressure.calculators.PedestrianCalculator;
 import com.mass.crowdPressure.calculators.figures.Vector;
+import com.mass.crowdPressure.calculators.figures.VectorXY;
+>>>>>>> develop
 import com.mass.crowdPressure.model.Position;
 
 public class VariableInformation {
