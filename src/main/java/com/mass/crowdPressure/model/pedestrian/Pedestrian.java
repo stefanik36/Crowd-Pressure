@@ -3,13 +3,13 @@ package com.mass.crowdPressure.model.pedestrian;
 import com.app.COD;
 import com.app.CODFactory;
 import com.mass.crowdPressure.calculators.Configuration;
-import com.mass.crowdPressure.calculators.GemoetricCalculator;
+import com.mass.crowdPressure.calculators.GeometricCalculator;
 import com.mass.crowdPressure.calculators.PedestrianCalculator;
+import com.mass.crowdPressure.calculators.figures.Vector;
+import com.mass.crowdPressure.calculators.figures.VectorXY;
 import com.mass.crowdPressure.exceptions.AngleOutOfRangeException;
 import com.mass.crowdPressure.model.DirectionInfo;
 import com.mass.crowdPressure.model.Environment;
-import com.mass.crowdPressure.model.Vector;
-import com.mass.crowdPressure.model.VectorXY;
 
 public class Pedestrian {
 
@@ -39,7 +39,7 @@ public class Pedestrian {
 		pedestrianInformation.getVariableInformation().setDesiredAcceleration(desiredAcceleration);
 		pedestrianInformation.getVariableInformation().setNextPosition(pedestrianCalculator.getNextPosition());
 		pedestrianInformation.getVariableInformation()
-				.setDestinationAngle(GemoetricCalculator.calculateAngle.apply(
+				.setDestinationAngle(GeometricCalculator.calculateAngle.apply(
 						pedestrianInformation.getVariableInformation().getNextPosition(),
 						pedestrianInformation.getVariableInformation().getDestinationPoint()));
 	}
@@ -56,8 +56,8 @@ public class Pedestrian {
 				.setVisionCenter(pedestrianInformation.getVariableInformation().getDesiredDirection());
 
 		pedestrianInformation.getVariableInformation()
-				.setFinished(GemoetricCalculator.isBigger.apply(
-						GemoetricCalculator.distance.apply(pedestrianInformation.getVariableInformation().getPosition(),
+				.setFinished(GeometricCalculator.isBigger.apply(
+						GeometricCalculator.distance.apply(pedestrianInformation.getVariableInformation().getPosition(),
 								pedestrianInformation.getVariableInformation().getDestinationPoint()),
 						Configuration.MAX_DISTANCE_TO_GOAL));
 

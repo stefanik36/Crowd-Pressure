@@ -74,7 +74,7 @@ public class CollisionDistance {
 
 	private Double getMinDistance(Position pedestrianPosition, Double minimalDistance, List<Position> crossPoints) {
 		OptionalDouble min = crossPoints.stream()
-				.mapToDouble(cp -> GemoetricCalculator.distance.apply(pedestrianPosition, cp)).min();
+				.mapToDouble(cp -> GeometricCalculator.distance.apply(pedestrianPosition, cp)).min();
 		if ((min.isPresent()) && (min.getAsDouble() < minimalDistance)) {
 			minimalDistance = min.getAsDouble();
 		}

@@ -8,12 +8,12 @@ import java.util.List;
 
 import com.app.COD;
 import com.app.CODFactory;
+import com.mass.crowdPressure.calculators.figures.Vector;
+import com.mass.crowdPressure.calculators.figures.VectorXY;
 import com.mass.crowdPressure.exceptions.AngleOutOfRangeException;
 import com.mass.crowdPressure.model.DirectionInfo;
 import com.mass.crowdPressure.model.Environment;
 import com.mass.crowdPressure.model.Position;
-import com.mass.crowdPressure.model.Vector;
-import com.mass.crowdPressure.model.VectorXY;
 import com.mass.crowdPressure.model.pedestrian.PedestrianInformation;
 
 public class PedestrianCalculator {
@@ -84,7 +84,7 @@ public class PedestrianCalculator {
 		double x = pedestrianInformation.getVariableInformation().getPosition().getX();
 		double y = pedestrianInformation.getVariableInformation().getPosition().getY();
 
-		VectorXY shift = GemoetricCalculator.changeVector(new Vector(desiredDirection, desiredSpeed));
+		VectorXY shift = GeometricCalculator.changeVector(new Vector(desiredDirection, desiredSpeed));
 
 		return new Position(x + shift.getX(), y + shift.getY());
 
@@ -102,34 +102,36 @@ public class PedestrianCalculator {
 	}
 
 	private double goalVelocity() {
-		double distance = GemoetricCalculator.distance.apply(
+		double distance = GeometricCalculator.distance.apply(
 				pedestrianInformation.getVariableInformation().getPosition(),
 				pedestrianInformation.getVariableInformation().getDestinationPoint());
 		return distance / pedestrianInformation.getStaticInformation().getRelaxationTime();
 	}
 
 	public Vector getDesireAcceleration(Vector vdes) throws AngleOutOfRangeException {
-		Vector acceleration = GemoetricCalculator.subtractVectors(vdes,
+		Vector acceleration = GeometricCalculator.subtractVectors(vdes,
 				pedestrianInformation.getVariableInformation().getDesiredSpeed());
-
+		cod.i("acc: ",Arrays.asList(acceleration,vdes,pedestrianInformation.getVariableInformation().getDesiredSpeed()));
 		Vector nForce = getForcesSum(forceCal.getForceNeighbours(pedestrianInformation));
 		nForce.setValue(nForce.getValue() / pedestrianInformation.getStaticInformation().getMass());
 
 		Vector wForce = getForcesSum(forceCal.getForceWalls(pedestrianInformation));
 		wForce.setValue(wForce.getValue() / pedestrianInformation.getStaticInformation().getMass());
 
+		
 		acceleration
 				.setValue(acceleration.getValue() / pedestrianInformation.getStaticInformation().getRelaxationTime());
-		acceleration = GemoetricCalculator.addVectors(acceleration, nForce);
-		acceleration = GemoetricCalculator.addVectors(acceleration, wForce);
+		
+		acceleration = GeometricCalculator.addVectors(acceleration, nForce);
+		acceleration = GeometricCalculator.addVectors(acceleration, wForce);
 		return acceleration;
 	}
 
 	private Vector getForcesSum(List<Vector> forces) throws AngleOutOfRangeException {
-		Vector force = new Vector(0.0, 0.0);
-		cod.i(forces);
+		Vector force = new Vector(Double.NaN, 0.0);
+//		cod.i(forces);
 		for (Vector f : forces) {
-			force = GemoetricCalculator.addVectors(force, f);
+			force = GeometricCalculator.addVectors(force, f);
 		}
 		return force;
 	}

@@ -1,4 +1,4 @@
-package com.mass.crowdPressure.model;
+package com.mass.crowdPressure.calculators.figures;
 
 public class Vector {
 	private double angle;

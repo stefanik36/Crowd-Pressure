@@ -1,12 +1,12 @@
 package com.mass.crowdPressure.model.pedestrian;
 
 import com.mass.crowdPressure.calculators.Configuration;
-import com.mass.crowdPressure.calculators.GemoetricCalculator;
+import com.mass.crowdPressure.calculators.GeometricCalculator;
 import com.mass.crowdPressure.calculators.GeometricCalculatorTest;
 import com.mass.crowdPressure.calculators.PedestrianCalculator;
+import com.mass.crowdPressure.calculators.figures.Vector;
+import com.mass.crowdPressure.calculators.figures.VectorXY;
 import com.mass.crowdPressure.model.Position;
-import com.mass.crowdPressure.model.Vector;
-import com.mass.crowdPressure.model.VectorXY;
 
 public class VariableInformation {
 
@@ -25,16 +25,16 @@ public class VariableInformation {
 		this.destinationPoint = destinationPoint;
 		this.position = position;
 		this.nextPosition = position;
-		this.destinationAngle = GemoetricCalculator.calculateAngle.apply(nextPosition, destinationPoint);
-		this.setFinished(GemoetricCalculator.isBigger.apply(
-				GemoetricCalculator.distance.apply(position, destinationPoint), Configuration.MAX_DISTANCE_TO_GOAL));
+		this.destinationAngle = GeometricCalculator.calculateAngle.apply(nextPosition, destinationPoint);
+		this.setFinished(GeometricCalculator.isBigger.apply(
+				GeometricCalculator.distance.apply(position, destinationPoint), Configuration.MAX_DISTANCE_TO_GOAL));
 		this.desiredDirection = visionCenter;
 		this.desiredSpeed = new Vector(desiredDirection, 0);
-		this.desiredAcceleration = new Vector(0.0, 0.0);
+		this.desiredAcceleration = new Vector(Double.NaN, 0.0);
 	}
 
 	public VariableInformation(Position destinationPoint, Position position) {
-		this(GemoetricCalculator.calculateAngle.apply(position, destinationPoint), destinationPoint, position);
+		this(GeometricCalculator.calculateAngle.apply(position, destinationPoint), destinationPoint, position);
 	}
 
 	public void setDestinationAngle(double destinationAngle) {

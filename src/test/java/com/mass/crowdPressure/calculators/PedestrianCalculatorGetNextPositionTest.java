@@ -6,9 +6,9 @@ import org.junit.Test;
 
 import com.app.COD;
 import com.app.CODFactory;
+import com.mass.crowdPressure.calculators.figures.Vector;
 import com.mass.crowdPressure.exceptions.AngleOutOfRangeException;
 import com.mass.crowdPressure.model.Position;
-import com.mass.crowdPressure.model.Vector;
 import com.mass.crowdPressure.model.pedestrian.PedestrianInformation;
 import com.mass.crowdPressure.model.pedestrian.StaticInformation;
 import com.mass.crowdPressure.model.pedestrian.VariableInformation;

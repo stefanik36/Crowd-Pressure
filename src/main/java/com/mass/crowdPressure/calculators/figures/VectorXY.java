@@ -1,4 +1,6 @@
-package com.mass.crowdPressure.model;
+package com.mass.crowdPressure.calculators.figures;
+
+import com.mass.crowdPressure.model.Position;
 
 public class VectorXY {
 	private double x;

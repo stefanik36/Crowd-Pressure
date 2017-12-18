@@ -10,16 +10,38 @@ import com.app.COD;
 import com.app.CODFactory;
 import com.mass.crowdPressure.calculators.figures.LinePointAngle;
 import com.mass.crowdPressure.calculators.figures.LineTwoPoints;
+import com.mass.crowdPressure.calculators.figures.Vector;
+import com.mass.crowdPressure.calculators.figures.VectorXY;
 import com.mass.crowdPressure.model.Position;
-import com.mass.crowdPressure.model.Vector;
-import com.mass.crowdPressure.model.VectorXY;
 
 public class GeometricCalculatorTest {
 	private final static COD cod = CODFactory.setLevelOfDepression(2);
 
 	@Test
+	public void distanceStraightPointTest() {
+		Position p = new Position(0, 0);
+		LineTwoPoints l = new LineTwoPoints(new Position(5, 0), new Position(0, 5));
+		Optional<Double> result = GeometricCalculator.vectorStraightPoint.apply(p, l);
+		assertEquals(3.53, result.get(), 0.1);
+	}
+	
+	@Test
+	public void distanceStraightPointTest2() {
+		Position p = new Position(0, 0);
+		LineTwoPoints l = new LineTwoPoints(new Position(0, 1), new Position(0, 5));
+		Optional<Double> result = GeometricCalculator.vectorStraightPoint.apply(p, l);
+		assertEquals(false, result.isPresent());
+	}
+	@Test
+	public void distanceStraightPointTest3() {
+		Position p = new Position(0, 0);
+		LineTwoPoints l = new LineTwoPoints(new Position(0, 1), new Position(1, 5));
+		Optional<Double> result = GeometricCalculator.vectorStraightPoint.apply(p, l);
+		assertEquals(false, result.isPresent());
+	}
+	@Test
 	public void changeVectorTest() {
-		Vector v = GemoetricCalculator.changeVector(new VectorXY(-5, 5));
+		Vector v = GeometricCalculator.changeVector(new VectorXY(-5, 5));
 		assertEquals(0.75, v.getAngle(), 0.001);
 		assertEquals(7.07, v.getValue(), 0.1);
 	}
@@ -29,7 +51,7 @@ public class GeometricCalculatorTest {
 
 		Position positionA = new Position(9, 8);
 		Position positionB = new Position(5, 5);
-		double result = GemoetricCalculator.distance.apply(positionA, positionB);
+		double result = GeometricCalculator.distance.apply(positionA, positionB);
 
 		// cod.i(result);
 		assertEquals(5.0, result, 0.001);
@@ -40,7 +62,7 @@ public class GeometricCalculatorTest {
 
 		Position positionA = new Position(9, 8);
 		Position positionB = new Position(6, 5);
-		double result = GemoetricCalculator.distance.apply(positionA, positionB);
+		double result = GeometricCalculator.distance.apply(positionA, positionB);
 
 		// cod.i(result);
 		assertEquals(4.24, result, 0.1);
@@ -48,7 +70,7 @@ public class GeometricCalculatorTest {
 
 	@Test
 	public void crossPointTwoLinesTest() {
-		Optional<Position> result = GemoetricCalculator.crossPointTwoLines.apply(
+		Optional<Position> result = GeometricCalculator.crossPointTwoLines.apply(
 				new LinePointAngle(new Position(5, 1), 0.75),
 				new LineTwoPoints(new Position(2, 2), new Position(2, 7)));
 
@@ -58,7 +80,7 @@ public class GeometricCalculatorTest {
 
 	@Test
 	public void crossPointTwoLinesTest2() {
-		Optional<Position> result = GemoetricCalculator.crossPointTwoLines.apply(
+		Optional<Position> result = GeometricCalculator.crossPointTwoLines.apply(
 				new LinePointAngle(new Position(5, 1), 0.75),
 				new LineTwoPoints(new Position(5, 2), new Position(5, 7)));
 		assertEquals(false, result.isPresent());
@@ -66,7 +88,7 @@ public class GeometricCalculatorTest {
 
 	@Test
 	public void crossPointTwoLinesTest3() {
-		Optional<Position> result = GemoetricCalculator.crossPointTwoLines.apply(
+		Optional<Position> result = GeometricCalculator.crossPointTwoLines.apply(
 				new LinePointAngle(new Position(5, 1), 1.75),
 				new LineTwoPoints(new Position(2, 2), new Position(2, 7)));
 		assertEquals(false, result.isPresent());
