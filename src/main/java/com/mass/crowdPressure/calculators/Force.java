@@ -68,17 +68,24 @@ public class Force {
 	}
 
 	private Optional<Vector> calculateForce(PedestrianInformation pedestrianInfo, StraightWall wall) {
-		Optional<Double> optionalDist = GeometricCalculator.vectorStraightPoint.apply(
+		Optional<Vector> optionalVector = GeometricCalculator.vectorStraightPoint.apply(
 				pedestrianInfo.getVariableInformation().getPosition(),
 				new LineTwoPoints(wall.getStartPosition(), wall.getEndPosition()));
-		if (optionalDist.isPresent()) {
-			Double force = pedestrianInfo.getStaticInformation().getRadius() - optionalDist.get();
+		if (optionalVector.isPresent()) {
+			Vector forceVector = optionalVector.get();
+			Double force = pedestrianInfo.getStaticInformation().getRadius() - forceVector.getValue();
 			if (force > 0) {
-				double neutral = 1;
-				VectorXY direction = new VectorXY(
-						(wall.getStartPosition().getX() * neutral) / wall.getStartPosition().getY(), neutral);
-				Vector forceVector = GeometricCalculator.changeVector(direction);
+
+				force = force * Configuration.K_PARAMETER;
+
 				forceVector.setValue(force);
+
+				// double neutral = 1;
+				// VectorXY direction = new VectorXY(
+				// (wall.getStartPosition().getX() * neutral) / wall.getStartPosition().getY(),
+				// neutral);
+				// Vector forceVector = GeometricCalculator.changeVector(direction);
+				// forceVector.setValue(force);
 				return Optional.of(forceVector);
 			}
 		}

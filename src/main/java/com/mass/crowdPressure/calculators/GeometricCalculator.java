@@ -100,17 +100,16 @@ public class GeometricCalculator {
 		// cod.i("xy: ",Arrays.asList(x,y));
 
 		if (checkIfPointIsInBetween(new Position(x, y), new Position(x1, y1), new Position(x2, y2))) {
-			double result = Math.abs(a * x0 + b * y0 + c) / Math.sqrt(denominator);
-
-			return Optional.of(changeVector(vectorFromTwoPoints(new Position(x, y), new Position(x0, y0))));
+			// double result = Math.abs(a * x0 + b * y0 + c) / Math.sqrt(denominator);
+			Vector result = changeVector(vectorFromTwoPoints(new Position(x, y), new Position(x0, y0)));
+			cod.i(result);
+			return Optional.of(result);
 		}
 		return Optional.empty();
 	};
 
 	private static VectorXY vectorFromTwoPoints(Position start, Position end) {
-		
-		
-
+		return new VectorXY(end.getX() - start.getX(), end.getY() - start.getY());
 	}
 
 	private static boolean checkIfPointIsInBetween(Position checking, Position pA, Position pB) {

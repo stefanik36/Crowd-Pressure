@@ -21,22 +21,22 @@ public class GeometricCalculatorTest {
 	public void distanceStraightPointTest() {
 		Position p = new Position(0, 0);
 		LineTwoPoints l = new LineTwoPoints(new Position(5, 0), new Position(0, 5));
-		Optional<Double> result = GeometricCalculator.vectorStraightPoint.apply(p, l);
-		assertEquals(3.53, result.get(), 0.1);
+		Optional<Vector> result = GeometricCalculator.vectorStraightPoint.apply(p, l);
+		assertEquals(3.53, result.get().getValue(), 0.1);
 	}
 	
 	@Test
 	public void distanceStraightPointTest2() {
 		Position p = new Position(0, 0);
 		LineTwoPoints l = new LineTwoPoints(new Position(0, 1), new Position(0, 5));
-		Optional<Double> result = GeometricCalculator.vectorStraightPoint.apply(p, l);
+		Optional<Vector> result = GeometricCalculator.vectorStraightPoint.apply(p, l);
 		assertEquals(false, result.isPresent());
 	}
 	@Test
 	public void distanceStraightPointTest3() {
 		Position p = new Position(0, 0);
 		LineTwoPoints l = new LineTwoPoints(new Position(0, 1), new Position(1, 5));
-		Optional<Double> result = GeometricCalculator.vectorStraightPoint.apply(p, l);
+		Optional<Vector> result = GeometricCalculator.vectorStraightPoint.apply(p, l);
 		assertEquals(false, result.isPresent());
 	}
 	@Test
