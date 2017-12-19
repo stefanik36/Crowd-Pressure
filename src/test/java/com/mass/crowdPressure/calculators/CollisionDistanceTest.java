@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import com.app.COD;
 import com.app.CODFactory;
+import com.mass.crowdPressure.exceptions.AngleOutOfRangeException;
 import com.mass.crowdPressure.model.Environment;
 import com.mass.crowdPressure.model.Position;
 import com.mass.crowdPressure.model.map.Map;
@@ -22,7 +23,7 @@ public class CollisionDistanceTest {
 	private final static COD cod = CODFactory.setLevelOfDepression(2);
 
 	@Test
-	public void getCollistionDistanceValueTest() {
+	public void getCollistionDistanceValueTest() throws AngleOutOfRangeException {
 		List<Pedestrian> pedestrians = new ArrayList<>();
 		Environment environment = new Environment(pedestrians, new Map(new ArrayList<>()));
 		StaticInformation staticInformation1 = new StaticInformation(1, 640, 1, 1, 1, 1);

@@ -102,7 +102,7 @@ public class GeometricCalculator {
 		if (checkIfPointIsInBetween(new Position(x, y), new Position(x1, y1), new Position(x2, y2))) {
 			// double result = Math.abs(a * x0 + b * y0 + c) / Math.sqrt(denominator);
 			Vector result = changeVector(vectorFromTwoPoints(new Position(x, y), new Position(x0, y0)));
-			cod.i(result);
+//			cod.i(result);
 			return Optional.of(result);
 		}
 		return Optional.empty();

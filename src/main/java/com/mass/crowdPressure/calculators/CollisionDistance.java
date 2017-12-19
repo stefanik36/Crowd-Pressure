@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import com.app.COD;
 import com.app.CODFactory;
+import com.mass.crowdPressure.exceptions.AngleOutOfRangeException;
 import com.mass.crowdPressure.model.Environment;
 import com.mass.crowdPressure.model.Position;
 import com.mass.crowdPressure.model.map.Wall;
@@ -23,7 +24,7 @@ public class CollisionDistance {
 		this.environment = environment;
 	}
 
-	public double getCollistionDistanceValue(Double alpha, PedestrianInformation pedestrianInformation) {
+	public double getCollistionDistanceValue(Double alpha, PedestrianInformation pedestrianInformation) throws AngleOutOfRangeException {
 		Double minimalDistance = pedestrianInformation.getStaticInformation().getHorizontDistance();
 		int id = pedestrianInformation.getStaticInformation().getId();
 		if (environment == null) {
@@ -60,7 +61,7 @@ public class CollisionDistance {
 	}
 
 	private Double neighboursDistance(PedestrianCrossPoints pedestrianCrossPoints, Position pedestrianPosition,
-			Double minimalDistance, int id) {
+			Double minimalDistance, int id) throws AngleOutOfRangeException {
 		// TODO neighbor pedestrian velocity
 		for (Pedestrian p : environment.getPedestrians()) {
 			if (p.getPedestrianInformation().getStaticInformation().getId() != id) {

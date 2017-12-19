@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import com.mass.crowdPressure.calculators.figures.VectorXY;
+import com.mass.crowdPressure.exceptions.AngleOutOfRangeException;
 import com.mass.crowdPressure.model.Position;
 import com.mass.crowdPressure.model.pedestrian.PedestrianInformation;
 
@@ -23,37 +25,45 @@ public class PedestrianCrossPoints {
 		B = (yi - tanA * xi);
 	}
 
-	public List<Position> getNeighborAllCrossPoints(PedestrianInformation neighborInformation) {
-		List<Double> coords = calculateNeighborAllCrossPointCoord(neighborInformation);
-		List<Position> crossPoints = calculateNeighborCrossPoints(coords, neighborInformation);
+	public List<Position> getNeighborAllCrossPoints(PedestrianInformation neighborInformation)
+			throws AngleOutOfRangeException {
+
+		Position oldPosition = neighborInformation.getVariableInformation().getPosition();
+		VectorXY shift = GeometricCalculator
+				.changeVector(neighborInformation.getVariableInformation().getDesiredSpeed());
+
+		List<Double> coords = calculateNeighborAllCrossPointCoord(
+				new Position(oldPosition.getX() + shift.getX(), oldPosition.getY() + shift.getY()),
+				neighborInformation.getStaticInformation().getRadius());
+		List<Position> crossPoints = calculateNeighborCrossPoints(coords);
 		return crossPoints;
 	}
 
-	List<Position> calculateNeighborCrossPoints(List<Double> coords, PedestrianInformation neighborInformation) {
+	List<Position> calculateNeighborCrossPoints(List<Double> coords) {
 		Function<Double, Position> positionFromCoord = (Double coordX) -> {
 			return new Position(coordX, tanA * (coordX - xi) + yi);
 		};
 		return coords.stream().map(positionFromCoord).collect(Collectors.toList());
 	}
 
-	List<Double> calculateNeighborAllCrossPointCoord(PedestrianInformation neighborInformation) {
+	List<Double> calculateNeighborAllCrossPointCoord(Position position, double radius) {
 
-		double underSqrt = calculateCrossPointCoordUnderSqrt(neighborInformation);
+		double underSqrt = calculateCrossPointCoordUnderSqrt(position, radius);
 
 		List<Double> result = new ArrayList<>();
 		if (underSqrt > 0) {
 			double sqrt = Math.sqrt(underSqrt);
-			result.addAll(Arrays.asList(calculateNeighborCrossPointCoord(sqrt, neighborInformation),
-					calculateNeighborCrossPointCoord(-sqrt, neighborInformation)));
+			result.addAll(Arrays.asList(calculateNeighborCrossPointCoord(sqrt, position),
+					calculateNeighborCrossPointCoord(-sqrt, position)));
 		} else if (underSqrt == 0) {
-			result.addAll(Arrays.asList(calculateNeighborCrossPointCoord(0.0, neighborInformation)));
+			result.addAll(Arrays.asList(calculateNeighborCrossPointCoord(0.0, position)));
 		}
 		return result;
 	}
 
-	double calculateNeighborCrossPointCoord(Double sqrt, PedestrianInformation neighborInformation) {
-		double xn = neighborInformation.getVariableInformation().getPosition().getX();
-		double yn = neighborInformation.getVariableInformation().getPosition().getY();
+	double calculateNeighborCrossPointCoord(Double sqrt, Position position) {
+		double xn = position.getX();
+		double yn = position.getY();
 		double result = sqrt;
 		result += xn;
 		result += tanA * yn;
@@ -62,10 +72,9 @@ public class PedestrianCrossPoints {
 		return result;
 	}
 
-	double calculateCrossPointCoordUnderSqrt(PedestrianInformation neighborInformation) {
-		double xn = neighborInformation.getVariableInformation().getPosition().getX();
-		double yn = neighborInformation.getVariableInformation().getPosition().getY();
-		double rn = neighborInformation.getStaticInformation().getRadius();
+	double calculateCrossPointCoordUnderSqrt(Position position, double rn) {
+		double xn = position.getX();
+		double yn = position.getY();
 
 		double result = 0;
 		result += -xn * xn * tanA * tanA;

@@ -30,12 +30,12 @@ public class PedestrianCalculator {
 		this.forceCal = new Force(environment);
 	}
 
-	public DirectionInfo getDirectionInfo() {
+	public DirectionInfo getDirectionInfo() throws AngleOutOfRangeException {
 		List<DirectionInfo> directionInfos = getDestinationDistanceFunctionValues();
 		return getMinimum(directionInfos);
 	}
 
-	List<DirectionInfo> getDestinationDistanceFunctionValues() {
+	List<DirectionInfo> getDestinationDistanceFunctionValues() throws AngleOutOfRangeException {
 		List<DirectionInfo> directionInfos = new ArrayList<>();
 		double start = pedestrianInformation.getVariableInformation().getVisionCenter()
 				- pedestrianInformation.getStaticInformation().getVisionAngle();
@@ -122,8 +122,8 @@ public class PedestrianCalculator {
 	public Vector getDesireAcceleration(Vector vdes) throws AngleOutOfRangeException {
 		Vector acceleration = GeometricCalculator.subtractVectors(vdes,
 				pedestrianInformation.getVariableInformation().getDesiredSpeed());
-		cod.i("acc: ",
-				Arrays.asList(acceleration, vdes, pedestrianInformation.getVariableInformation().getDesiredSpeed()));
+//		cod.i("acc: ",
+//				Arrays.asList(acceleration, vdes, pedestrianInformation.getVariableInformation().getDesiredSpeed()));
 		Vector nForce = getForcesSum(forceCal.getForceNeighbours(pedestrianInformation));
 		nForce.setValue(nForce.getValue() / pedestrianInformation.getStaticInformation().getMass());
 

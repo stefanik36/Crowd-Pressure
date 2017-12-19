@@ -1,5 +1,7 @@
 package com.mass.crowdPressure;
 
+import java.util.Iterator;
+
 import com.app.COD;
 import com.app.CODFactory;
 import com.mass.crowdPressure.calculators.Configuration;
@@ -34,15 +36,24 @@ public class Engine {
 			p.prepareNextStep();
 		}
 		// ale tu trzeba te ^ joinować
-
-		for (Pedestrian p : environment.getPedestrians()) { // i tu też
-			p.nextStep();
-//			cod.i("pi: ", p.getPedestrianInformation());
-//			System.out.println(p.getPedestrianInformation().getVariableInformation().getDesiredDirection() + ":("
-//					+ p.getPedestrianInformation().getVariableInformation().getPosition().getX() + ","
-//					+ p.getPedestrianInformation().getVariableInformation().getPosition().getY() + ")");
+		for(Iterator<Pedestrian> iterator = environment.getPedestrians().iterator(); iterator.hasNext(); ) {
+			Pedestrian p = iterator.next();
+			if(p.getPedestrianInformation().getVariableInformation().isFinished()) {
+				iterator.remove();
+			}else {
+				p.nextStep();
+			}
+			
 		}
-		// te tu ^ też
+		
+//		for (Pedestrian p : environment.getPedestrians()) { // i tu też
+//			p.nextStep();
+////			cod.i("pi: ", p.getPedestrianInformation());
+////			System.out.println(p.getPedestrianInformation().getVariableInformation().getDesiredDirection() + ":("
+////					+ p.getPedestrianInformation().getVariableInformation().getPosition().getX() + ","
+////					+ p.getPedestrianInformation().getVariableInformation().getPosition().getY() + ")");
+//		}
+//		// te tu ^ też
 	}
 
 	public Environment getEnvironment() {

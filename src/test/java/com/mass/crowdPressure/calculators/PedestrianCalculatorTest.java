@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import com.app.COD;
 import com.app.CODFactory;
+import com.mass.crowdPressure.exceptions.AngleOutOfRangeException;
 import com.mass.crowdPressure.model.DirectionInfo;
 import com.mass.crowdPressure.model.Environment;
 import com.mass.crowdPressure.model.Position;
@@ -24,7 +25,7 @@ public class PedestrianCalculatorTest {
 	private final static COD cod = CODFactory.setLevelOfDepression(2);
 
 	@Test
-	public void getDestinationDistanceFunctionValuesTest() {
+	public void getDestinationDistanceFunctionValuesTest() throws AngleOutOfRangeException {
 
 		// List<Pedestrian> pedestrians = new ArrayList<>();
 		// Environment environment = new Environment(pedestrians, null);
@@ -64,7 +65,7 @@ public class PedestrianCalculatorTest {
 	}
 
 	@Test
-	public void getDesireDirectionTest() {
+	public void getDesireDirectionTest() throws AngleOutOfRangeException {
 
 		// List<Pedestrian> pedestrians = new ArrayList<>();
 		// Environment environment = new Environment(pedestrians, null);
@@ -105,7 +106,7 @@ public class PedestrianCalculatorTest {
 	}
 
 	@Test
-	public void getDesireDirectionTest2() {
+	public void getDesireDirectionTest2() throws AngleOutOfRangeException {
 
 		List<Pedestrian> pedestrians = new ArrayList<>();
 		Environment environment = new Environment(pedestrians, new Map(new ArrayList<>()));
@@ -131,7 +132,7 @@ public class PedestrianCalculatorTest {
 	}
 
 	@Test
-	public void getDesireDirectionTest3() {
+	public void getDesireDirectionTest3() throws AngleOutOfRangeException {
 
 		List<Pedestrian> pedestrians = new ArrayList<>();
 		Environment environment = new Environment(pedestrians,

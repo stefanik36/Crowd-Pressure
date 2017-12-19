@@ -16,7 +16,7 @@ public class PedestriansFactory {
 	private static final double DEFAULT_PEDESTRIAN_MASS = 360.0;
 	private static final double DEFAULT_PEDESTRIAN_COMFORTABLE_SPEED = 0.1;
 	private static final double DEFAULT_PEDESTRIAN_VISION_ANGLE = 0.4;
-	private static final double DEFAULT_PEDESTRIAN_HORIZON_DISTANCE = 10;
+	private static final double DEFAULT_PEDESTRIAN_HORIZON_DISTANCE = 2;
 	private static final double DEFAULT_PEDESTRIAN_RELAXATION_TIME = 1;
 	private static int ID = 0;
 	public void addPedestrians(Environment environment, Symulation sym) {
