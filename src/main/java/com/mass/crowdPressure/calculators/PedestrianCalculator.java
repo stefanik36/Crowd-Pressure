@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.app.COD;
 import com.app.CODFactory;
@@ -52,6 +53,7 @@ public class PedestrianCalculator {
 					pedestrianInformation.getStaticInformation().getHorizontDistance(), collisionDistanceValue);
 			directionInfos.add(new DirectionInfo(alpha, collisionDistanceValue, destinationDistanceValue));
 		}
+//		cod.i("DIRECTIONS: ",directionInfos.stream().filter(d -> d.getCollisionDistance()<10.0).collect(Collectors.toList()));
 		return directionInfos;
 	}
 
@@ -88,9 +90,14 @@ public class PedestrianCalculator {
 		Vector acceleration = pedestrianInformation.getVariableInformation().getDesiredAcceleration();
 
 		Vector finalForce = velocity;
+		
+		
 		if (Configuration.FORCES) {
+			
 			finalForce = GeometricCalculator.addVectors(velocity, acceleration);
 		}
+		
+//		cod.i(pedestrianInformation.getStaticInformation().getId()+" VELO ACC FF: ",Arrays.asList(velocity,acceleration, finalForce));
 
 		VectorXY shift = GeometricCalculator.changeVector(finalForce);
 
@@ -101,15 +108,16 @@ public class PedestrianCalculator {
 
 	}
 
-	public Vector getDesireVelocity(double collisionDistance, double alpha) {
+	public Vector getDesireVelocity(double collisionDistance, double alpha, int i) {
 		double result = pedestrianInformation.getStaticInformation().getComfortableSpeed();
+//		cod.i("v: "+i,Arrays.asList(goalVelocity(), collisionVelocity(collisionDistance), result));
 		Vector v = new Vector(alpha, Arrays.asList(goalVelocity(), collisionVelocity(collisionDistance), result)
 				.stream().mapToDouble(d -> d).min().getAsDouble());
 		return v;
 	}
 
 	private double collisionVelocity(double collisionDistance) {
-		return collisionDistance / pedestrianInformation.getStaticInformation().getRelaxationTime();
+		return collisionDistance/ pedestrianInformation.getStaticInformation().getRelaxationTime();
 	}
 
 	private double goalVelocity() {
@@ -135,6 +143,11 @@ public class PedestrianCalculator {
 
 		acceleration = GeometricCalculator.addVectors(acceleration, nForce);
 		acceleration = GeometricCalculator.addVectors(acceleration, wForce);
+		
+		if(Configuration.MAX_ACCELERATION_VALUE<acceleration.getValue()) {
+			acceleration.setValue(Configuration.MAX_ACCELERATION_VALUE);
+		}
+		
 		return acceleration;
 	}
 
@@ -142,6 +155,7 @@ public class PedestrianCalculator {
 		Vector force = new Vector(Double.NaN, 0.0);
 		// cod.i(forces);
 		for (Vector f : forces) {
+//			cod.i("FORCES",forces);
 			force = GeometricCalculator.addVectors(force, f);
 		}
 		return force;

@@ -108,11 +108,11 @@ public class GeometricCalculator {
 		return Optional.empty();
 	};
 
-	private static VectorXY vectorFromTwoPoints(Position start, Position end) {
+	public static VectorXY vectorFromTwoPoints(Position start, Position end) {
 		return new VectorXY(end.getX() - start.getX(), end.getY() - start.getY());
 	}
 
-	private static boolean checkIfPointIsInBetween(Position checking, Position pA, Position pB) {
+	public static boolean checkIfPointIsInBetween(Position checking, Position pA, Position pB) {
 		double x = checking.getX();
 		double y = checking.getY();
 		double x1 = pA.getX();

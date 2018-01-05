@@ -16,12 +16,17 @@ public class PedestrianCrossPoints {
 	private double yi;
 	private double tanA;
 	private double B;
+	private double alpha;
 
 	public PedestrianCrossPoints(Double alpha, PedestrianInformation pedestrianInformation) {
 		super();
+		
+		
+		
 		xi = pedestrianInformation.getVariableInformation().getPosition().getX();
 		yi = pedestrianInformation.getVariableInformation().getPosition().getY();
 		tanA = Math.tan(alpha * Math.PI);
+		this.alpha = alpha;
 		B = (yi - tanA * xi);
 	}
 
@@ -32,9 +37,13 @@ public class PedestrianCrossPoints {
 		VectorXY shift = GeometricCalculator
 				.changeVector(neighborInformation.getVariableInformation().getDesiredSpeed());
 
-		List<Double> coords = calculateNeighborAllCrossPointCoord(
-				new Position(oldPosition.getX() + shift.getX(), oldPosition.getY() + shift.getY()),
+		Position neighborNewPosition = new Position(oldPosition.getX() + shift.getX(),
+				oldPosition.getY() + shift.getY());
+		// VectorXY shift = new VectorXY(0, 0);
+
+		List<Double> coords = calculateNeighborAllCrossPointCoord(neighborNewPosition,
 				neighborInformation.getStaticInformation().getRadius());
+
 		List<Position> crossPoints = calculateNeighborCrossPoints(coords);
 		return crossPoints;
 	}
@@ -43,7 +52,13 @@ public class PedestrianCrossPoints {
 		Function<Double, Position> positionFromCoord = (Double coordX) -> {
 			return new Position(coordX, tanA * (coordX - xi) + yi);
 		};
-		return coords.stream().map(positionFromCoord).collect(Collectors.toList());
+
+		return coords.stream().map(positionFromCoord)
+				.filter(p -> GeometricCalculator
+						.changeVector(GeometricCalculator.vectorFromTwoPoints(new Position(xi, yi), p))
+						.getAngle() == alpha)
+				.collect(Collectors.toList());
+		// return coords.stream().map(positionFromCoord).collect(Collectors.toList());
 	}
 
 	List<Double> calculateNeighborAllCrossPointCoord(Position position, double radius) {

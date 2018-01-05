@@ -38,11 +38,11 @@ public class Engine {
 		// ale tu trzeba te ^ joinować
 		for(Iterator<Pedestrian> iterator = environment.getPedestrians().iterator(); iterator.hasNext(); ) {
 			Pedestrian p = iterator.next();
-			if(p.getPedestrianInformation().getVariableInformation().isFinished()) {
-				iterator.remove();
-			}else {
+//			if(p.getPedestrianInformation().getVariableInformation().isFinished()) {
+//				iterator.remove();
+//			}else {
 				p.nextStep();
-			}
+//			}
 			
 		}
 		

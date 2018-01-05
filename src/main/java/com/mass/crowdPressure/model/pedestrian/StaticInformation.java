@@ -1,7 +1,8 @@
 package com.mass.crowdPressure.model.pedestrian;
 
+import com.mass.crowdPressure.calculators.Configuration;
+
 public class StaticInformation {
-	private static final double MASS_RADIUS_RATIO = 320.0;
 	private int id;
 	private double mass; // [kg]
 	private double radius; // [m]
@@ -15,7 +16,7 @@ public class StaticInformation {
 		super();
 		this.id = id;
 		this.mass = mass;
-		this.radius = mass / MASS_RADIUS_RATIO;
+		this.radius = mass / Configuration.MASS_RADIUS_RATIO;
 		this.comfortableSpeed = comfortableSpeed;
 		this.visionAngle = visionAngle;
 		this.horizontDistance = horizontDistance;
@@ -28,7 +29,7 @@ public class StaticInformation {
 
 	public void setMass(double mass) {
 		this.mass = mass;
-		this.radius = mass / MASS_RADIUS_RATIO;
+		this.radius = mass / Configuration.MASS_RADIUS_RATIO;
 	}
 
 	public double getRadius() {

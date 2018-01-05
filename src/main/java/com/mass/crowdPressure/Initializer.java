@@ -13,11 +13,11 @@ import com.mass.crowdPressure.model.pedestrian.Pedestrian;
 public class Initializer {
 
 
-	static public Engine createEngine() {
+	static public Engine createEngine(Symulation sym) {
 
 		// create map
 		MapFactory mapFactory = new MapFactory();
-		Map map = mapFactory.getMap(Symulation.SYM_P1_W1);
+		Map map = mapFactory.getMap(sym);
 
 		
 		List<Pedestrian> pedestrians = new ArrayList<>();
@@ -26,7 +26,7 @@ public class Initializer {
 		
 		// create pedestrians
 		PedestriansFactory pedestriansBuilder = new PedestriansFactory();
-		pedestriansBuilder.addPedestrians(environment,Symulation.SYM_P1_W1);
+		pedestriansBuilder.addPedestrians(environment,sym);
 
 		return new Engine(environment);
 	}

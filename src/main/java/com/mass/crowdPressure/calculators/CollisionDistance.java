@@ -24,7 +24,8 @@ public class CollisionDistance {
 		this.environment = environment;
 	}
 
-	public double getCollistionDistanceValue(Double alpha, PedestrianInformation pedestrianInformation) throws AngleOutOfRangeException {
+	public double getCollistionDistanceValue(Double alpha, PedestrianInformation pedestrianInformation)
+			throws AngleOutOfRangeException {
 		Double minimalDistance = pedestrianInformation.getStaticInformation().getHorizontDistance();
 		int id = pedestrianInformation.getStaticInformation().getId();
 		if (environment == null) {
@@ -60,16 +61,20 @@ public class CollisionDistance {
 		return minimalDistance;
 	}
 
-	private Double neighboursDistance(PedestrianCrossPoints pedestrianCrossPoints, Position pedestrianPosition,
+	private Double neighboursDistance(PedestrianCrossPoints pedestrianCrossPointsCal, Position pedestrianPosition,
 			Double minimalDistance, int id) throws AngleOutOfRangeException {
-		// TODO neighbor pedestrian velocity
 		for (Pedestrian p : environment.getPedestrians()) {
 			if (p.getPedestrianInformation().getStaticInformation().getId() != id) {
-				List<Position> crossPoints = pedestrianCrossPoints
+				List<Position> crossPoints = pedestrianCrossPointsCal
 						.getNeighborAllCrossPoints(p.getPedestrianInformation());
 				minimalDistance = getMinDistance(pedestrianPosition, minimalDistance, crossPoints);
 			}
 		}
+		
+		if(minimalDistance<Configuration.DEFAULT_PEDESTRIAN_HORIZON_DISTANCE) {
+			minimalDistance = Math.sqrt(minimalDistance);
+		}
+
 		return minimalDistance;
 	}
 
