@@ -61,7 +61,7 @@ public class CrowdSimulationGUI {
 
 		KeyFrame frame = new KeyFrame(duration, actionEvent -> {
 			try {
-				// clearAll();
+				clearAll();
 				drawCoordinateSystem();
 				drawMap(engine.getEnvironment().getMap());
 				drawPedestrians(engine.getEnvironment().getPedestrians());
@@ -130,6 +130,8 @@ public class CrowdSimulationGUI {
 		initializeMenu();
 		primaryStage.show();
 
+		drawCoordinateSystem();
+		drawMap(engine.getEnvironment().getMap());
 	}
 
 	private void initializeCanvas() {
@@ -138,17 +140,17 @@ public class CrowdSimulationGUI {
 		gc = canvas.getGraphicsContext2D();
 		canvas.setLayoutY(50);
 		canvas.setLayoutX(10);
+		canvas.setScaleX(1);
+		canvas.setScaleY(-1);
 
 		canvas.setOnMouseClicked(event -> {
 			try {
-				double posX = descale(event.getSceneX() - canvas.getLayoutX());
-				double posY = descale(event.getSceneY() - canvas.getLayoutY());
+				double posX = event.getX();
+				double posY = event.getY();
 
-				System.out.println(
-						(event.getSceneX() - canvas.getLayoutX()) + " " + (event.getSceneY() - canvas.getLayoutY()));
-				gc.fillArc(event.getSceneX() - canvas.getLayoutX(), event.getSceneY() - canvas.getLayoutY(), 5, 5, 0,
-						360, ArcType.OPEN);
-				new PedestriansFactory().addPedestrian(engine.getEnvironment(), posX, posY);
+				System.out.println(posX + " x " + posY);
+				gc.fillArc(posX, posY, 5, 5, 0,360, ArcType.OPEN);
+				new PedestriansFactory().addPedestrian(engine.getEnvironment(), descale(posX), descale(posY));
 
 				FXMLLoader fxmlLoader = new FXMLLoader();
 				fxmlLoader.setLocation(CrowdSimulationGUI.class.getResource("pedestrian.fxml"));
