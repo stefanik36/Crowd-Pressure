@@ -1,7 +1,5 @@
 package com.mass.crowdPressure.gui;
 
-import com.app.COD;
-import com.app.CODFactory;
 import com.mass.crowdPressure.Configuration;
 import com.mass.crowdPressure.Engine;
 import com.mass.crowdPressure.Initializer;
@@ -30,7 +28,6 @@ import java.util.ResourceBundle;
 
 public class GUIController implements Initializable {
 
-    private static final COD cod = CODFactory.getCOD();
     private static final double COLOR_OPACITY = 1.0;
     private static final double COLOR_BLUE = 0.0;
     private Timeline simLoop;
@@ -114,7 +111,7 @@ public class GUIController implements Initializable {
         });
     }
 
-    public void changeFps(int fps){
+    private void changeFps(int fps){
         simLoop.stop();
         simLoop.getKeyFrames().clear();
         buildAndSetUpSimulationLoop(fps);
@@ -167,7 +164,7 @@ public class GUIController implements Initializable {
         simLoop.getKeyFrames().add(frame);
     }
 
-    public void clearAll() {
+    private void clearAll() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }
 
