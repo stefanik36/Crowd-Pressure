@@ -35,7 +35,8 @@ public class GUIController implements Initializable {
     private Engine engine;
 
 
-    @FXML   public Button pauseStartButton;
+    @FXML   public Button btnPauseStart;
+    @FXML   public Button btnNextStep;
     @FXML   public ComboBox<String> actionComboBox;
     @FXML   public Slider fpsSlider;
     @FXML   public Label lblSliderVal;
@@ -54,14 +55,21 @@ public class GUIController implements Initializable {
         switch (simLoop.getStatus()) {
             case RUNNING:
                 simLoop.pause();
-                pauseStartButton.setText("Start");
+                btnPauseStart.setText("Start");
+                btnNextStep.setDisable(false);
                 break;
             case PAUSED:
             case STOPPED:
                 simLoop.play();
-                pauseStartButton.setText("Pause");
+                btnPauseStart.setText("Pause");
+                btnNextStep.setDisable(true);
                 break;
         }
+    }
+
+    @FXML
+    public void getNextStep() {
+        System.out.println("Next step...");
     }
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -72,7 +80,7 @@ public class GUIController implements Initializable {
         actionComboBox.getItems().addAll("Nothing", "Add wall", "Add Pedestrian");
         actionComboBox.getSelectionModel().select("Nothing");
 
-        pauseStartButton.setText("Start");
+        btnPauseStart.setText("Start");
         fpsSlider.setValue(this.fps);
         lblSliderVal.setText(String.format("%d", this.fps));
 
@@ -112,10 +120,13 @@ public class GUIController implements Initializable {
     }
 
     private void changeFps(int fps){
+        Animation.Status status = simLoop.getStatus();
         simLoop.stop();
         simLoop.getKeyFrames().clear();
         buildAndSetUpSimulationLoop(fps);
-        simLoop.play();
+        if(status == Animation.Status.RUNNING) {
+            simLoop.play();
+        }
 
     }
 
@@ -144,12 +155,19 @@ public class GUIController implements Initializable {
 
     private void buildAndSetUpSimulationLoop(int fps) {
         Duration duration = Duration.millis(1000 / (float) fps);
-        System.out.print("");
-        KeyFrame frame = new KeyFrame(duration, actionEvent -> {
+        KeyFrame frame = getNextFrame(duration);
+        simLoop = new Timeline();
+        int cycleCount = Animation.INDEFINITE;
+        simLoop.setCycleCount(cycleCount);
+        simLoop.getKeyFrames().add(frame);
+    }
+
+    private KeyFrame getNextFrame(Duration duration) {
+        return new KeyFrame(duration, e -> {
             try {
-                System.out.print("");
                 clearAll();
                 drawCoordinateSystem();
+                System.out.print("");
                 drawMap(engine.getEnvironment().getMap());
                 drawPedestrians(engine.getEnvironment().getPedestrians());
                 engine.nextState();
@@ -158,10 +176,6 @@ public class GUIController implements Initializable {
                 ex.printStackTrace();
             }
         });
-        simLoop = new Timeline();
-        int cycleCount = Animation.INDEFINITE;
-        simLoop.setCycleCount(cycleCount);
-        simLoop.getKeyFrames().add(frame);
     }
 
     private void clearAll() {
