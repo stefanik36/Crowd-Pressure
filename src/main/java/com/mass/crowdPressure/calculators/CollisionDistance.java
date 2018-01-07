@@ -2,6 +2,7 @@ package com.mass.crowdPressure.calculators;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
@@ -49,6 +50,7 @@ public class CollisionDistance {
 	private double getWallDistance(WallCrossPoint wallCrossPoint, Position pedestrianPosition, Double minimalDistance) {
 		for (Wall w : environment.getMap().getWalls()) {
 			List<Position> crossPoints = wallCrossPoint.getWallCrossPoints(w);
+//			cod.i("CP:" , crossPoints );
 			minimalDistance = getMinDistance(pedestrianPosition, minimalDistance, crossPoints);
 
 			// if (!crossPoints.isEmpty()) {
@@ -77,13 +79,17 @@ public class CollisionDistance {
 
 		return minimalDistance;
 	}
-
-	private Double getMinDistance(Position pedestrianPosition, Double minimalDistance, List<Position> crossPoints) {
+	
+	private Double getMinDistance(Position pedestrianPosition, Double minimalDistance,
+			List<Position> crossPoints) {
 		OptionalDouble min = crossPoints.stream()
 				.mapToDouble(cp -> GeometricCalculator.distance.apply(pedestrianPosition, cp)).min();
+
 		if ((min.isPresent()) && (min.getAsDouble() < minimalDistance)) {
 			minimalDistance = min.getAsDouble();
+
 		}
+		// cod.i("WALL",minimalDistance);
 		return minimalDistance;
 	}
 

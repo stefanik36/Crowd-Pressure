@@ -34,11 +34,13 @@ public class GeometricCalculator {
 		double denominator = -xp1 * tan + yp1 + xp2 * tan - yp2;
 		double x = numerator / denominator;
 		double y = tan * x + yi - tan * xi;
+//		cod.i("ANGLE: " + lpa.getAngle() + " wall: POS: ", Arrays.asList(ltp, new Position(x, y)));
 
 		if (checkIfPointIsInBetween(new Position(x, y), new Position(xp1, yp1), new Position(xp2, yp2))) {
+//			cod.i("HERE CROST POINT: " + lpa.getAngle(), new Position(x, y));
 			// if (((x >= xp1 && x <= xp2) || (x >= xp2 && x <= xp1)) && ((y >= yp1 && y <=
 			// yp2) || (y >= xp2 && y <= xp1))) {
-			if ((lpa.getAngle() < 1 && y > yi) || (lpa.getAngle() > 2 && y < yi)
+			if ((lpa.getAngle() < 1 && y > yi) || (lpa.getAngle() > 1 && y < yi)
 					|| (lpa.getAngle() == 1 && y == yi && x > xi) || (lpa.getAngle() == 0 && y == yi && x < xi))
 				return Optional.of(new Position(x, y));
 		}
@@ -102,7 +104,7 @@ public class GeometricCalculator {
 		if (checkIfPointIsInBetween(new Position(x, y), new Position(x1, y1), new Position(x2, y2))) {
 			// double result = Math.abs(a * x0 + b * y0 + c) / Math.sqrt(denominator);
 			Vector result = changeVector(vectorFromTwoPoints(new Position(x, y), new Position(x0, y0)));
-//			cod.i(result);
+			// cod.i(result);
 			return Optional.of(result);
 		}
 		return Optional.empty();
@@ -120,7 +122,10 @@ public class GeometricCalculator {
 		double x2 = pB.getX();
 		double y2 = pB.getY();
 
-		return (((x1 <= x && x <= x2) || (x2 <= x && x <= x1)) && ((y1 <= y && y <= y2) || (y2 <= y && y <= y1)));
+		return (((x1 - Configuration.PRECISION <= x && x <= x2 + Configuration.PRECISION)
+				|| (x2 - Configuration.PRECISION <= x && x <= x1 + Configuration.PRECISION))
+				&& ((y1 - Configuration.PRECISION <= y && y <= y2 + Configuration.PRECISION)
+						|| (y2 - Configuration.PRECISION <= y && y <= y1 + Configuration.PRECISION)));
 	}
 
 	// public static double AngleThreepoints(Position a, Position b, Position c) {
