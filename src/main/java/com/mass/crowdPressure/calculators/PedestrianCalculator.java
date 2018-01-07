@@ -1,10 +1,13 @@
 package com.mass.crowdPressure.calculators;
 
+import java.security.cert.PKIXRevocationChecker.Option;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import com.app.COD;
@@ -26,6 +29,8 @@ public class PedestrianCalculator {
 	private CollisionDistance collisionDistanceCal;
 	private CrowdPressure crowdPressureCal;
 	private Force forceCal;
+	private static final Random rand = new Random();
+	private static final int RANDOM_POOL = 10000;
 
 	public PedestrianCalculator(PedestrianInformation pedestrianInformation, Environment environment) {
 		this.pedestrianInformation = pedestrianInformation;
@@ -43,17 +48,45 @@ public class PedestrianCalculator {
 				.collect(Collectors.toList());
 
 		if (hasNotNotMovingObstacles.isEmpty()) {
-			return changeVisionCenter(directionInfos);
-//			return getMinimumDestinationDistance(directionInfos);
+			cod.i("A " + pedestrianInformation.getVariableInformation().getVisionCenter());
+			if (getTrueInProbability(Configuration.PERCENT_PROBABLITY_OF_CHANGING_VISION_CENTER)) {
+				return changeVisionCenter(directionInfos);
+			} else {
+				return getMinimumDestinationDistance(directionInfos);
+			}
 		} else if (hasNotNotMovingObstacles.size() < directionInfos.size()) {
-			return getMinimumDestinationDistance(hasNotNotMovingObstacles);
+			cod.i("B " + pedestrianInformation.getVariableInformation().getVisionCenter());
+				
+			if (getTrueInProbability(Configuration.PERCENT_PROBABLITY_OF_COMPUTE_NOT_FOR_WALLS)) {
+				return getMinimumDestinationDistance(hasNotNotMovingObstacles);
+			} else {
+				return getMinimumDestinationDistance(directionInfos);
+			}
 		} else {
+			cod.i("C " + pedestrianInformation.getVariableInformation().getVisionCenter());
 			return getMinimumDestinationDistance(directionInfos);
 		}
 	}
 
+	private boolean getTrueInProbability(int probablity) {
+		int random = rand.nextInt(100);
+		boolean computeNotForWalls = random < probablity;
+		return computeNotForWalls;
+	}
+
 	private DirectionInfo changeVisionCenter(List<DirectionInfo> directionInfos) {
+		if (Configuration.CHANGE_VISION_CENTER_RANDOM) {
+			return getRandomDirectionInfo();
+		}
 		return getMaximumCollisionDistance(directionInfos);
+	}
+
+	private DirectionInfo getRandomDirectionInfo() {
+		double alpha = (double) rand.nextInt(RANDOM_POOL) / ((double) (RANDOM_POOL / 2));
+		// cod.i("alpha: " + alpha);
+		DirectionInfo randomDi = new DirectionInfo(alpha, new MinimumDistance(Double.MAX_VALUE, Optional.empty()),
+				Double.MIN_VALUE);
+		return randomDi;
 	}
 
 	public DirectionInfo getMaximumCollisionDistance(List<DirectionInfo> directionInfos) {
@@ -66,7 +99,7 @@ public class PedestrianCalculator {
 		});
 		return max;
 	}
-	
+
 	public DirectionInfo getMinimumDestinationDistance(List<DirectionInfo> directionInfos) {
 		DirectionInfo min = Collections.min(directionInfos, new Comparator<DirectionInfo>() {
 			@Override
@@ -112,8 +145,6 @@ public class PedestrianCalculator {
 		}
 		return alpha;
 	}
-
-	
 
 	public Position getNextPosition() throws AngleOutOfRangeException {
 		// double desiredDirection =

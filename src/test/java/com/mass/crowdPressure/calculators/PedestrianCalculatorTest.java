@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import com.app.COD;
 import com.app.CODFactory;
+import com.mass.crowdPressure.calculators.figures.Vector;
 import com.mass.crowdPressure.exceptions.AngleOutOfRangeException;
 import com.mass.crowdPressure.model.DirectionInfo;
 import com.mass.crowdPressure.model.Environment;
@@ -100,7 +101,7 @@ public class PedestrianCalculatorTest {
 		PedestrianCalculator pc = new PedestrianCalculator(main, environment);
 
 		DirectionInfo dd = pc.getDirectionInfo();
-		 cod.i(dd);
+		cod.i(dd);
 		assertEquals(0.310, dd.getAlpha(), 0.01);
 
 	}
@@ -147,7 +148,7 @@ public class PedestrianCalculatorTest {
 		PedestrianCalculator pc = new PedestrianCalculator(main, environment);
 
 		DirectionInfo dd = pc.getDirectionInfo();
-//		cod.i(dd);
+		// cod.i(dd);
 
 	}
 

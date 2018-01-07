@@ -85,9 +85,7 @@ public class CollisionDistance {
 			}
 		}
 
-		// if (minimalDistance < Configuration.DEFAULT_PEDESTRIAN_HORIZON_DISTANCE) {
-		// minimalDistance = Math.sqrt(minimalDistance);
-		// }
+
 
 		return optionalGlobalMin;
 	}

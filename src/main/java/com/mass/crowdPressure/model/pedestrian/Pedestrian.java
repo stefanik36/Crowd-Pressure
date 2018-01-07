@@ -12,6 +12,7 @@ import com.mass.crowdPressure.calculators.figures.VectorXY;
 import com.mass.crowdPressure.exceptions.AngleOutOfRangeException;
 import com.mass.crowdPressure.model.DirectionInfo;
 import com.mass.crowdPressure.model.Environment;
+import com.mass.crowdPressure.model.Position;
 
 public class Pedestrian {
 
@@ -28,7 +29,7 @@ public class Pedestrian {
 
 	public void prepareNextStep() throws AngleOutOfRangeException {
 		
-
+		
 		DirectionInfo desiredDirectionInfo = pedestrianCalculator.getDirectionInfo();
 		Vector desiredVelocity = pedestrianCalculator.getDesireVelocity(desiredDirectionInfo.getCollisionDistance().getMinimumDistance(),
 				desiredDirectionInfo.getAlpha(), pedestrianInformation.getStaticInformation().getId());
