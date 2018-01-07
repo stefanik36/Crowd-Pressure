@@ -45,8 +45,8 @@ public class PedestriansFactory {
 //			p = new Position(30, 30);
 //		}
 //		cod.i("id:" + ID, p);
-//		Position p = new Position(22, 1);
-		Position p = new Position(10, 1);
+		Position p = new Position(22, 1);
+//		Position p = new Position(10, 1);
 		Position destinationPoint = p;
 		Position position = new Position(x, y);
 		environment.getPedestrians().add(createPedestrian(ID++, environment, destinationPoint, position));
