@@ -169,7 +169,7 @@ public class CrowdSimulationGUI {
 				new PedestriansFactory().addPedestrian(engine.getEnvironment(), descale(posX), descale(posY));
 
 				FXMLLoader fxmlLoader = new FXMLLoader();
-				fxmlLoader.setLocation(CrowdSimulationGUI.class.getResource("pedestrian.fxml"));
+				fxmlLoader.setLocation(CrowdSimulationGUI.class.getResource("Pedestrian.fxml"));
 				PedestrianCreationController controller = fxmlLoader.getController();
 				Scene scene = new Scene(fxmlLoader.load(), 600, 400);
 				// Stage stage = new Stage();
