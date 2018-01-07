@@ -36,8 +36,6 @@ public class GUIController implements Initializable {
     private Timeline simLoop;
     private GraphicsContext gc;
     private Engine engine;
-    private int windowWidth;
-    private int windowHeight;
 
 
     @FXML   public Button pauseStartButton;
@@ -170,7 +168,7 @@ public class GUIController implements Initializable {
     }
 
     public void clearAll() {
-        gc.clearRect(0, 0, windowWidth, windowHeight);
+        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }
 
     private void drawPedestrians(List<Pedestrian> pedestrians) {
