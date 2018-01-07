@@ -16,13 +16,9 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Slider;
+import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.ArcType;
 import javafx.util.Duration;
@@ -37,20 +33,20 @@ public class GUIController implements Initializable {
     private static final COD cod = CODFactory.getCOD();
     private static final double COLOR_OPACITY = 1.0;
     private static final double COLOR_BLUE = 0.0;
-    private int cycleCount = Animation.INDEFINITE;
-    private Group root;
     private Timeline simLoop;
-    private int fps;
-    private String windowTitle;
     private GraphicsContext gc;
     private Engine engine;
     private int windowWidth;
     private int windowHeight;
 
-    @FXML public Button pauseStartButton;
-    @FXML public ComboBox<String> actionComboBox;
-    @FXML public Slider fpsSlider;
-    @FXML public ScrollPane scrollPane;
+
+    @FXML   public Button pauseStartButton;
+    @FXML   public ComboBox<String> actionComboBox;
+    @FXML   public Slider fpsSlider;
+    @FXML   public Label lblSliderVal;
+            private int fps;
+    @FXML   public ScrollPane scrollPane;
+    @FXML   public Canvas canvas;
 
 
     @FXML
@@ -84,6 +80,7 @@ public class GUIController implements Initializable {
         pauseStartButton.setText("Start");
 
         initializeCanvas();
+        setSliderListener();
 
         buildAndSetUpSimulationLoop();
 
@@ -92,11 +89,9 @@ public class GUIController implements Initializable {
     }
 
     private void initializeCanvas() {
-        Canvas canvas = new Canvas();
-        scrollPane.setContent(canvas);
         gc = canvas.getGraphicsContext2D();
-        canvas.setLayoutY(50);
-        canvas.setLayoutX(10);
+        canvas.setLayoutY(0);
+        canvas.setLayoutX(0);
         canvas.setScaleX(1);
         canvas.setScaleY(-1);
 
@@ -107,6 +102,14 @@ public class GUIController implements Initializable {
             System.out.println(posX + " x " + posY);
             gc.fillArc(posX, posY, 5, 5, 0, 360, ArcType.OPEN);
             new PedestriansFactory().addPedestrian(engine.getEnvironment(), descale(posX), descale(posY));
+        });
+    }
+
+    private void setSliderListener(){
+        fpsSlider.valueProperty().addListener((ov, old_val, new_val) -> {
+            fpsSlider.setValue(new_val.intValue());
+            lblSliderVal.setText(String.format("%d", new_val.intValue()));
+            fps = (int) fpsSlider.getValue();
         });
     }
 
@@ -151,6 +154,7 @@ public class GUIController implements Initializable {
         });
 
         simLoop = new Timeline();
+        int cycleCount = Animation.INDEFINITE;
         simLoop.setCycleCount(cycleCount);
         simLoop.getKeyFrames().add(frame);
     }
@@ -182,6 +186,14 @@ public class GUIController implements Initializable {
         return new Color(red, green, COLOR_BLUE, COLOR_OPACITY);
     }
 
+    public void start() {
+        simLoop.play();
+    }
+
+    public void stop() {
+        simLoop.stop();
+    }
+
     public void setGraphicContext(GraphicsContext graphicContext) {
         this.gc = graphicContext;
     }
@@ -194,7 +206,7 @@ public class GUIController implements Initializable {
         this.simLoop = simLoop;
     }
 
-    public void setRoot(Group root) {
-        this.root = root;
+    public void setEngine(Engine engine) {
+        this.engine = engine;
     }
 }

@@ -28,8 +28,9 @@ public class Main extends Application {
 		Parent pre = fxmlLoader.load();
 		Scene scene = new Scene(pre);
 		primaryStage.setScene(scene);
-		primaryStage.setMinHeight(450);
-		primaryStage.setMinWidth(600);
+		primaryStage.setTitle("Crowd pressure symulation");
+		primaryStage.setMinHeight(600);
+		primaryStage.setMinWidth(650);
 		primaryStage.setOnCloseRequest(we -> {
 			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 			alert.setHeaderText("");

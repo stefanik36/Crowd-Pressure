@@ -29,8 +29,8 @@
     </MenuBar>
       <HBox alignment="CENTER" spacing="10.0">
          <children>
-            <Button fx:id="pauseStartButton" mnemonicParsing="false" onAction="#pauseStartSim" text="Start/Pause" />
-            <Button mnemonicParsing="false" text="Next step &gt;" />
+            <Button fx:id="pauseStartButton" maxWidth="90.0" minWidth="90.0" mnemonicParsing="false" onAction="#pauseStartSim" prefWidth="90.0" text="Start/Pause" />
+            <Button maxWidth="90.0" minWidth="90.0" mnemonicParsing="false" prefWidth="90.0" text="Next step &gt;" />
             <Region prefWidth="200.0" />
              <ComboBox fx:id="actionComboBox" onAction="#chooseAction" prefWidth="150.0" promptText="Action">
                  <opaqueInsets>
@@ -39,12 +39,13 @@
              </ComboBox>
             <VBox alignment="CENTER">
                <children>
-                  <Label text="fps: ">
-                     <VBox.margin>
-                        <Insets bottom="5.0" />
-                     </VBox.margin>
-                  </Label>
-                  <Slider fx:id="fpsSlider" blockIncrement="5.0" min="10.0" showTickLabels="true" showTickMarks="true" value="60.0" />
+                  <HBox alignment="CENTER">
+                     <children>
+                        <Label text="fps: " />
+                        <Label fx:id="lblSliderVal" text="60" />
+                     </children>
+                  </HBox>
+                  <Slider fx:id="fpsSlider" blockIncrement="5.0" min="10.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="60.0" />
                </children>
                <HBox.margin>
                   <Insets left="10.0" />
@@ -57,9 +58,9 @@
       </HBox>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
          <children>
-            <ScrollPane fx:id="scrollPane" hbarPolicy="ALWAYS" layoutX="204.0" layoutY="-46.0" prefHeight="317.0" prefWidth="640.0" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="ALWAYS" layoutX="204.0" layoutY="-46.0" prefHeight="317.0" prefWidth="640.0" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <content>
-                  <RadioButton mnemonicParsing="false" text="RadioButton" />
+                  <Canvas fx:id="canvas" height="297.0" width="718.0" />
                </content></ScrollPane>
          </children>
     </AnchorPane>
