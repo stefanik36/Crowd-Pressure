@@ -28,12 +28,12 @@ import java.util.ResourceBundle;
 
 public class GUIController implements Initializable {
 
+
     private static final double COLOR_OPACITY = 1.0;
     private static final double COLOR_BLUE = 0.0;
     private Timeline simLoop;
     private GraphicsContext gc;
     private Engine engine;
-
 
     @FXML   public Button btnPauseStart;
     @FXML   public Button btnNextStep;
@@ -44,6 +44,27 @@ public class GUIController implements Initializable {
     @FXML   public ScrollPane scrollPane;
     @FXML   public Canvas canvas;
 
+
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        engine = Initializer.createEngine(Configuration.SYMULATION_TYPE);
+
+        actionComboBox.getItems().removeAll(actionComboBox.getItems());
+        actionComboBox.getItems().addAll("Nothing", "Add wall", "Add Pedestrian");
+        actionComboBox.getSelectionModel().select("Nothing");
+
+        btnPauseStart.setText("Start");
+        fpsSlider.setValue(this.fps);
+        lblSliderVal.setText(String.format("%d", this.fps));
+
+        initializeCanvas();
+        setSliderListener();
+
+        buildAndSetUpSimulationLoop(this.fps);
+
+        drawCoordinateSystem();
+        drawMap(engine.getEnvironment().getMap());
+    }
 
     @FXML
     private void chooseAction(){
@@ -69,28 +90,13 @@ public class GUIController implements Initializable {
 
     @FXML
     public void getNextStep() {
-        System.out.println("Next step...");
-    }
-
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        engine = Initializer.createEngine(Configuration.SYMULATION_TYPE);
-
-        actionComboBox.getItems().removeAll(actionComboBox.getItems());
-        actionComboBox.getItems().addAll("Nothing", "Add wall", "Add Pedestrian");
-        actionComboBox.getSelectionModel().select("Nothing");
-
-        btnPauseStart.setText("Start");
-        fpsSlider.setValue(this.fps);
-        lblSliderVal.setText(String.format("%d", this.fps));
-
-        initializeCanvas();
-        setSliderListener();
-
-        buildAndSetUpSimulationLoop(this.fps);
-
-        drawCoordinateSystem();
-        drawMap(engine.getEnvironment().getMap());
+        Duration duration = Duration.millis(1000 / (float) fps);
+        KeyFrame frame = getNextFrame(duration);
+        Timeline loop = new Timeline();
+        int cycleCount = 1;
+        loop.setCycleCount(cycleCount);
+        loop.getKeyFrames().add(frame);
+        loop.play();
     }
 
     private void initializeCanvas() {
@@ -130,29 +136,6 @@ public class GUIController implements Initializable {
 
     }
 
-    private double descale(double value) {
-        if (value == 0)
-            return 0;
-        return value / Configuration.SCALE_VALUE;
-    }
-
-    private void drawCoordinateSystem() {
-        gc.strokeLine(0, 0, 1000, 5);
-        gc.strokeLine(0, 0, 5, 1000);
-    }
-
-    private void drawMap(Map map) {
-        for (Wall w : map.getWalls()) {
-            Position start = ((StraightWall) w).getStartPosition();
-            Position end = ((StraightWall) w).getEndPosition();
-            gc.strokeLine(scale(start.getX()), scale(start.getY()), scale(end.getX()), scale(end.getY()));
-        }
-    }
-
-    private double scale(double value) {
-        return value * Configuration.SCALE_VALUE;
-    }
-
     private void buildAndSetUpSimulationLoop(int fps) {
         Duration duration = Duration.millis(1000 / (float) fps);
         KeyFrame frame = getNextFrame(duration);
@@ -176,6 +159,29 @@ public class GUIController implements Initializable {
                 ex.printStackTrace();
             }
         });
+    }
+
+    private double descale(double value) {
+        if (value == 0)
+            return 0;
+        return value / Configuration.SCALE_VALUE;
+    }
+
+    private void drawCoordinateSystem() {
+        gc.strokeLine(0, 0, 1000, 5);
+        gc.strokeLine(0, 0, 5, 1000);
+    }
+
+    private void drawMap(Map map) {
+        for (Wall w : map.getWalls()) {
+            Position start = ((StraightWall) w).getStartPosition();
+            Position end = ((StraightWall) w).getEndPosition();
+            gc.strokeLine(scale(start.getX()), scale(start.getY()), scale(end.getX()), scale(end.getY()));
+        }
+    }
+
+    private double scale(double value) {
+        return value * Configuration.SCALE_VALUE;
     }
 
     private void clearAll() {

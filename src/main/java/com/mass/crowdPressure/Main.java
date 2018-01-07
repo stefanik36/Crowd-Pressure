@@ -1,6 +1,5 @@
 package com.mass.crowdPressure;
 
-import com.mass.crowdPressure.gui.CrowdSimulationGUI;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,7 +11,6 @@ import javafx.stage.Stage;
 import java.util.Optional;
 
 public class Main extends Application {
-	private CrowdSimulationGUI gui = new CrowdSimulationGUI("CrowdPressureSym", Configuration.FPS, 1000, 1000);
 
 	public static void main(String[] args) {
 		launch(args);
@@ -20,9 +18,6 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-
-//		gui.setEngine(Initializer.createEngine(Configuration.SYMULATION_TYPE));
-//		gui.initialize(primaryStage);
 
 		FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("App.fxml"));
 		Parent pre = fxmlLoader.load();
