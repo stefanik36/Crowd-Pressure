@@ -16,6 +16,7 @@ public class VariableInformation {
 	private Vector desiredSpeed;
 	private Vector desiredAcceleration;
 	private boolean finished;
+	private double  crowdPressure;
 
 	public VariableInformation(double visionCenter, Position destinationPoint, Position position) {
 		this.visionCenter = visionCenter;
@@ -28,6 +29,7 @@ public class VariableInformation {
 		this.desiredDirection = visionCenter;
 		this.desiredSpeed = new Vector(desiredDirection, 0);
 		this.desiredAcceleration = new Vector(Double.NaN, 0.0);
+		this.crowdPressure = 1.0;
 	}
 
 	public VariableInformation(Position destinationPoint, Position position) {
@@ -104,5 +106,13 @@ public class VariableInformation {
 
 	public void setDesiredAcceleration(Vector desiredAcceleration) {
 		this.desiredAcceleration = desiredAcceleration;
+	}
+
+	public double getCrowdPressure() {
+		return crowdPressure;
+	}
+
+	public void setCrowdPressure(double crowdPressure) {
+		this.crowdPressure = crowdPressure;
 	}
 }

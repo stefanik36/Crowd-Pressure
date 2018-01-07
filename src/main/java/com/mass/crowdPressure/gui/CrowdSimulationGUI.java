@@ -1,15 +1,18 @@
 package com.mass.crowdPressure.gui;
 
+import java.io.IOException;
+import java.util.List;
+
 import com.app.COD;
 import com.app.CODFactory;
 import com.mass.crowdPressure.Engine;
 import com.mass.crowdPressure.builders.PedestriansFactory;
-import com.mass.crowdPressure.calculators.Configuration;
 import com.mass.crowdPressure.model.Position;
 import com.mass.crowdPressure.model.map.Map;
 import com.mass.crowdPressure.model.map.StraightWall;
 import com.mass.crowdPressure.model.map.Wall;
 import com.mass.crowdPressure.model.pedestrian.Pedestrian;
+
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -24,13 +27,11 @@ import javafx.scene.shape.ArcType;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-
 public class CrowdSimulationGUI {
 	private static final COD cod = CODFactory.getCOD();
 	private static final double SCALE_VALUE = 20;
+	private static final double COLOR_OPACITY = 1.0;
+	private static final double COLOR_BLUE = 0.8;
 	private int cycleCount = Animation.INDEFINITE;
 	private Group root;
 	private Timeline simLoop;
@@ -95,7 +96,7 @@ public class CrowdSimulationGUI {
 	}
 
 	private void drawPedestrians(List<Pedestrian> pedestrians) {
-		gc.setFill(Color.RED);
+//		gc.setFill(Color.RED);
 		for (Pedestrian p : pedestrians) {
 			double x = scale(p.getPedestrianInformation().getVariableInformation().getPosition().getX());
 			double y = scale(p.getPedestrianInformation().getVariableInformation().getPosition().getY());
@@ -105,9 +106,25 @@ public class CrowdSimulationGUI {
 			// cod.i("scaled: ",Arrays.asList(x,y,radius,vision));
 			gc.fillArc(x, y, 4, 3, 0, 360, ArcType.OPEN);
 			gc.strokeOval(x - radius, y - radius, radius * 2, radius * 2);
-//			gc.strokeOval(x - vision, y - vision, vision * 2, vision * 2);
+
+			Color pedestrianColor = getPedestrianColor(
+					p.getPedestrianInformation().getVariableInformation().getCrowdPressure());
+
+			gc.setFill(pedestrianColor);
+			// gc.strokeOval(x - vision, y - vision, vision * 2, vision * 2);
 		}
-		gc.setFill(Color.BLACK);
+//		gc.setFill(Color.BLACK);
+	}
+
+	private Color getPedestrianColor(double x) {
+//		x = x*100;
+		double red = (x > 0.5 ? 1.0 : 2*x/1.0);
+		double green = (x > 0.5 ? 1-2*(x-0.5)/1.0 : 1.0);
+		Color pedestrianColor = new Color(red, green, COLOR_BLUE, COLOR_OPACITY);
+
+//		cod.i("RGB: ", pedestrianColor);
+//		cod.i("RGB: ", Arrays.asList(red, green, COLOR_BLUE));
+		return pedestrianColor;
 	}
 
 	private double descale(double value) {
@@ -149,7 +166,7 @@ public class CrowdSimulationGUI {
 				double posY = event.getY();
 
 				System.out.println(posX + " x " + posY);
-				gc.fillArc(posX, posY, 5, 5, 0,360, ArcType.OPEN);
+				gc.fillArc(posX, posY, 5, 5, 0, 360, ArcType.OPEN);
 				new PedestriansFactory().addPedestrian(engine.getEnvironment(), descale(posX), descale(posY));
 
 				FXMLLoader fxmlLoader = new FXMLLoader();
