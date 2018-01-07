@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.app.COD;
 import com.app.CODFactory;
+import com.mass.crowdPressure.Configuration;
 import com.mass.crowdPressure.Engine;
 import com.mass.crowdPressure.builders.PedestriansFactory;
 import com.mass.crowdPressure.model.Position;
@@ -29,9 +30,8 @@ import javafx.util.Duration;
 
 public class CrowdSimulationGUI {
 	private static final COD cod = CODFactory.getCOD();
-	private static final double SCALE_VALUE = 20;
 	private static final double COLOR_OPACITY = 1.0;
-	private static final double COLOR_BLUE = 0.8;
+	private static final double COLOR_BLUE = 0.0;
 	private int cycleCount = Animation.INDEFINITE;
 	private Group root;
 	private Timeline simLoop;
@@ -117,7 +117,7 @@ public class CrowdSimulationGUI {
 	}
 
 	private Color getPedestrianColor(double x) {
-//		x = x*100;
+//		x = x*100;Configuration
 		double red = (x > 0.5 ? 1.0 : 2*x/1.0);
 		double green = (x > 0.5 ? 1-2*(x-0.5)/1.0 : 1.0);
 		Color pedestrianColor = new Color(red, green, COLOR_BLUE, COLOR_OPACITY);
@@ -130,11 +130,11 @@ public class CrowdSimulationGUI {
 	private double descale(double value) {
 		if (value == 0)
 			return 0;
-		return value / SCALE_VALUE;
+		return value / Configuration.SCALE_VALUE;
 	}
 
 	private double scale(double value) {
-		return value * SCALE_VALUE;
+		return value * Configuration.SCALE_VALUE;
 	}
 
 	public void initialize(Stage primaryStage) throws IOException, InterruptedException {

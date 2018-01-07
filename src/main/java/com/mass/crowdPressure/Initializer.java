@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.mass.crowdPressure.builders.MapFactory;
 import com.mass.crowdPressure.builders.PedestriansFactory;
-import com.mass.crowdPressure.calculators.Configuration;
 import com.mass.crowdPressure.model.Environment;
 import com.mass.crowdPressure.model.map.Map;
 import com.mass.crowdPressure.model.pedestrian.Pedestrian;

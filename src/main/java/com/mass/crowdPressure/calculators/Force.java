@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import com.app.COD;
 import com.app.CODFactory;
+import com.mass.crowdPressure.Configuration;
 import com.mass.crowdPressure.calculators.figures.LineTwoPoints;
 import com.mass.crowdPressure.calculators.figures.Vector;
 import com.mass.crowdPressure.calculators.figures.VectorXY;

@@ -31,7 +31,7 @@ public class CollisionDistance {
 		Double horizontDistance = pedestrianInformation.getStaticInformation().getHorizontDistance();
 		int id = pedestrianInformation.getStaticInformation().getId();
 		if (environment == null) {
-			return new MinimumDistance(horizontDistance);
+			return new MinimumDistance(horizontDistance, Optional.empty());
 		}
 		// cod.i(pedestrianInformation);
 		// TODO inside geometric function
@@ -42,23 +42,26 @@ public class CollisionDistance {
 
 		Optional<Double> nDistance = neighboursDistance(pedestrianCrossPoints, pedestrianPosition, id);
 		Optional<Double> wDistance = getWallDistance(wallCrossPoint, pedestrianPosition);
-		
-		List<Optional<Double>> distances = Arrays.asList(nDistance, wDistance);
 
-		MinimumDistance minimumDistance = getminimumDistance(horizontDistance, distances);
+		MinimumDistance minimumDistance = getminimumDistance(horizontDistance, nDistance, wDistance);
 
 		return minimumDistance;
 	}
 
-	private MinimumDistance getminimumDistance(Double horizontDistance, List<Optional<Double>> distances) {
+	private MinimumDistance getminimumDistance(Double horizontDistance, Optional<Double> nDistance,
+			Optional<Double> wDistance) {
 		Double minDistanceValue = horizontDistance;
-		for (Optional<Double> d : distances) {
+		for (Optional<Double> d : Arrays.asList(nDistance, wDistance)) {
 			if (d.isPresent()) {
 				minDistanceValue = minDistanceValue < d.get() ? minDistanceValue : d.get();
 			}
 		}
-		MinimumDistance minimumDistance = new MinimumDistance(minDistanceValue);
-		return minimumDistance;
+		if (wDistance.isPresent()) {
+			if (wDistance.get() < horizontDistance) {
+				return new MinimumDistance(minDistanceValue, wDistance);
+			}
+		}
+		return new MinimumDistance(minDistanceValue, Optional.empty());
 	}
 
 	private Optional<Double> getWallDistance(WallCrossPoint wallCrossPoint, Position pedestrianPosition) {

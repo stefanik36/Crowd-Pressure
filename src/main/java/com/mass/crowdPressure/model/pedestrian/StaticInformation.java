@@ -1,6 +1,6 @@
 package com.mass.crowdPressure.model.pedestrian;
 
-import com.mass.crowdPressure.calculators.Configuration;
+import com.mass.crowdPressure.Configuration;
 
 public class StaticInformation {
 	private int id;

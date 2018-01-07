@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.app.COD;
 import com.app.CODFactory;
-import com.mass.crowdPressure.calculators.Configuration;
+import com.mass.crowdPressure.Configuration;
 import com.mass.crowdPressure.calculators.GeometricCalculator;
 import com.mass.crowdPressure.calculators.PedestrianCalculator;
 import com.mass.crowdPressure.calculators.figures.Vector;
@@ -27,13 +27,10 @@ public class Pedestrian {
 	}
 
 	public void prepareNextStep() throws AngleOutOfRangeException {
-		if (pedestrianInformation.getVariableInformation().isFinished()) {
-			cod.i("PEDESTRIAN: " + pedestrianInformation.getStaticInformation().getId() + " FINISHED");
-			return;
-		}
+		
 
 		DirectionInfo desiredDirectionInfo = pedestrianCalculator.getDirectionInfo();
-		Vector desiredVelocity = pedestrianCalculator.getDesireVelocity(desiredDirectionInfo.getCollisionDistance(),
+		Vector desiredVelocity = pedestrianCalculator.getDesireVelocity(desiredDirectionInfo.getCollisionDistance().getMinimumDistance(),
 				desiredDirectionInfo.getAlpha(), pedestrianInformation.getStaticInformation().getId());
 		// cod.i(desiredVelocity);
 
@@ -54,9 +51,6 @@ public class Pedestrian {
 	}
 
 	public void nextStep() {
-		if (pedestrianInformation.getVariableInformation().isFinished()) {
-			return;
-		}
 		// cod.i("pos",pedestrianInformation.getVariableInformation().getPosition());
 		// cod.i("next",pedestrianInformation.getVariableInformation().getNextPosition());
 		pedestrianInformation.getVariableInformation()
