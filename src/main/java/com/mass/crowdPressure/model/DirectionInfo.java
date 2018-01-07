@@ -1,40 +1,42 @@
 package com.mass.crowdPressure.model;
 
 public class DirectionInfo {
-	private double alpha;
-	private double collisionDistance;
-	private double destinationDistance;
+	private Double alpha;
+	private MinimumDistance collisionDistance;
+	private Double destinationDistance;
 
-	public DirectionInfo(double alpha, double collisionDistance, double destinationDistance) {
+	public DirectionInfo(double alpha, MinimumDistance collisionDistanceValue, double destinationDistance) {
 		super();
-		this.alpha = alpha;
-		this.collisionDistance = collisionDistance;
-		this.destinationDistance = destinationDistance;
+		this.setAlpha(alpha);
+		this.setCollisionDistance(collisionDistanceValue);
+		this.setDestinationDistance(destinationDistance);
 	}
+
 	public DirectionInfo() {
 		super();
 	}
-	public double getAlpha() {
-		return alpha;
-	}
 
-	public void setAlpha(double alpha) {
-		this.alpha = alpha;
-	}
-
-	public double getCollisionDistance() {
+	public MinimumDistance getCollisionDistance() {
 		return collisionDistance;
 	}
 
-	public void setCollisionDistance(double collisionDistance) {
+	public void setCollisionDistance(MinimumDistance collisionDistance) {
 		this.collisionDistance = collisionDistance;
+	}
+
+	public Double getAlpha() {
+		return alpha;
+	}
+
+	public void setAlpha(Double alpha) {
+		this.alpha = alpha;
 	}
 
 	public Double getDestinationDistance() {
 		return destinationDistance;
 	}
 
-	public void setDestinationDistance(double destinationDistance) {
+	public void setDestinationDistance(Double destinationDistance) {
 		this.destinationDistance = destinationDistance;
 	}
 

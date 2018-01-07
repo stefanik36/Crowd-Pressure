@@ -1,5 +1,7 @@
 package com.mass.crowdPressure.model.pedestrian;
 
+import java.util.List;
+
 import com.app.COD;
 import com.app.CODFactory;
 import com.mass.crowdPressure.calculators.Configuration;
@@ -31,10 +33,13 @@ public class Pedestrian {
 		}
 
 		DirectionInfo desiredDirectionInfo = pedestrianCalculator.getDirectionInfo();
-		Vector desiredVelocity = pedestrianCalculator.getDesireVelocity(desiredDirectionInfo.getCollisionDistance(),
+		Vector desiredVelocity = pedestrianCalculator.getDesireVelocity(desiredDirectionInfo.getCollisionDistance().getMinimumDistanceObstacles(),
 				desiredDirectionInfo.getAlpha(), pedestrianInformation.getStaticInformation().getId());
 		// cod.i(desiredVelocity);
-		Vector desiredAcceleration = pedestrianCalculator.getDesireAcceleration(desiredVelocity);
+		
+		List<Vector> forces = pedestrianCalculator.getForces();
+		double forcesValue = pedestrianCalculator.getForcesValue(forces);
+		Vector desiredAcceleration = pedestrianCalculator.getDesireAcceleration(desiredVelocity,forces);
 		pedestrianInformation.getVariableInformation().setDesiredDirection(desiredDirectionInfo.getAlpha());
 		pedestrianInformation.getVariableInformation().setDesiredSpeed(desiredVelocity);
 		pedestrianInformation.getVariableInformation().setDesiredAcceleration(desiredAcceleration);
@@ -43,6 +48,8 @@ public class Pedestrian {
 				.setDestinationAngle(GeometricCalculator.calculateAngle.apply(
 						pedestrianInformation.getVariableInformation().getNextPosition(),
 						pedestrianInformation.getVariableInformation().getDestinationPoint()));
+//		cod.e("ACCELERATION",desiredAcceleration);
+		pedestrianInformation.getVariableInformation().setCrowdPressure(pedestrianCalculator.getCrowdPressure(forcesValue));
 	}
 
 	public void nextStep() {

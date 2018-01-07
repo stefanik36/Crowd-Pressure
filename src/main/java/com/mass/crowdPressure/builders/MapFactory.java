@@ -26,11 +26,11 @@ public class MapFactory {
 
 	private Map getRoom() {
 		List<Wall> walls = new ArrayList<>();
-		walls.add(new StraightWall(new Position(6, 10), new Position(20, 10)));
-		walls.add(new StraightWall(new Position(25, 10), new Position(39, 10)));
-		walls.add(new StraightWall(new Position(6, 10), new Position(6, 40)));
-		walls.add(new StraightWall(new Position(39, 10), new Position(39, 40)));
-		walls.add(new StraightWall(new Position(6, 40), new Position(39, 40)));
+		walls.add(new StraightWall(new Position(6, 30), new Position(45, 30)));
+		walls.add(new StraightWall(new Position(55, 30), new Position(90, 30)));
+		walls.add(new StraightWall(new Position(6, 30), new Position(6, 80)));
+		walls.add(new StraightWall(new Position(90, 30), new Position(90, 80)));
+		walls.add(new StraightWall(new Position(6, 80), new Position(90, 80)));
 		Map map = new Map(walls);
 		return map;
 	}

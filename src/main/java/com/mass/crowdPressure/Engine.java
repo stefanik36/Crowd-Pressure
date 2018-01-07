@@ -11,7 +11,7 @@ import com.mass.crowdPressure.model.pedestrian.Pedestrian;
 
 public class Engine {
 
-	private final static COD cod = CODFactory.setLevelOfDepression(4);
+	private final static COD cod = CODFactory.setLevelOfDepression(10);
 
 	private Environment environment;
 
@@ -45,6 +45,7 @@ public class Engine {
 //			}
 			
 		}
+//		cod.i(environment.getPedestrians().get(0).getPedestrianInformation());
 		
 //		for (Pedestrian p : environment.getPedestrians()) { // i tu też
 //			p.nextStep();

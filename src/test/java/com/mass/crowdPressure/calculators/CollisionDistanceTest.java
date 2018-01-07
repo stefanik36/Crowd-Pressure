@@ -42,7 +42,7 @@ public class CollisionDistanceTest {
 		CollisionDistance cd = new CollisionDistance(environment);
 		// cod.i(environment.getPedestrians().stream().map(p ->
 		// p.getPedestrianInformation()).collect(Collectors.toList()));
-		double result = cd.getCollistionDistanceValue(0.25, main);
+		double result = cd.getCollistionDistanceValue(0.25, main).getMinimumDistanceObstacles();
 
 		// when(pedestrianInformation.getVisionCenter()).thenReturn(43.0);
 		// when(pedestrianInformation.getVisionAngle()).thenReturn(5.0);
