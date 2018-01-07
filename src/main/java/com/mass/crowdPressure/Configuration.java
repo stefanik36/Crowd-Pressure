@@ -26,6 +26,7 @@ public class Configuration {
 	public static final double PRECISION_OF_CALCULATIONS = 0.001;
 	public static final Function<DestinationDistanceCalculatorInfo, Double> ddFunction = DestinationDistance.originalDDFunction;
 	public static final boolean FORCES = true;
+	public static final boolean CHANGE_VISION_CENTER = false;
 
 	// SYMULATION
 	public static final int FPS = 60;

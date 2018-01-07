@@ -43,8 +43,11 @@ public class PedestrianCalculator {
 				.collect(Collectors.toList());
 
 		if (hasNotNotMovingObstacles.isEmpty()) {
-			return changeVisionCenter(directionInfos);
-//			return getMinimumDestinationDistance(directionInfos);
+			if (Configuration.CHANGE_VISION_CENTER) {
+				return changeVisionCenter(directionInfos);
+			} else {
+				return getMinimumDestinationDistance(directionInfos);
+			}
 		} else if (hasNotNotMovingObstacles.size() < directionInfos.size()) {
 			return getMinimumDestinationDistance(hasNotNotMovingObstacles);
 		} else {
@@ -66,7 +69,7 @@ public class PedestrianCalculator {
 		});
 		return max;
 	}
-	
+
 	public DirectionInfo getMinimumDestinationDistance(List<DirectionInfo> directionInfos) {
 		DirectionInfo min = Collections.min(directionInfos, new Comparator<DirectionInfo>() {
 			@Override
@@ -112,8 +115,6 @@ public class PedestrianCalculator {
 		}
 		return alpha;
 	}
-
-	
 
 	public Position getNextPosition() throws AngleOutOfRangeException {
 		// double desiredDirection =
