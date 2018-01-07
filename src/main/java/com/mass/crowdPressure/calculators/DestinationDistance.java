@@ -45,7 +45,7 @@ public class DestinationDistance {
 		DestinationDistanceCalculatorInfo ddci = new DestinationDistanceCalculatorInfo(alpha, destinationAngle,
 				horizontDistance, collisionDistanceValue);
 
-		return Configuration.ddFunction.apply(ddci);
+		return Configuration.DESTINATION_DISTANCE_FUNCTION.apply(ddci);
 	}
 
 }

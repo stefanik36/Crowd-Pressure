@@ -111,7 +111,9 @@ public class CrowdSimulationGUI {
 					p.getPedestrianInformation().getVariableInformation().getCrowdPressure());
 
 			gc.setFill(pedestrianColor);
-			// gc.strokeOval(x - vision, y - vision, vision * 2, vision * 2);
+			if(Configuration.SHOW_VISION_RADIUS) {
+				 gc.strokeOval(x - vision, y - vision, vision * 2, vision * 2);
+			}
 		}
 //		gc.setFill(Color.BLACK);
 	}
@@ -167,7 +169,7 @@ public class CrowdSimulationGUI {
 
 				System.out.println(posX + " x " + posY);
 				gc.fillArc(posX, posY, 5, 5, 0, 360, ArcType.OPEN);
-				new PedestriansFactory().addPedestrian(engine.getEnvironment(), descale(posX), descale(posY));
+				new PedestriansFactory().addPedestrian(engine.getEnvironment(), new Position(descale(posX), descale(posY)), null);
 
 				FXMLLoader fxmlLoader = new FXMLLoader();
 				fxmlLoader.setLocation(CrowdSimulationGUI.class.getResource("pedestrian.fxml"));
