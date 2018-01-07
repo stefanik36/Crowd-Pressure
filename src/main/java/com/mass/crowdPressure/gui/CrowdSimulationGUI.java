@@ -1,8 +1,5 @@
 package com.mass.crowdPressure.gui;
 
-import java.io.IOException;
-import java.util.List;
-
 import com.app.COD;
 import com.app.CODFactory;
 import com.mass.crowdPressure.Configuration;
@@ -13,7 +10,6 @@ import com.mass.crowdPressure.model.map.Map;
 import com.mass.crowdPressure.model.map.StraightWall;
 import com.mass.crowdPressure.model.map.Wall;
 import com.mass.crowdPressure.model.pedestrian.Pedestrian;
-
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -27,6 +23,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.ArcType;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.io.IOException;
+import java.util.List;
 
 public class CrowdSimulationGUI {
 	private static final COD cod = CODFactory.getCOD();
@@ -186,7 +185,7 @@ public class CrowdSimulationGUI {
 
 	private void initializeMenu() throws IOException {
 
-		FXMLLoader fxmlLoader = new FXMLLoader(CrowdSimulationGUI.class.getResource("menu.fxml"));
+		FXMLLoader fxmlLoader = new FXMLLoader(CrowdSimulationGUI.class.getResource("Menu.fxml"));
 		Parent menuP = fxmlLoader.load();
 		menu = fxmlLoader.getController();
 		menu.setGraphicContext(gc);
