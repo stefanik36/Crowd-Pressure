@@ -29,6 +29,6 @@ public class Configuration {
 	public static final Function<DestinationDistanceCalculatorInfo, Double> ddFunction = DestinationDistance.originalDDFunction;
 
 	public static final boolean FORCES = true;
-	public static final double WALL_DISTANCE_POWER = 0.00001;
+//	public static final double WALL_DISTANCE_POWER = 0.00001;
 
 }

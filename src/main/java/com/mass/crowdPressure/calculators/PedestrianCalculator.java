@@ -49,7 +49,7 @@ public class PedestrianCalculator {
 		for (Double i = start; i <= end; i = i + step) {
 			alpha = getAlpha(i);
 			double collisionDistanceValue = collisionDistanceCal.getCollistionDistanceValue(alpha,
-					pedestrianInformation);
+					pedestrianInformation).getMinimumDistance();
 			double destinationDistanceValue = destinationDistanceCal.getDestinationDistanceFunction(alpha,
 					pedestrianInformation.getVariableInformation().getDestinationAngle(),
 					pedestrianInformation.getStaticInformation().getHorizontDistance(), collisionDistanceValue);

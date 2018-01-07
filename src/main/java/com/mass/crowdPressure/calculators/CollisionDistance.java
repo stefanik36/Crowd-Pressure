@@ -11,6 +11,7 @@ import com.app.COD;
 import com.app.CODFactory;
 import com.mass.crowdPressure.exceptions.AngleOutOfRangeException;
 import com.mass.crowdPressure.model.Environment;
+import com.mass.crowdPressure.model.MinimumDistance;
 import com.mass.crowdPressure.model.Position;
 import com.mass.crowdPressure.model.map.Wall;
 import com.mass.crowdPressure.model.pedestrian.Pedestrian;
@@ -25,12 +26,12 @@ public class CollisionDistance {
 		this.environment = environment;
 	}
 
-	public double getCollistionDistanceValue(Double alpha, PedestrianInformation pedestrianInformation)
+	public MinimumDistance getCollistionDistanceValue(Double alpha, PedestrianInformation pedestrianInformation)
 			throws AngleOutOfRangeException {
-		Double minimalDistance = pedestrianInformation.getStaticInformation().getHorizontDistance();
+		Double horizontDistance = pedestrianInformation.getStaticInformation().getHorizontDistance();
 		int id = pedestrianInformation.getStaticInformation().getId();
 		if (environment == null) {
-			return minimalDistance;
+			return new MinimumDistance(horizontDistance);
 		}
 		// cod.i(pedestrianInformation);
 		// TODO inside geometric function
@@ -39,58 +40,77 @@ public class CollisionDistance {
 
 		Position pedestrianPosition = pedestrianInformation.getVariableInformation().getPosition();
 
-		minimalDistance = neighboursDistance(pedestrianCrossPoints, pedestrianPosition, minimalDistance, id);
-		// System.out.print("alpha: " + alpha + " ");
-		minimalDistance = getWallDistance(wallCrossPoint, pedestrianPosition, minimalDistance);
-		// System.out.println("" + alpha + ": "+minimalDistance);
+		Optional<Double> nDistance = neighboursDistance(pedestrianCrossPoints, pedestrianPosition, id);
+		Optional<Double> wDistance = getWallDistance(wallCrossPoint, pedestrianPosition);
+		
+		List<Optional<Double>> distances = Arrays.asList(nDistance, wDistance);
 
-		return minimalDistance;
+		MinimumDistance minimumDistance = getminimumDistance(horizontDistance, distances);
+
+		return minimumDistance;
 	}
 
-	private double getWallDistance(WallCrossPoint wallCrossPoint, Position pedestrianPosition, Double minimalDistance) {
-		for (Wall w : environment.getMap().getWalls()) {
-			List<Position> crossPoints = wallCrossPoint.getWallCrossPoints(w);
-//			cod.i("CP:" , crossPoints );
-			minimalDistance = getMinDistance(pedestrianPosition, minimalDistance, crossPoints);
-
-			// if (!crossPoints.isEmpty()) {
-			// cod.i("cp md pp", Arrays.asList(crossPoints.get(0), minimalDistance,
-			// pedestrianPosition));
-			// } else {
-			// cod.i("cp md pp", Arrays.asList(null, minimalDistance, pedestrianPosition));
-			// }
-		}
-		return minimalDistance;
-	}
-
-	private Double neighboursDistance(PedestrianCrossPoints pedestrianCrossPointsCal, Position pedestrianPosition,
-			Double minimalDistance, int id) throws AngleOutOfRangeException {
-		for (Pedestrian p : environment.getPedestrians()) {
-			if (p.getPedestrianInformation().getStaticInformation().getId() != id) {
-				List<Position> crossPoints = pedestrianCrossPointsCal
-						.getNeighborAllCrossPoints(p.getPedestrianInformation());
-				minimalDistance = getMinDistance(pedestrianPosition, minimalDistance, crossPoints);
+	private MinimumDistance getminimumDistance(Double horizontDistance, List<Optional<Double>> distances) {
+		Double minDistanceValue = horizontDistance;
+		for (Optional<Double> d : distances) {
+			if (d.isPresent()) {
+				minDistanceValue = minDistanceValue < d.get() ? minDistanceValue : d.get();
 			}
 		}
-		
-		if(minimalDistance<Configuration.DEFAULT_PEDESTRIAN_HORIZON_DISTANCE) {
-			minimalDistance = Math.sqrt(minimalDistance);
-		}
-
-		return minimalDistance;
+		MinimumDistance minimumDistance = new MinimumDistance(minDistanceValue);
+		return minimumDistance;
 	}
-	
-	private Double getMinDistance(Position pedestrianPosition, Double minimalDistance,
-			List<Position> crossPoints) {
-		OptionalDouble min = crossPoints.stream()
-				.mapToDouble(cp -> GeometricCalculator.distance.apply(pedestrianPosition, cp)).min();
 
-		if ((min.isPresent()) && (min.getAsDouble() < minimalDistance)) {
-			minimalDistance = min.getAsDouble();
-
+	private Optional<Double> getWallDistance(WallCrossPoint wallCrossPoint, Position pedestrianPosition) {
+		Optional<Double> optionalGlobalMin = Optional.empty();
+		for (Wall w : environment.getMap().getWalls()) {
+			optionalGlobalMin = resolveMinimumOfOptionals(optionalGlobalMin,
+					getMinDistance(pedestrianPosition, wallCrossPoint.getWallCrossPoints(w)));
 		}
-		// cod.i("WALL",minimalDistance);
-		return minimalDistance;
+		return optionalGlobalMin;
+	}
+
+	private Optional<Double> neighboursDistance(PedestrianCrossPoints pedestrianCrossPointsCal,
+			Position pedestrianPosition, int id) throws AngleOutOfRangeException {
+
+		Optional<Double> optionalGlobalMin = Optional.empty();
+
+		for (Pedestrian p : environment.getPedestrians()) {
+			if (p.getPedestrianInformation().getStaticInformation().getId() != id) {
+				optionalGlobalMin = resolveMinimumOfOptionals(optionalGlobalMin, getMinDistance(pedestrianPosition,
+						pedestrianCrossPointsCal.getNeighborAllCrossPoints(p.getPedestrianInformation())));
+			}
+		}
+
+		// if (minimalDistance < Configuration.DEFAULT_PEDESTRIAN_HORIZON_DISTANCE) {
+		// minimalDistance = Math.sqrt(minimalDistance);
+		// }
+
+		return optionalGlobalMin;
+	}
+
+	private Optional<Double> resolveMinimumOfOptionals(Optional<Double> optionalGlobalMin,
+			Optional<Double> optionalActualMin) {
+		if (optionalGlobalMin.isPresent()) {
+			if (optionalActualMin.isPresent()) {
+				Double actualMin = optionalActualMin.get();
+				if (actualMin < optionalGlobalMin.get()) {
+					optionalGlobalMin = Optional.of(actualMin);
+				}
+			}
+		} else {
+			optionalGlobalMin = optionalActualMin;
+		}
+		return optionalGlobalMin;
+	}
+
+	private Optional<Double> getMinDistance(Position pedestrianPosition, List<Position> crossPoints) {
+		OptionalDouble om = crossPoints.stream()
+				.mapToDouble(cp -> GeometricCalculator.distance.apply(pedestrianPosition, cp)).min();
+		if (om.isPresent()) {
+			return Optional.of(om.getAsDouble());
+		}
+		return Optional.empty();
 	}
 
 }
