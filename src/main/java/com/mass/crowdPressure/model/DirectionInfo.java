@@ -3,9 +3,9 @@ package com.mass.crowdPressure.model;
 public class DirectionInfo {
 	private double alpha;
 	private MinimumDistance collisionDistance;
-	private double destinationDistance;
+	private Double destinationDistance;
 
-	public DirectionInfo(double alpha, MinimumDistance collisionDistanceValue, double destinationDistance) {
+	public DirectionInfo(double alpha, MinimumDistance collisionDistanceValue, Double destinationDistance) {
 		super();
 		this.alpha = alpha;
 		this.setCollisionDistance(collisionDistanceValue);
@@ -28,7 +28,7 @@ public class DirectionInfo {
 		return destinationDistance;
 	}
 
-	public void setDestinationDistance(double destinationDistance) {
+	public void setDestinationDistance(Double destinationDistance) {
 		this.destinationDistance = destinationDistance;
 	}
 
