@@ -6,6 +6,7 @@ import java.util.function.BiFunction;
 
 import com.app.COD;
 import com.app.CODFactory;
+import com.mass.crowdPressure.Configuration;
 import com.mass.crowdPressure.calculators.figures.LinePointAngle;
 import com.mass.crowdPressure.calculators.figures.LineTwoPoints;
 import com.mass.crowdPressure.calculators.figures.Vector;
@@ -34,10 +35,11 @@ public class GeometricCalculator {
 		double denominator = -xp1 * tan + yp1 + xp2 * tan - yp2;
 		double x = numerator / denominator;
 		double y = tan * x + yi - tan * xi;
-//		cod.i("ANGLE: " + lpa.getAngle() + " wall: POS: ", Arrays.asList(ltp, new Position(x, y)));
+		// cod.i("ANGLE: " + lpa.getAngle() + " wall: POS: ", Arrays.asList(ltp, new
+		// Position(x, y)));
 
 		if (checkIfPointIsInBetween(new Position(x, y), new Position(xp1, yp1), new Position(xp2, yp2))) {
-//			cod.i("HERE CROST POINT: " + lpa.getAngle(), new Position(x, y));
+			// cod.i("HERE CROST POINT: " + lpa.getAngle(), new Position(x, y));
 			// if (((x >= xp1 && x <= xp2) || (x >= xp2 && x <= xp1)) && ((y >= yp1 && y <=
 			// yp2) || (y >= xp2 && y <= xp1))) {
 			if ((lpa.getAngle() < 1 && y > yi) || (lpa.getAngle() > 1 && y < yi)
@@ -122,10 +124,14 @@ public class GeometricCalculator {
 		double x2 = pB.getX();
 		double y2 = pB.getY();
 
-		return (((x1 - Configuration.PRECISION <= x && x <= x2 + Configuration.PRECISION)
-				|| (x2 - Configuration.PRECISION <= x && x <= x1 + Configuration.PRECISION))
-				&& ((y1 - Configuration.PRECISION <= y && y <= y2 + Configuration.PRECISION)
-						|| (y2 - Configuration.PRECISION <= y && y <= y1 + Configuration.PRECISION)));
+		return (((x1 - Configuration.PRECISION_OF_CALCULATIONS <= x
+				&& x <= x2 + Configuration.PRECISION_OF_CALCULATIONS)
+				|| (x2 - Configuration.PRECISION_OF_CALCULATIONS <= x
+						&& x <= x1 + Configuration.PRECISION_OF_CALCULATIONS))
+				&& ((y1 - Configuration.PRECISION_OF_CALCULATIONS <= y
+						&& y <= y2 + Configuration.PRECISION_OF_CALCULATIONS)
+						|| (y2 - Configuration.PRECISION_OF_CALCULATIONS <= y
+								&& y <= y1 + Configuration.PRECISION_OF_CALCULATIONS)));
 	}
 
 	// public static double AngleThreepoints(Position a, Position b, Position c) {

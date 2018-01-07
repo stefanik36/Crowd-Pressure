@@ -9,11 +9,13 @@ import java.util.stream.Collectors;
 
 import com.app.COD;
 import com.app.CODFactory;
+import com.mass.crowdPressure.Configuration;
 import com.mass.crowdPressure.calculators.figures.Vector;
 import com.mass.crowdPressure.calculators.figures.VectorXY;
 import com.mass.crowdPressure.exceptions.AngleOutOfRangeException;
 import com.mass.crowdPressure.model.DirectionInfo;
 import com.mass.crowdPressure.model.Environment;
+import com.mass.crowdPressure.model.MinimumDistance;
 import com.mass.crowdPressure.model.Position;
 import com.mass.crowdPressure.model.pedestrian.PedestrianInformation;
 
@@ -35,7 +37,44 @@ public class PedestrianCalculator {
 
 	public DirectionInfo getDirectionInfo() throws AngleOutOfRangeException {
 		List<DirectionInfo> directionInfos = getDestinationDistanceFunctionValues();
-		return getMinimum(directionInfos);
+
+		List<DirectionInfo> hasNotNotMovingObstacles = directionInfos.stream()
+				.filter(di -> !di.getCollisionDistance().getNotMovingObstacle().isPresent())
+				.collect(Collectors.toList());
+
+		if (hasNotNotMovingObstacles.isEmpty()) {
+			return changeVisionCenter(directionInfos);
+//			return getMinimumDestinationDistance(directionInfos);
+		} else if (hasNotNotMovingObstacles.size() < directionInfos.size()) {
+			return getMinimumDestinationDistance(hasNotNotMovingObstacles);
+		} else {
+			return getMinimumDestinationDistance(directionInfos);
+		}
+	}
+
+	private DirectionInfo changeVisionCenter(List<DirectionInfo> directionInfos) {
+		return getMaximumCollisionDistance(directionInfos);
+	}
+
+	public DirectionInfo getMaximumCollisionDistance(List<DirectionInfo> directionInfos) {
+		DirectionInfo max = Collections.max(directionInfos, new Comparator<DirectionInfo>() {
+			@Override
+			public int compare(DirectionInfo di1, DirectionInfo di2) {
+				return di1.getCollisionDistance().getNotMovingObstacle().get()
+						.compareTo(di2.getCollisionDistance().getNotMovingObstacle().get());
+			}
+		});
+		return max;
+	}
+	
+	public DirectionInfo getMinimumDestinationDistance(List<DirectionInfo> directionInfos) {
+		DirectionInfo min = Collections.min(directionInfos, new Comparator<DirectionInfo>() {
+			@Override
+			public int compare(DirectionInfo di1, DirectionInfo di2) {
+				return di1.getDestinationDistance().compareTo(di2.getDestinationDistance());
+			}
+		});
+		return min;
 	}
 
 	List<DirectionInfo> getDestinationDistanceFunctionValues() throws AngleOutOfRangeException {
@@ -48,14 +87,16 @@ public class PedestrianCalculator {
 		double alpha;
 		for (Double i = start; i <= end; i = i + step) {
 			alpha = getAlpha(i);
-			double collisionDistanceValue = collisionDistanceCal.getCollistionDistanceValue(alpha,
+			MinimumDistance collisionDistanceValue = collisionDistanceCal.getCollistionDistanceValue(alpha,
 					pedestrianInformation);
 			double destinationDistanceValue = destinationDistanceCal.getDestinationDistanceFunction(alpha,
 					pedestrianInformation.getVariableInformation().getDestinationAngle(),
-					pedestrianInformation.getStaticInformation().getHorizontDistance(), collisionDistanceValue);
+					pedestrianInformation.getStaticInformation().getHorizontDistance(),
+					collisionDistanceValue.getMinimumDistance());
 			directionInfos.add(new DirectionInfo(alpha, collisionDistanceValue, destinationDistanceValue));
 		}
-//		cod.i("DIRECTIONS: ",directionInfos.stream().filter(d -> d.getCollisionDistance()<10.0).collect(Collectors.toList()));
+		// cod.i("DIRECTIONS: ",directionInfos.stream().filter(d ->
+		// d.getCollisionDistance()<10.0).collect(Collectors.toList()));
 		return directionInfos;
 	}
 
@@ -72,15 +113,7 @@ public class PedestrianCalculator {
 		return alpha;
 	}
 
-	public DirectionInfo getMinimum(List<DirectionInfo> directionInfos) {
-		DirectionInfo min = Collections.min(directionInfos, new Comparator<DirectionInfo>() {
-			@Override
-			public int compare(DirectionInfo di1, DirectionInfo di2) {
-				return di1.getDestinationDistance().compareTo(di2.getDestinationDistance());
-			}
-		});
-		return min;
-	}
+	
 
 	public Position getNextPosition() throws AngleOutOfRangeException {
 		// double desiredDirection =
@@ -92,14 +125,14 @@ public class PedestrianCalculator {
 		Vector acceleration = pedestrianInformation.getVariableInformation().getDesiredAcceleration();
 
 		Vector finalForce = velocity;
-		
-		
+
 		if (Configuration.FORCES) {
-			
+
 			finalForce = GeometricCalculator.addVectors(velocity, acceleration);
 		}
-		
-//		cod.i(pedestrianInformation.getStaticInformation().getId()+" VELO ACC FF: ",Arrays.asList(velocity,acceleration, finalForce));
+
+		// cod.i(pedestrianInformation.getStaticInformation().getId()+" VELO ACC FF:
+		// ",Arrays.asList(velocity,acceleration, finalForce));
 
 		VectorXY shift = GeometricCalculator.changeVector(finalForce);
 
@@ -112,14 +145,15 @@ public class PedestrianCalculator {
 
 	public Vector getDesireVelocity(double collisionDistance, double alpha, int i) {
 		double result = pedestrianInformation.getStaticInformation().getComfortableSpeed();
-//		cod.i("v: "+i,Arrays.asList(goalVelocity(), collisionVelocity(collisionDistance), result));
+		// cod.i("v: "+i,Arrays.asList(goalVelocity(),
+		// collisionVelocity(collisionDistance), result));
 		Vector v = new Vector(alpha, Arrays.asList(goalVelocity(), collisionVelocity(collisionDistance), result)
 				.stream().mapToDouble(d -> d).min().getAsDouble());
 		return v;
 	}
 
 	private double collisionVelocity(double collisionDistance) {
-		return collisionDistance/ pedestrianInformation.getStaticInformation().getRelaxationTime();
+		return collisionDistance / pedestrianInformation.getStaticInformation().getRelaxationTime();
 	}
 
 	private double goalVelocity() {

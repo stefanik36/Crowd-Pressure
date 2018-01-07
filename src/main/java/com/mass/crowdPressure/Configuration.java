@@ -1,7 +1,8 @@
-package com.mass.crowdPressure.calculators;
+package com.mass.crowdPressure;
 
 import java.util.function.Function;
 
+import com.mass.crowdPressure.calculators.DestinationDistance;
 import com.mass.crowdPressure.model.DestinationDistanceCalculatorInfo;
 
 public class Configuration {
@@ -20,15 +21,15 @@ public class Configuration {
 	public static final Double START_ANGLE = 0.0;
 	public static final Double END_ANGLE = 2.0;
 	public static final int INIT_NO_PEDESTRIANS = 10;
-	public static final Double MAX_DISTANCE_TO_GOAL = 0.1;
-	public static final int STEPS = 10;
+	public static final Double MAX_DISTANCE_TO_GOAL = 1.8;
 	public static final Double K_PARAMETER = 1 * Math.pow(10, 3); // 5 * Math.pow(10, 3)
-	public static final double PRECISION = 0.001;
-
-//	public static final Function<DestinationDistanceCalculatorInfo, Double> ddFunction = DestinationDistance.modifiedDDFunction;
+	public static final double PRECISION_OF_CALCULATIONS = 0.001;
 	public static final Function<DestinationDistanceCalculatorInfo, Double> ddFunction = DestinationDistance.originalDDFunction;
-
 	public static final boolean FORCES = true;
-	public static final double WALL_DISTANCE_POWER = 0.00001;
+
+	// SYMULATION
+	public static final int FPS = 60;
+	public static final Symulation SYMULATION_TYPE = Symulation.SYM_ROOM;
+	public static final double SCALE_VALUE = 10;
 
 }

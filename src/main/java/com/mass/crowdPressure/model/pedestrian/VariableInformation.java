@@ -1,6 +1,6 @@
 package com.mass.crowdPressure.model.pedestrian;
 
-import com.mass.crowdPressure.calculators.Configuration;
+import com.mass.crowdPressure.Configuration;
 import com.mass.crowdPressure.calculators.GeometricCalculator;
 import com.mass.crowdPressure.calculators.figures.Vector;
 import com.mass.crowdPressure.model.Position;
