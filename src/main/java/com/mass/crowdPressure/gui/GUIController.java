@@ -84,7 +84,7 @@ public class GUIController implements Initializable {
         initializeCanvas();
         setSliderListener();
 
-        buildAndSetUpSimulationLoop();
+        buildAndSetUpSimulationLoop(this.fps);
 
         drawCoordinateSystem();
         drawMap(engine.getEnvironment().getMap());
@@ -103,7 +103,7 @@ public class GUIController implements Initializable {
 
             System.out.println(posX + " x " + posY);
             gc.fillArc(posX, posY, 5, 5, 0, 360, ArcType.OPEN);
-            new PedestriansFactory().addPedestrian(engine.getEnvironment(), descale(posX), descale(posY));
+            new PedestriansFactory().addPedestrian(engine.getEnvironment(), new Position(descale(posX), descale(posY)), null);
         });
     }
 
@@ -112,8 +112,16 @@ public class GUIController implements Initializable {
             fpsSlider.setValue(new_val.intValue());
             lblSliderVal.setText(String.format("%d", new_val.intValue()));
             fps = (int) fpsSlider.getValue();
-            buildAndSetUpSimulationLoop();
+            changeFps(fps);
         });
+    }
+
+    public void changeFps(int fps){
+        simLoop.stop();
+        simLoop.getKeyFrames().clear();
+        buildAndSetUpSimulationLoop(fps);
+        simLoop.play();
+
     }
 
     private double descale(double value) {
@@ -139,8 +147,8 @@ public class GUIController implements Initializable {
         return value * Configuration.SCALE_VALUE;
     }
 
-    private void buildAndSetUpSimulationLoop() {
-        Duration duration = Duration.millis(1000 / (float) this.fps);
+    private void buildAndSetUpSimulationLoop(int fps) {
+        Duration duration = Duration.millis(1000 / (float) fps);
         System.out.print("");
         KeyFrame frame = new KeyFrame(duration, actionEvent -> {
             try {
