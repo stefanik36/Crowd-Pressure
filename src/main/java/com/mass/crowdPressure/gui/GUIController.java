@@ -44,7 +44,7 @@ public class GUIController implements Initializable {
     @FXML   public ComboBox<String> actionComboBox;
     @FXML   public Slider fpsSlider;
     @FXML   public Label lblSliderVal;
-            private int fps;
+            private int fps = 40;
     @FXML   public ScrollPane scrollPane;
     @FXML   public Canvas canvas;
 
@@ -78,6 +78,8 @@ public class GUIController implements Initializable {
         actionComboBox.getSelectionModel().select("Nothing");
 
         pauseStartButton.setText("Start");
+        fpsSlider.setValue(this.fps);
+        lblSliderVal.setText(String.format("%d", this.fps));
 
         initializeCanvas();
         setSliderListener();
@@ -90,8 +92,8 @@ public class GUIController implements Initializable {
 
     private void initializeCanvas() {
         gc = canvas.getGraphicsContext2D();
-        canvas.setLayoutY(0);
-        canvas.setLayoutX(0);
+        canvas.setLayoutY(-50);
+        canvas.setLayoutX(-10);
         canvas.setScaleX(1);
         canvas.setScaleY(-1);
 
@@ -110,6 +112,7 @@ public class GUIController implements Initializable {
             fpsSlider.setValue(new_val.intValue());
             lblSliderVal.setText(String.format("%d", new_val.intValue()));
             fps = (int) fpsSlider.getValue();
+            buildAndSetUpSimulationLoop();
         });
     }
 
@@ -137,11 +140,11 @@ public class GUIController implements Initializable {
     }
 
     private void buildAndSetUpSimulationLoop() {
-
         Duration duration = Duration.millis(1000 / (float) this.fps);
-
+        System.out.print("");
         KeyFrame frame = new KeyFrame(duration, actionEvent -> {
             try {
+                System.out.print("");
                 clearAll();
                 drawCoordinateSystem();
                 drawMap(engine.getEnvironment().getMap());
@@ -152,7 +155,6 @@ public class GUIController implements Initializable {
                 ex.printStackTrace();
             }
         });
-
         simLoop = new Timeline();
         int cycleCount = Animation.INDEFINITE;
         simLoop.setCycleCount(cycleCount);
@@ -184,29 +186,5 @@ public class GUIController implements Initializable {
         double green = (x > 0.5 ? 1-2*(x-0.5)/1.0 : 1.0);
 
         return new Color(red, green, COLOR_BLUE, COLOR_OPACITY);
-    }
-
-    public void start() {
-        simLoop.play();
-    }
-
-    public void stop() {
-        simLoop.stop();
-    }
-
-    public void setGraphicContext(GraphicsContext graphicContext) {
-        this.gc = graphicContext;
-    }
-
-    public GraphicsContext getGraphicContext() {
-        return this.gc;
-    }
-
-    public void setSimLoop(Timeline simLoop) {
-        this.simLoop = simLoop;
-    }
-
-    public void setEngine(Engine engine) {
-        this.engine = engine;
     }
 }

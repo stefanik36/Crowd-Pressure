@@ -40,18 +40,18 @@ public class CrowdSimulationGUI {
 	private GraphicsContext gc;
 	private Engine engine;
 	private int windowWidth;
-	private int windowHigh;
+	private int windowHeight;
 
-	public CrowdSimulationGUI(String title, int fps, int windowHigh, int windowWidth) {
+	public CrowdSimulationGUI(String title, int fps, int windowHeight, int windowWidth) {
 		this.windowTitle = title;
-		this.windowHigh = windowHigh;
+		this.windowHeight = windowHeight;
 		this.windowWidth = windowWidth;
 		this.fps = fps;
 		buildAndSetUpSimulationLoop();
 	}
 
-	public CrowdSimulationGUI(String title, int fps, int windowWidth, int windowHigh, int cycleCount) {
-		this(title, fps, windowHigh, windowWidth);
+	public CrowdSimulationGUI(String title, int fps, int windowWidth, int windowHeight, int cycleCount) {
+		this(title, fps, windowHeight, windowWidth);
 		this.cycleCount = cycleCount;
 	}
 
@@ -62,6 +62,7 @@ public class CrowdSimulationGUI {
 		KeyFrame frame = new KeyFrame(duration, actionEvent -> {
 			try {
 				clearAll();
+				//System.out.println("Tworze klatke...");
 				drawCoordinateSystem();
 				drawMap(engine.getEnvironment().getMap());
 				drawPedestrians(engine.getEnvironment().getPedestrians());
@@ -95,35 +96,25 @@ public class CrowdSimulationGUI {
 	}
 
 	private void drawPedestrians(List<Pedestrian> pedestrians) {
-//		gc.setFill(Color.RED);
 		for (Pedestrian p : pedestrians) {
 			double x = scale(p.getPedestrianInformation().getVariableInformation().getPosition().getX());
 			double y = scale(p.getPedestrianInformation().getVariableInformation().getPosition().getY());
 			double radius = scale(p.getPedestrianInformation().getStaticInformation().getRadius());
-			double vision = scale(p.getPedestrianInformation().getStaticInformation().getHorizontDistance());
-
-			// cod.i("scaled: ",Arrays.asList(x,y,radius,vision));
 			gc.fillArc(x, y, 4, 3, 0, 360, ArcType.OPEN);
 			gc.strokeOval(x - radius, y - radius, radius * 2, radius * 2);
 
 			Color pedestrianColor = getPedestrianColor(
-					p.getPedestrianInformation().getVariableInformation().getCrowdPressure());
-
+					p.getPedestrianInformation().getVariableInformation().getCrowdPressure()
+			);
+			System.out.print("");
 			gc.setFill(pedestrianColor);
-			// gc.strokeOval(x - vision, y - vision, vision * 2, vision * 2);
 		}
-//		gc.setFill(Color.BLACK);
 	}
 
 	private Color getPedestrianColor(double x) {
-//		x = x*100;Configuration
 		double red = (x > 0.5 ? 1.0 : 2*x/1.0);
 		double green = (x > 0.5 ? 1-2*(x-0.5)/1.0 : 1.0);
-		Color pedestrianColor = new Color(red, green, COLOR_BLUE, COLOR_OPACITY);
-
-//		cod.i("RGB: ", pedestrianColor);
-//		cod.i("RGB: ", Arrays.asList(red, green, COLOR_BLUE));
-		return pedestrianColor;
+		return new Color(red, green, COLOR_BLUE, COLOR_OPACITY);
 	}
 
 	private double descale(double value) {
@@ -139,7 +130,7 @@ public class CrowdSimulationGUI {
 	public void initialize(Stage primaryStage) throws IOException, InterruptedException {
 		primaryStage.setTitle(windowTitle);
 		root = new Group();
-		Scene theScene = new Scene(root, windowWidth, windowHigh);
+		Scene theScene = new Scene(root, windowWidth, windowHeight);
 		primaryStage.setScene(theScene);
 
 		initializeCanvas();
@@ -151,7 +142,7 @@ public class CrowdSimulationGUI {
 	}
 
 	private void initializeCanvas() {
-		Canvas canvas = new Canvas(windowWidth - 10, windowHigh - 50);
+		Canvas canvas = new Canvas(windowWidth - 10, windowHeight - 50);
 		root.getChildren().add(canvas);
 		gc = canvas.getGraphicsContext2D();
 		canvas.setLayoutY(50);
