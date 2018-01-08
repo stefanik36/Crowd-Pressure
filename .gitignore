@@ -3,6 +3,9 @@
 /build/
 /out/
 
+.classpath
+.project
+org.eclipse.jdt.core.prefs
 
 # Ignore Gradle GUI config
 gradle-app.setting
