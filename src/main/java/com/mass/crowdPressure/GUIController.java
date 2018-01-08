@@ -42,7 +42,9 @@ public class GUIController implements Initializable {
     @FXML   public MenuItem menuQuit;
     @FXML   public Button btnPauseStart;
     @FXML   public Button btnNextStep;
-    @FXML   public ComboBox<String> actionComboBox;
+    @FXML   public ComboBox<String> cbAction;
+    @FXML   public ComboBox<String> cbSym;
+            private Symulation symType;
     @FXML   public Slider fpsSlider;
     @FXML   public Label lblSliderVal;
             private int fps = 40;
@@ -52,19 +54,38 @@ public class GUIController implements Initializable {
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        engine = Initializer.createEngine(Configuration.SYMULATION_TYPE);
+        cbAction.getItems().removeAll(cbAction.getItems());
+        cbAction.getItems().addAll("Add wall", "Add Pedestrian");
+        cbAction.getSelectionModel().select("Add Pedestrian");
 
-        actionComboBox.getItems().removeAll(actionComboBox.getItems());
-        actionComboBox.getItems().addAll("Add wall", "Add Pedestrian");
-        actionComboBox.getSelectionModel().select("Add Pedestrian");
+        cbSym.getItems().removeAll(cbSym.getItems());
+        cbSym.getItems().addAll(
+                "SYM_P0_W0",
+                "SYM_P0_W1",
+                "SYM_P2_W0",
+                "SYM_P1_W1",
+                "SYM_P1_W2",
+                "SYM_ROOM",
+                "SYM_ROOM_OBSTACLE1",
+                "SYM_ROOM_PERP_WALL"
+        );
+        cbSym.getSelectionModel().select("SYM_ROOM_OBSTACLE1");
+        symType = Symulation.SYM_ROOM_OBSTACLE1;
+
+        engine = Initializer.createEngine(symType);
 
         btnPauseStart.setText("Start");
         fpsSlider.setValue(this.fps);
         lblSliderVal.setText(String.format("%d", this.fps));
 
-        initializeCanvas();
         setSliderListener();
+        setCbSymListener();
 
+        drawCanvasSymulation();
+    }
+
+    private void drawCanvasSymulation() {
+        initializeCanvas();
         buildAndSetUpSimulationLoop(this.fps);
 
         drawCoordinateSystem();
@@ -72,12 +93,17 @@ public class GUIController implements Initializable {
     }
 
     @FXML
-    private void chooseAction(){
-        System.out.println(actionComboBox.getValue());
+    public void chooseAction(){
+        System.out.println(cbAction.getValue());
     }
 
     @FXML
-    private void pauseStartSim() {
+    public void chooseSym() {
+        System.out.println(cbSym.getValue());
+    }
+
+    @FXML
+    public void pauseStartSim() {
         switch (simLoop.getStatus()) {
             case RUNNING:
                 simLoop.pause();
@@ -144,7 +170,7 @@ public class GUIController implements Initializable {
 
             System.out.println(posX + " x " + posY);
 
-            switch (actionComboBox.getSelectionModel().getSelectedIndex()){
+            switch (cbAction.getSelectionModel().getSelectedIndex()){
                 case 0:
                     //add wall
                     break;
@@ -165,6 +191,49 @@ public class GUIController implements Initializable {
             fps = (int) fpsSlider.getValue();
             changeFps(fps);
         });
+    }
+
+    private void setCbSymListener(){
+        cbSym.valueProperty().addListener((ov, old_val, new_val) -> {
+            switch (new_val){
+                case "SYM_P0_W0":
+                    changeSymType(Symulation.SYM_P0_W0);
+                    break;
+                case "SYM_P0_W1":
+                    changeSymType(Symulation.SYM_P0_W1);
+                    break;
+                case "SYM_P2_W0":
+                    changeSymType(Symulation.SYM_P2_W0);
+                    break;
+                case "SYM_P1_W1":
+                    changeSymType(Symulation.SYM_P1_W1);
+                    break;
+                case "SYM_P1_W2":
+                    changeSymType(Symulation.SYM_P1_W2);
+                    break;
+                case "SYM_ROOM":
+                    changeSymType(Symulation.SYM_ROOM);
+                    break;
+                case "SYM_ROOM_OBSTACLE1":
+                    changeSymType(Symulation.SYM_ROOM_OBSTACLE1);
+                    break;
+                case "SYM_ROOM_PERP_WALL":
+                    changeSymType(Symulation.SYM_ROOM_PERP_WALL);
+                    break;
+            }
+        });
+    }
+
+    private void changeSymType(Symulation symType) {
+        simLoop.pause();
+        btnPauseStart.setText("Start");
+        btnNextStep.setDisable(false);
+
+        this.symType = symType;
+        engine = Initializer.createEngine(this.symType);
+
+        clearAll();
+        drawCanvasSymulation();
     }
 
     private void changeFps(int fps){

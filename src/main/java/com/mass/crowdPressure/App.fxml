@@ -32,7 +32,8 @@
                 <Button fx:id="btnPauseStart" maxWidth="90.0" minWidth="90.0" mnemonicParsing="false" onAction="#pauseStartSim" prefWidth="90.0" text="Start/Pause" />
                 <Button fx:id="btnNextStep" maxWidth="90.0" minWidth="90.0" mnemonicParsing="false" onAction="#getNextStep" prefWidth="90.0" text="Next step &gt;" />
                 <Region prefWidth="100.0" HBox.hgrow="ALWAYS" />
-                <ComboBox fx:id="actionComboBox" onAction="#chooseAction" prefWidth="150.0" promptText="Action">
+            <ComboBox fx:id="cbSym" onAction="#chooseSym" promptText="Symulation" />
+                <ComboBox fx:id="cbAction" onAction="#chooseAction" promptText="Action">
                     <opaqueInsets>
                         <Insets />
                     </opaqueInsets>
