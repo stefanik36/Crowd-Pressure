@@ -50,8 +50,8 @@ public class GUIController implements Initializable {
         engine = Initializer.createEngine(Configuration.SYMULATION_TYPE);
 
         actionComboBox.getItems().removeAll(actionComboBox.getItems());
-        actionComboBox.getItems().addAll("Nothing", "Add wall", "Add Pedestrian");
-        actionComboBox.getSelectionModel().select("Nothing");
+        actionComboBox.getItems().addAll("Add wall", "Add Pedestrian");
+        actionComboBox.getSelectionModel().select("Add Pedestrian");
 
         btnPauseStart.setText("Start");
         fpsSlider.setValue(this.fps);
@@ -111,9 +111,19 @@ public class GUIController implements Initializable {
             double posY = event.getY();
 
             System.out.println(posX + " x " + posY);
-            gc.fillArc(posX, posY, 5, 5, 0, 360, ArcType.OPEN);
-            new PedestriansFactory().addPedestrian(engine.getEnvironment(), new Position(descale(posX), descale(posY)), null);
-        });
+
+            switch (actionComboBox.getSelectionModel().getSelectedIndex()){
+                case 0:
+                    //add wall
+                    break;
+                case 1:
+                    gc.fillArc(posX, posY, 5, 5, 0, 360, ArcType.OPEN);
+                    new PedestriansFactory().addPedestrian(
+                            engine.getEnvironment(), new Position(descale(posX), descale(posY)), null
+                    );
+                    break;
+            }
+            });
     }
 
     private void setSliderListener(){
