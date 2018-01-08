@@ -23,7 +23,7 @@ public class Main extends Application {
 		Parent pre = fxmlLoader.load();
 		Scene scene = new Scene(pre);
 		primaryStage.setScene(scene);
-		primaryStage.setTitle("Crowd pressure symulation");
+		primaryStage.setTitle("Crowd pressure simulation");
 		primaryStage.setMinHeight(600);
 		primaryStage.setMinWidth(650);
 		primaryStage.setOnCloseRequest(we -> {

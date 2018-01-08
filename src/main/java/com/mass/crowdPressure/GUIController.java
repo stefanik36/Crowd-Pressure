@@ -1,8 +1,5 @@
-package com.mass.crowdPressure.gui;
+package com.mass.crowdPressure;
 
-import com.mass.crowdPressure.Configuration;
-import com.mass.crowdPressure.Engine;
-import com.mass.crowdPressure.Initializer;
 import com.mass.crowdPressure.builders.PedestriansFactory;
 import com.mass.crowdPressure.model.Position;
 import com.mass.crowdPressure.model.map.Map;
@@ -12,17 +9,23 @@ import com.mass.crowdPressure.model.pedestrian.Pedestrian;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.ArcType;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 
@@ -35,6 +38,8 @@ public class GUIController implements Initializable {
     private GraphicsContext gc;
     private Engine engine;
 
+    @FXML   public MenuItem menuNew;
+    @FXML   public MenuItem menuQuit;
     @FXML   public Button btnPauseStart;
     @FXML   public Button btnNextStep;
     @FXML   public ComboBox<String> actionComboBox;
@@ -97,6 +102,33 @@ public class GUIController implements Initializable {
         loop.setCycleCount(cycleCount);
         loop.getKeyFrames().add(frame);
         loop.play();
+    }
+
+    @FXML
+    public void exit(ActionEvent e) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText("");
+        alert.setTitle("Exit");
+        alert.setContentText("Are you sure you want to exit?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            Stage stage = (Stage) btnPauseStart.getScene().getWindow();
+            stage.close();
+        } else {
+            e.consume();
+        }
+    }
+
+    @FXML
+    public void clearSym(ActionEvent e) {
+        Parent root2 = null;
+        try {
+            root2 = FXMLLoader.load(Main.class.getResource("App.fxml"));
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        btnPauseStart.getScene().setRoot(root2);
     }
 
     private void initializeCanvas() {

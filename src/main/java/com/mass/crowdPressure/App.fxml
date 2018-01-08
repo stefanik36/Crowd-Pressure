@@ -10,14 +10,14 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mass.crowdPressure.gui.GUIController">
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mass.crowdPressure.GUIController">
     <children>
         <MenuBar VBox.vgrow="NEVER">
             <menus>
                 <Menu mnemonicParsing="false" text="File">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="New" />
-                        <MenuItem mnemonicParsing="false" text="Quit" />
+                        <MenuItem fx:id="menuNew" mnemonicParsing="false" onAction="#clearSym" text="New" />
+                        <MenuItem fx:id="menuQuit" mnemonicParsing="false" onAction="#exit" text="Quit" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">
@@ -46,13 +46,7 @@
                                 <Label fx:id="lblSliderVal" text="60" />
                             </children>
                         </HBox>
-                        <Slider fx:id="fpsSlider"
-                                blockIncrement="5.0"
-                                max="200.0" min="5.0"
-                                showTickLabels="false"
-                                showTickMarks="true"
-                                snapToTicks="true" value="60.0"
-                                prefWidth="180.0"/>
+                        <Slider fx:id="fpsSlider" blockIncrement="5.0" max="200.0" min="5.0" prefWidth="180.0" showTickLabels="false" showTickMarks="true" snapToTicks="true" value="60.0" />
                     </children>
                     <HBox.margin>
                         <Insets left="10.0" />
