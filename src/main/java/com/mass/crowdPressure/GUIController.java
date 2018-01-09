@@ -50,6 +50,9 @@ public class GUIController implements Initializable {
             private int fps = 40;
     @FXML   public ScrollPane scrollPane;
     @FXML   public Canvas canvas;
+    @FXML   public Button btnPlus;
+    @FXML   public Button btnMinus;
+            private int scaleValue;
 
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -73,6 +76,7 @@ public class GUIController implements Initializable {
         symType = Symulation.SYM_ROOM_OBSTACLE1;
 
         engine = Initializer.createEngine(symType);
+        scaleValue = 10;
 
         btnPauseStart.setText("Start");
         fpsSlider.setValue(this.fps);
@@ -82,14 +86,6 @@ public class GUIController implements Initializable {
         setCbSymListener();
 
         drawCanvasSymulation();
-    }
-
-    private void drawCanvasSymulation() {
-        initializeCanvas();
-        buildAndSetUpSimulationLoop(this.fps);
-
-        drawCoordinateSystem();
-        drawMap(engine.getEnvironment().getMap());
     }
 
     @FXML
@@ -131,6 +127,20 @@ public class GUIController implements Initializable {
     }
 
     @FXML
+    public void enlargeView() {
+        scaleValue = scaleValue + 2;
+        clearAll();
+        drawCanvasSymulation();
+    }
+
+    @FXML
+    public void lessenView() {
+        scaleValue = scaleValue >= 4 ? scaleValue - 2 : scaleValue;
+        clearAll();
+        drawCanvasSymulation();
+    }
+
+    @FXML
     public void exit(ActionEvent e) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setHeaderText("");
@@ -155,6 +165,15 @@ public class GUIController implements Initializable {
             e1.printStackTrace();
         }
         btnPauseStart.getScene().setRoot(root2);
+    }
+
+    private void drawCanvasSymulation() {
+        initializeCanvas();
+        buildAndSetUpSimulationLoop(this.fps);
+
+        drawCoordinateSystem();
+        drawMap(engine.getEnvironment().getMap());
+        drawPedestrians(engine.getEnvironment().getPedestrians());
     }
 
     private void initializeCanvas() {
@@ -272,15 +291,9 @@ public class GUIController implements Initializable {
         });
     }
 
-    private double descale(double value) {
-        if (value == 0)
-            return 0;
-        return value / Configuration.SCALE_VALUE;
-    }
-
     private void drawCoordinateSystem() {
-        gc.strokeLine(0, 0, 1000, 5);
-        gc.strokeLine(0, 0, 5, 1000);
+        gc.strokeLine(0, 0, 1000*scaleValue, 5*scaleValue);
+        gc.strokeLine(0, 0, 5*scaleValue, 1000*scaleValue);
     }
 
     private void drawMap(Map map) {
@@ -291,8 +304,14 @@ public class GUIController implements Initializable {
         }
     }
 
+    private double descale(double value) {
+        if (value == 0)
+            return 0;
+        return value / scaleValue;
+    }
+
     private double scale(double value) {
-        return value * Configuration.SCALE_VALUE;
+        return value * scaleValue;
     }
 
     private void clearAll() {
@@ -321,4 +340,5 @@ public class GUIController implements Initializable {
 
         return new Color(red, green, COLOR_BLUE, COLOR_OPACITY);
     }
+
 }
