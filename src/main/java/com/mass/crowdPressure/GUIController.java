@@ -24,6 +24,7 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -31,28 +32,40 @@ import java.util.ResourceBundle;
 
 public class GUIController implements Initializable {
 
-
     private static final double COLOR_OPACITY = 1.0;
     private static final double COLOR_BLUE = 0.0;
     private Timeline simLoop;
     private GraphicsContext gc;
     private Engine engine;
 
-    @FXML   public MenuItem menuNew;
-    @FXML   public MenuItem menuQuit;
-    @FXML   public Button btnPauseStart;
-    @FXML   public Button btnNextStep;
-    @FXML   public ComboBox<String> cbAction;
-    @FXML   public ComboBox<String> cbSym;
-            private Symulation symType;
-    @FXML   public Slider fpsSlider;
-    @FXML   public Label lblSliderVal;
-            private int fps = 40;
-    @FXML   public ScrollPane scrollPane;
-    @FXML   public Canvas canvas;
-    @FXML   public Button btnPlus;
-    @FXML   public Button btnMinus;
-            private int scaleValue;
+    @FXML
+    public MenuItem menuNew;
+    @FXML
+    public MenuItem menuQuit;
+    @FXML
+    public Button btnPauseStart;
+    @FXML
+    public Button btnNextStep;
+    @FXML
+    public ComboBox<String> cbAction;
+    @FXML
+    public ComboBox<String> cbSym;
+    private Symulation symType;
+    @FXML
+    public Slider fpsSlider;
+    @FXML
+    public Label lblSliderVal;
+    private int fps = 40;
+    @FXML
+    public ScrollPane scrollPane;
+    @FXML
+    public Canvas canvas;
+    @FXML
+    public Button btnPlus;
+    @FXML
+    public Button btnMinus;
+    private int scaleValue;
+    private ArrayList<Double> wallPos = new ArrayList<>(2);
 
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -84,12 +97,13 @@ public class GUIController implements Initializable {
 
         setSliderListener();
         setCbSymListener();
+        setCanvasListener();
 
-        drawCanvasSymulation();
+        drawCanvasSimulation();
     }
 
     @FXML
-    public void chooseAction(){
+    public void chooseAction() {
         System.out.println(cbAction.getValue());
     }
 
@@ -130,14 +144,14 @@ public class GUIController implements Initializable {
     public void enlargeView() {
         scaleValue = scaleValue + 2;
         clearAll();
-        drawCanvasSymulation();
+        drawCanvasSimulation();
     }
 
     @FXML
     public void lessenView() {
         scaleValue = scaleValue >= 4 ? scaleValue - 2 : scaleValue;
         clearAll();
-        drawCanvasSymulation();
+        drawCanvasSimulation();
     }
 
     @FXML
@@ -148,7 +162,7 @@ public class GUIController implements Initializable {
         alert.setContentText("Are you sure you want to exit?");
 
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK){
+        if (result.get() == ButtonType.OK) {
             Stage stage = (Stage) btnPauseStart.getScene().getWindow();
             stage.close();
         } else {
@@ -167,7 +181,7 @@ public class GUIController implements Initializable {
         btnPauseStart.getScene().setRoot(root2);
     }
 
-    private void drawCanvasSymulation() {
+    private void drawCanvasSimulation() {
         initializeCanvas();
         buildAndSetUpSimulationLoop(this.fps);
 
@@ -182,28 +196,48 @@ public class GUIController implements Initializable {
         canvas.setLayoutX(-10);
         canvas.setScaleX(1);
         canvas.setScaleY(-1);
+    }
 
+    private void setCanvasListener() {
         canvas.setOnMouseClicked(event -> {
             double posX = event.getX();
             double posY = event.getY();
+            if (wallPos.isEmpty()) {
+                wallPos.add(0, posX);
+                wallPos.add(1, posY);
+            }
+            double posX1 = wallPos.get(0);
+            double posY1 = wallPos.get(1);
 
             System.out.println(posX + " x " + posY);
 
-            switch (cbAction.getSelectionModel().getSelectedIndex()){
+            switch (cbAction.getSelectionModel().getSelectedIndex()) {
                 case 0:
-                    //add wall
+                    if ((posX1 != posX) || (posY1 != posY)) {
+                        setWall(new Position(posX, posY), new Position(posX1, posY1));
+                        System.out.println("Wall created...");
+                    }
+                    System.out.println("Need another click to create wall...");
                     break;
                 case 1:
-                    gc.fillArc(posX, posY, 5, 5, 0, 360, ArcType.OPEN);
-                    new PedestriansFactory().addPedestrian(
-                            engine.getEnvironment(), new Position(descale(posX), descale(posY)), null
-                    );
+                    setPedestrian(posX, posY);
                     break;
             }
-            });
+        });
     }
 
-    private void setSliderListener(){
+    private void setWall(Position pos1, Position pos2) {
+
+    }
+
+    private void setPedestrian(double posX, double posY) {
+        gc.fillArc(posX, posY, 5, 5, 0, 360, ArcType.OPEN);
+        new PedestriansFactory().addPedestrian(
+                engine.getEnvironment(), new Position(descale(posX), descale(posY)), null
+        );
+    }
+
+    private void setSliderListener() {
         fpsSlider.valueProperty().addListener((ov, old_val, new_val) -> {
             fpsSlider.setValue(new_val.intValue());
             lblSliderVal.setText(String.format("%d", new_val.intValue()));
@@ -212,9 +246,20 @@ public class GUIController implements Initializable {
         });
     }
 
-    private void setCbSymListener(){
+    private void changeFps(int fps) {
+        Animation.Status status = simLoop.getStatus();
+        simLoop.stop();
+        simLoop.getKeyFrames().clear();
+        buildAndSetUpSimulationLoop(fps);
+        if (status == Animation.Status.RUNNING) {
+            simLoop.play();
+        }
+
+    }
+
+    private void setCbSymListener() {
         cbSym.valueProperty().addListener((ov, old_val, new_val) -> {
-            switch (new_val){
+            switch (new_val) {
                 case "SYM_P0_W0":
                     changeSymType(Symulation.SYM_P0_W0);
                     break;
@@ -252,18 +297,7 @@ public class GUIController implements Initializable {
         engine = Initializer.createEngine(this.symType);
 
         clearAll();
-        drawCanvasSymulation();
-    }
-
-    private void changeFps(int fps){
-        Animation.Status status = simLoop.getStatus();
-        simLoop.stop();
-        simLoop.getKeyFrames().clear();
-        buildAndSetUpSimulationLoop(fps);
-        if(status == Animation.Status.RUNNING) {
-            simLoop.play();
-        }
-
+        drawCanvasSimulation();
     }
 
     private void buildAndSetUpSimulationLoop(int fps) {
@@ -292,8 +326,8 @@ public class GUIController implements Initializable {
     }
 
     private void drawCoordinateSystem() {
-        gc.strokeLine(0, 0, 1000*scaleValue, 5*scaleValue);
-        gc.strokeLine(0, 0, 5*scaleValue, 1000*scaleValue);
+        gc.strokeLine(0, 0, 1000 * scaleValue, 5 * scaleValue);
+        gc.strokeLine(0, 0, 5 * scaleValue, 1000 * scaleValue);
     }
 
     private void drawMap(Map map) {
@@ -335,8 +369,8 @@ public class GUIController implements Initializable {
     }
 
     private Color getPedestrianColor(double x) {
-        double red = (x > 0.5 ? 1.0 : 2*x/1.0);
-        double green = (x > 0.5 ? 1-2*(x-0.5)/1.0 : 1.0);
+        double red = (x > 0.5 ? 1.0 : 2 * x / 1.0);
+        double green = (x > 0.5 ? 1 - 2 * (x - 0.5) / 1.0 : 1.0);
 
         return new Color(red, green, COLOR_BLUE, COLOR_OPACITY);
     }
