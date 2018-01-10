@@ -143,14 +143,14 @@ public class GUIController implements Initializable {
     @FXML
     public void enlargeView() {
         scaleValue = scaleValue + 2;
-        clearAll();
+        clearCanvas();
         drawCanvasSimulation();
     }
 
     @FXML
     public void lessenView() {
         scaleValue = scaleValue >= 4 ? scaleValue - 2 : scaleValue;
-        clearAll();
+        clearCanvas();
         drawCanvasSimulation();
     }
 
@@ -191,6 +191,8 @@ public class GUIController implements Initializable {
     }
 
     private void initializeCanvas() {
+        canvas.setHeight(1000);
+        canvas.setWidth(1000);
         gc = canvas.getGraphicsContext2D();
         canvas.setLayoutY(-50);
         canvas.setLayoutX(-10);
@@ -296,7 +298,7 @@ public class GUIController implements Initializable {
         this.symType = symType;
         engine = Initializer.createEngine(this.symType);
 
-        clearAll();
+        clearCanvas();
         drawCanvasSimulation();
     }
 
@@ -312,7 +314,7 @@ public class GUIController implements Initializable {
     private KeyFrame getNextFrame(Duration duration) {
         return new KeyFrame(duration, e -> {
             try {
-                clearAll();
+                clearCanvas();
                 drawCoordinateSystem();
                 System.out.print("");
                 drawMap(engine.getEnvironment().getMap());
@@ -326,8 +328,8 @@ public class GUIController implements Initializable {
     }
 
     private void drawCoordinateSystem() {
-        gc.strokeLine(0, 0, 1000 * scaleValue, 5 * scaleValue);
-        gc.strokeLine(0, 0, 5 * scaleValue, 1000 * scaleValue);
+        gc.strokeLine(0, 0, 1000, 5);
+        gc.strokeLine(0, 0, 5, 1000);
     }
 
     private void drawMap(Map map) {
@@ -348,7 +350,7 @@ public class GUIController implements Initializable {
         return value * scaleValue;
     }
 
-    private void clearAll() {
+    private void clearCanvas() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }
 
