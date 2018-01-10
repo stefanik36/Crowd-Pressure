@@ -35,10 +35,11 @@ public class GUIController implements Initializable {
     private static final double COLOR_OPACITY = 1.0;
     private static final double COLOR_BLUE = 0.0;
 
-    private int FPS = 40;
-    private Symulation SIMULATION_TYPE;
-    private int SCALE_VALUE = 10;
-    private Position DESTINATION = Configuration.DEFAULT_DESTINATION_POSITION;
+    private int fps;
+    private Symulation simulationType;
+    private int scaleValue;
+    private Position destination;
+    private Map map;
 
     private Timeline simLoop;
     private GraphicsContext gc;
@@ -73,6 +74,15 @@ public class GUIController implements Initializable {
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        simulationType = Symulation.SYM_ROOM_OBSTACLE1;
+        engine = Initializer.createEngine(simulationType);
+        map = new Map(engine.getEnvironment().getMap().getWalls());
+
+        wallPos.clear();
+        destination = Configuration.DEFAULT_DESTINATION_POSITION;
+        scaleValue = 10;
+        fps = 40;
+
         cbAction.getItems().removeAll(cbAction.getItems());
         cbAction.getItems().addAll("Add wall", "Add Pedestrian");
         cbAction.getSelectionModel().select("Add Pedestrian");
@@ -89,13 +99,10 @@ public class GUIController implements Initializable {
                 "SYM_ROOM_PERP_WALL"
         );
         cbSym.getSelectionModel().select("SYM_ROOM_OBSTACLE1");
-        SIMULATION_TYPE = Symulation.SYM_ROOM_OBSTACLE1;
-
-        engine = Initializer.createEngine(SIMULATION_TYPE);
 
         btnPauseStart.setText("Start");
-        fpsSlider.setValue(this.FPS);
-        lblSliderVal.setText(String.format("%d", this.FPS));
+        fpsSlider.setValue(this.fps);
+        lblSliderVal.setText(String.format("%d", this.fps));
 
         setSliderListener();
         setCbSymListener();
@@ -133,7 +140,7 @@ public class GUIController implements Initializable {
 
     @FXML
     public void getNextStep() {
-        Duration duration = Duration.millis(1000 / (float) FPS);
+        Duration duration = Duration.millis(1000 / (float) fps);
         KeyFrame frame = getNextFrame(duration);
         Timeline loop = new Timeline();
         int cycleCount = 1;
@@ -144,14 +151,14 @@ public class GUIController implements Initializable {
 
     @FXML
     public void enlargeView() {
-        SCALE_VALUE = SCALE_VALUE + 2;
+        scaleValue = scaleValue + 2;
         clearCanvas();
         drawCanvasSimulation();
     }
 
     @FXML
     public void lessenView() {
-        SCALE_VALUE = SCALE_VALUE >= 4 ? SCALE_VALUE - 2 : SCALE_VALUE;
+        scaleValue = scaleValue >= 4 ? scaleValue - 2 : scaleValue;
         clearCanvas();
         drawCanvasSimulation();
     }
@@ -185,10 +192,10 @@ public class GUIController implements Initializable {
 
     private void drawCanvasSimulation() {
         initializeCanvas();
-        buildAndSetUpSimulationLoop(this.FPS);
+        buildAndSetUpSimulationLoop(this.fps);
 
         drawCoordinateSystem();
-        drawMap(engine.getEnvironment().getMap());
+        drawMap(map);
         drawPedestrians(engine.getEnvironment().getPedestrians());
         drawDestination();
     }
@@ -207,22 +214,23 @@ public class GUIController implements Initializable {
         canvas.setOnMouseClicked(event -> {
             double posX = event.getX();
             double posY = event.getY();
-            if (wallPos.isEmpty()) {
-                wallPos.add(0, posX);
-                wallPos.add(1, posY);
-            }
-            double posX1 = wallPos.get(0);
-            double posY1 = wallPos.get(1);
 
             System.out.println(posX + " x " + posY);
 
             switch (cbAction.getSelectionModel().getSelectedIndex()) {
                 case 0:
+                    if (wallPos.isEmpty()) {
+                        wallPos.add(0, posX);
+                        wallPos.add(1, posY);
+                    }
+                    double posX1 = wallPos.get(0);
+                    double posY1 = wallPos.get(1);
+                    System.out.println(posX1 + " x " + posY1);
                     if ((posX1 != posX) || (posY1 != posY)) {
                         setWall(new Position(posX, posY), new Position(posX1, posY1));
-                        System.out.println("Wall created...");
+                    } else {
+                        System.out.println("Need another click to create wall...");
                     }
-                    System.out.println("Need another click to create wall...");
                     break;
                 case 1:
                     setPedestrian(posX, posY);
@@ -231,14 +239,21 @@ public class GUIController implements Initializable {
         });
     }
 
+    //FIXME
     private void setWall(Position pos1, Position pos2) {
-
+        Wall newWall = new StraightWall(pos1, pos2);
+        List<Wall> currentWalls = map.getWalls();
+        currentWalls.add(newWall);
+        map = new Map(currentWalls);
+        drawMap(map);
+        System.out.println("Wall created...");
+        wallPos.clear();
     }
 
     private void setPedestrian(double posX, double posY) {
         gc.fillArc(posX, posY, 5, 5, 0, 360, ArcType.OPEN);
         new PedestriansFactory().addPedestrian(
-                engine.getEnvironment(), new Position(descale(posX), descale(posY)), DESTINATION
+                engine.getEnvironment(), new Position(descale(posX), descale(posY)), destination
         );
     }
 
@@ -246,8 +261,8 @@ public class GUIController implements Initializable {
         fpsSlider.valueProperty().addListener((ov, old_val, new_val) -> {
             fpsSlider.setValue(new_val.intValue());
             lblSliderVal.setText(String.format("%d", new_val.intValue()));
-            FPS = (int) fpsSlider.getValue();
-            changeFps(FPS);
+            fps = (int) fpsSlider.getValue();
+            changeFps(fps);
         });
     }
 
@@ -293,13 +308,15 @@ public class GUIController implements Initializable {
         });
     }
 
+    //FIXME set destination on change
     private void changeSymType(Symulation symType) {
         simLoop.pause();
         btnPauseStart.setText("Start");
         btnNextStep.setDisable(false);
 
-        this.SIMULATION_TYPE = symType;
-        engine = Initializer.createEngine(this.SIMULATION_TYPE);
+        this.simulationType = symType;
+        engine = Initializer.createEngine(this.simulationType);
+        map = engine.getEnvironment().getMap();
 
         clearCanvas();
         drawCanvasSimulation();
@@ -320,7 +337,8 @@ public class GUIController implements Initializable {
                 clearCanvas();
                 drawCoordinateSystem();
                 System.out.print("");
-                drawMap(engine.getEnvironment().getMap());
+//                drawMap(engine.getEnvironment().getMap());
+                drawMap(map);
                 drawPedestrians(engine.getEnvironment().getPedestrians());
                 drawDestination();
                 engine.nextState();
@@ -347,11 +365,11 @@ public class GUIController implements Initializable {
     private double descale(double value) {
         if (value == 0)
             return 0;
-        return value / SCALE_VALUE;
+        return value / scaleValue;
     }
 
     private double scale(double value) {
-        return value * SCALE_VALUE;
+        return value * scaleValue;
     }
 
     private void clearCanvas() {
@@ -382,9 +400,9 @@ public class GUIController implements Initializable {
         return new Color(red, green, COLOR_BLUE, COLOR_OPACITY);
     }
 
-    private void drawDestination () {
-        double x = scale(DESTINATION.getX());
-        double y = scale(DESTINATION.getY());
+    private void drawDestination() {
+        double x = scale(destination.getX());
+        double y = scale(destination.getY());
         gc.setFill(Color.BLACK);
         gc.fillArc(x, y, 5, 5, 0, 360, ArcType.ROUND);
     }
