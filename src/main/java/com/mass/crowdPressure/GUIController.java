@@ -34,9 +34,16 @@ public class GUIController implements Initializable {
 
     private static final double COLOR_OPACITY = 1.0;
     private static final double COLOR_BLUE = 0.0;
+
+    private int FPS = 40;
+    private Symulation SIMULATION_TYPE;
+    private int SCALE_VALUE = 10;
+    private Position DESTINATION = Configuration.DEFAULT_DESTINATION_POSITION;
+
     private Timeline simLoop;
     private GraphicsContext gc;
     private Engine engine;
+    private ArrayList<Double> wallPos = new ArrayList<>(2);
 
     @FXML
     public MenuItem menuNew;
@@ -50,12 +57,10 @@ public class GUIController implements Initializable {
     public ComboBox<String> cbAction;
     @FXML
     public ComboBox<String> cbSym;
-    private Symulation symType;
     @FXML
     public Slider fpsSlider;
     @FXML
     public Label lblSliderVal;
-    private int fps = 40;
     @FXML
     public ScrollPane scrollPane;
     @FXML
@@ -64,8 +69,6 @@ public class GUIController implements Initializable {
     public Button btnPlus;
     @FXML
     public Button btnMinus;
-    private int scaleValue;
-    private ArrayList<Double> wallPos = new ArrayList<>(2);
 
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -86,14 +89,13 @@ public class GUIController implements Initializable {
                 "SYM_ROOM_PERP_WALL"
         );
         cbSym.getSelectionModel().select("SYM_ROOM_OBSTACLE1");
-        symType = Symulation.SYM_ROOM_OBSTACLE1;
+        SIMULATION_TYPE = Symulation.SYM_ROOM_OBSTACLE1;
 
-        engine = Initializer.createEngine(symType);
-        scaleValue = 10;
+        engine = Initializer.createEngine(SIMULATION_TYPE);
 
         btnPauseStart.setText("Start");
-        fpsSlider.setValue(this.fps);
-        lblSliderVal.setText(String.format("%d", this.fps));
+        fpsSlider.setValue(this.FPS);
+        lblSliderVal.setText(String.format("%d", this.FPS));
 
         setSliderListener();
         setCbSymListener();
@@ -131,7 +133,7 @@ public class GUIController implements Initializable {
 
     @FXML
     public void getNextStep() {
-        Duration duration = Duration.millis(1000 / (float) fps);
+        Duration duration = Duration.millis(1000 / (float) FPS);
         KeyFrame frame = getNextFrame(duration);
         Timeline loop = new Timeline();
         int cycleCount = 1;
@@ -142,14 +144,14 @@ public class GUIController implements Initializable {
 
     @FXML
     public void enlargeView() {
-        scaleValue = scaleValue + 2;
+        SCALE_VALUE = SCALE_VALUE + 2;
         clearCanvas();
         drawCanvasSimulation();
     }
 
     @FXML
     public void lessenView() {
-        scaleValue = scaleValue >= 4 ? scaleValue - 2 : scaleValue;
+        SCALE_VALUE = SCALE_VALUE >= 4 ? SCALE_VALUE - 2 : SCALE_VALUE;
         clearCanvas();
         drawCanvasSimulation();
     }
@@ -183,11 +185,12 @@ public class GUIController implements Initializable {
 
     private void drawCanvasSimulation() {
         initializeCanvas();
-        buildAndSetUpSimulationLoop(this.fps);
+        buildAndSetUpSimulationLoop(this.FPS);
 
         drawCoordinateSystem();
         drawMap(engine.getEnvironment().getMap());
         drawPedestrians(engine.getEnvironment().getPedestrians());
+        drawDestination();
     }
 
     private void initializeCanvas() {
@@ -235,7 +238,7 @@ public class GUIController implements Initializable {
     private void setPedestrian(double posX, double posY) {
         gc.fillArc(posX, posY, 5, 5, 0, 360, ArcType.OPEN);
         new PedestriansFactory().addPedestrian(
-                engine.getEnvironment(), new Position(descale(posX), descale(posY)), null
+                engine.getEnvironment(), new Position(descale(posX), descale(posY)), DESTINATION
         );
     }
 
@@ -243,8 +246,8 @@ public class GUIController implements Initializable {
         fpsSlider.valueProperty().addListener((ov, old_val, new_val) -> {
             fpsSlider.setValue(new_val.intValue());
             lblSliderVal.setText(String.format("%d", new_val.intValue()));
-            fps = (int) fpsSlider.getValue();
-            changeFps(fps);
+            FPS = (int) fpsSlider.getValue();
+            changeFps(FPS);
         });
     }
 
@@ -295,8 +298,8 @@ public class GUIController implements Initializable {
         btnPauseStart.setText("Start");
         btnNextStep.setDisable(false);
 
-        this.symType = symType;
-        engine = Initializer.createEngine(this.symType);
+        this.SIMULATION_TYPE = symType;
+        engine = Initializer.createEngine(this.SIMULATION_TYPE);
 
         clearCanvas();
         drawCanvasSimulation();
@@ -319,6 +322,7 @@ public class GUIController implements Initializable {
                 System.out.print("");
                 drawMap(engine.getEnvironment().getMap());
                 drawPedestrians(engine.getEnvironment().getPedestrians());
+                drawDestination();
                 engine.nextState();
 
             } catch (Exception ex) {
@@ -343,11 +347,11 @@ public class GUIController implements Initializable {
     private double descale(double value) {
         if (value == 0)
             return 0;
-        return value / scaleValue;
+        return value / SCALE_VALUE;
     }
 
     private double scale(double value) {
-        return value * scaleValue;
+        return value * SCALE_VALUE;
     }
 
     private void clearCanvas() {
@@ -356,17 +360,18 @@ public class GUIController implements Initializable {
 
     private void drawPedestrians(List<Pedestrian> pedestrians) {
         for (Pedestrian p : pedestrians) {
+
+            Color pedestrianColor = getPedestrianColor(
+                    p.getPedestrianInformation().getVariableInformation().getCrowdPressure()
+            );
+
+            gc.setFill(pedestrianColor);
             double x = scale(p.getPedestrianInformation().getVariableInformation().getPosition().getX());
             double y = scale(p.getPedestrianInformation().getVariableInformation().getPosition().getY());
             double radius = scale(p.getPedestrianInformation().getStaticInformation().getRadius());
 
             gc.fillArc(x, y, 4, 3, 0, 360, ArcType.OPEN);
             gc.strokeOval(x - radius, y - radius, radius * 2, radius * 2);
-
-            Color pedestrianColor = getPedestrianColor(
-                    p.getPedestrianInformation().getVariableInformation().getCrowdPressure());
-
-            gc.setFill(pedestrianColor);
         }
     }
 
@@ -375,6 +380,13 @@ public class GUIController implements Initializable {
         double green = (x > 0.5 ? 1 - 2 * (x - 0.5) / 1.0 : 1.0);
 
         return new Color(red, green, COLOR_BLUE, COLOR_OPACITY);
+    }
+
+    private void drawDestination () {
+        double x = scale(DESTINATION.getX());
+        double y = scale(DESTINATION.getY());
+        gc.setFill(Color.BLACK);
+        gc.fillArc(x, y, 5, 5, 0, 360, ArcType.ROUND);
     }
 
 }
