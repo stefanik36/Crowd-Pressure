@@ -308,7 +308,6 @@ public class GUIController implements Initializable {
         });
     }
 
-    //FIXME set destination on change
     private void changeSymType(Symulation symType) {
         simLoop.pause();
         btnPauseStart.setText("Start");
@@ -317,7 +316,12 @@ public class GUIController implements Initializable {
         this.simulationType = symType;
         engine = Initializer.createEngine(this.simulationType);
         map = engine.getEnvironment().getMap();
-
+        List<Pedestrian> pedestrians = engine.getEnvironment().getPedestrians();
+        if(pedestrians.size() > 0) {
+            destination = engine.getEnvironment().getPedestrians().get(0).getPedestrianInformation().getVariableInformation().getDestinationPoint();
+        } else {
+            destination = Configuration.DEFAULT_DESTINATION_POSITION;
+        }
         clearCanvas();
         drawCanvasSimulation();
     }
