@@ -2,21 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="247e9c60-ac02-4bf2-9f32-e4488f3c90dd" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/App.fxml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/GUIController.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/Main.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/gui/Green.css" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change beforePath="$PROJECT_DIR$/Crowd-Pressure.iws" afterPath="$PROJECT_DIR$/Crowd-Pressure.iws" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/App.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/Symulation.java" afterPath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/Symulation.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/calculators/GeometricCalculator.java" afterPath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/calculators/GeometricCalculator.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/gui/CrowdSimulationGUI.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/gui/MenuController.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/gui/PedestrianCreationController.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/gui/menu.fxml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/gui/pedestrian.fxml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/model/map/StraightWall.java" afterPath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/model/map/StraightWall.java" />
     </list>
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -134,11 +120,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Symulation.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Symulation.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/Symulation.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="36">
-              <caret line="2" column="24" lean-forward="false" selection-start-line="2" selection-start-column="24" selection-end-line="2" selection-end-column="24" />
+            <state relative-caret-position="108">
+              <caret line="6" column="0" lean-forward="true" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Crowd-Pressure.iws" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Crowd-Pressure.iws">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-2592">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -785,12 +781,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1515863680214</updated>
-      <workItem from="1515863681242" duration="6037000" />
+      <workItem from="1515863681242" duration="6334000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="6037000" />
+    <option name="totallyTimeSpent" value="6334000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
@@ -988,8 +984,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/Symulation.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="2" column="24" lean-forward="false" selection-start-line="2" selection-start-column="24" selection-end-line="2" selection-end-column="24" />
+        <state relative-caret-position="108">
+          <caret line="6" column="0" lean-forward="true" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Crowd-Pressure.iws">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2592">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
