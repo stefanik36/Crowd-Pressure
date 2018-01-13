@@ -2,17 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="247e9c60-ac02-4bf2-9f32-e4488f3c90dd" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/Crowd-Pressure.iml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/Crowd-Pressure.ipr" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/Crowd-Pressure.iws" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/Crowd-Pressure_main.iml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/Crowd-Pressure_test.iml" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/Configuration.java" afterPath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/Configuration.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/App.fxml" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/GUIController.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/Main.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/gui/Green.css" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change beforePath="$PROJECT_DIR$/Crowd-Pressure.iws" afterPath="$PROJECT_DIR$/Crowd-Pressure.iws" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/App.java" afterPath="" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/Symulation.java" afterPath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/Symulation.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/builders/MapFactory.java" afterPath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/builders/MapFactory.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/builders/PedestriansFactory.java" afterPath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/builders/PedestriansFactory.java" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/calculators/GeometricCalculator.java" afterPath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/calculators/GeometricCalculator.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/calculators/PedestrianCalculator.java" afterPath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/calculators/PedestrianCalculator.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/gui/CrowdSimulationGUI.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/gui/MenuController.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/gui/PedestrianCreationController.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/gui/menu.fxml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/gui/pedestrian.fxml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/model/map/StraightWall.java" afterPath="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/model/map/StraightWall.java" />
     </list>
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -82,7 +86,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/builders/PedestriansFactory.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="198">
-              <caret line="22" column="54" lean-forward="true" selection-start-line="22" selection-start-column="54" selection-end-line="22" selection-end-column="54" />
+              <caret line="22" column="54" lean-forward="false" selection-start-line="22" selection-start-column="54" selection-end-line="22" selection-end-column="54" />
               <folding />
             </state>
           </provider>
@@ -96,16 +100,6 @@
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="App.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/App.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
-              <caret line="10" column="23" lean-forward="false" selection-start-line="10" selection-start-column="23" selection-end-line="10" selection-end-column="23" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -140,11 +134,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Symulation.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Symulation.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/Symulation.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="6" column="0" lean-forward="true" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+            <state relative-caret-position="36">
+              <caret line="2" column="24" lean-forward="false" selection-start-line="2" selection-start-column="24" selection-end-line="2" selection-end-column="24" />
               <folding />
             </state>
           </provider>
@@ -153,18 +147,18 @@
       <file leaf-file-name="GeometricCalculator.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/calculators/GeometricCalculator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="56" column="0" lean-forward="false" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
+            <state relative-caret-position="237">
+              <caret line="108" column="24" lean-forward="false" selection-start-line="108" selection-start-column="24" selection-end-line="108" selection-end-column="24" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PedestrianCalculator.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="PedestrianCalculator.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/calculators/PedestrianCalculator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="218" column="10" lean-forward="false" selection-start-line="218" selection-start-column="10" selection-end-line="218" selection-end-column="10" />
+            <state relative-caret-position="288">
+              <caret line="219" column="60" lean-forward="false" selection-start-line="219" selection-start-column="60" selection-end-line="219" selection-end-column="60" />
               <folding />
             </state>
           </provider>
@@ -519,11 +513,11 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/builders/MapFactory.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/calculators/GeometricCalculator.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/builders/PedestriansFactory.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/Symulation.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/Configuration.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/calculators/PedestrianCalculator.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/calculators/GeometricCalculator.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/Symulation.java" />
       </list>
     </option>
   </component>
@@ -659,7 +653,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="SearchEverywhereHistoryKey" value="cod&#9;PSI&#9;JAVA://com.mass.crowdPressure.builders.PedestriansFactory#cod" />
+    <property name="SearchEverywhereHistoryKey" value="2.0&#9;FILE&#9;jar:///home/daniel/.gradle/caches/modules-2/files-2.1/net.bytebuddy/byte-buddy/1.4.26/bdfa1de07d902c9fb0167c14a2a7a3a4a8bd40a2/byte-buddy-1.4.26-sources.jar!/net/bytebuddy/jar/asm/optimizer/jdk1.2.2_017.txt.gz&#10;cod&#9;PSI&#9;JAVA://com.mass.crowdPressure.builders.PedestriansFactory#cod" />
     <property name="settings.editor.selected.configurable" value="preferences.sourceCode" />
   </component>
   <component name="RunDashboard">
@@ -791,12 +785,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1515863680214</updated>
-      <workItem from="1515863681242" duration="5179000" />
+      <workItem from="1515863681242" duration="6037000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5179000" />
+    <option name="totallyTimeSpent" value="6037000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
@@ -888,8 +882,8 @@
         <state relative-caret-position="201">
           <caret line="40" column="0" lean-forward="false" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
           <folding>
-            <element signature="e#451#452#0" expanded="true" />
-            <element signature="e#488#489#0" expanded="true" />
+            <element signature="e#451#452#0" expanded="false" />
+            <element signature="e#488#489#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -921,15 +915,7 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/builders/PedestriansFactory.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="198">
-          <caret line="22" column="54" lean-forward="true" selection-start-line="22" selection-start-column="54" selection-end-line="22" selection-end-column="54" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/Symulation.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="0" lean-forward="true" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+          <caret line="22" column="54" lean-forward="false" selection-start-line="22" selection-start-column="54" selection-end-line="22" selection-end-column="54" />
           <folding />
         </state>
       </provider>
@@ -976,14 +962,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/calculators/GeometricCalculator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="56" column="0" lean-forward="false" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/calculators/PedestrianCrossPoints.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-954">
@@ -994,8 +972,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/calculators/PedestrianCalculator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="218" column="10" lean-forward="false" selection-start-line="218" selection-start-column="10" selection-end-line="218" selection-end-column="10" />
+        <state relative-caret-position="288">
+          <caret line="219" column="60" lean-forward="false" selection-start-line="219" selection-start-column="60" selection-end-line="219" selection-end-column="60" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/calculators/GeometricCalculator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="237">
+          <caret line="108" column="24" lean-forward="false" selection-start-line="108" selection-start-column="24" selection-end-line="108" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/mass/crowdPressure/Symulation.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="2" column="24" lean-forward="false" selection-start-line="2" selection-start-column="24" selection-end-line="2" selection-end-column="24" />
           <folding />
         </state>
       </provider>

@@ -28,4 +28,9 @@ public class StraightWall implements Wall{
 		this.endPosition = endPosition;
 	}
 
+	@Override
+	public String toString() {
+		return "Wall(start(" + this.getStartPosition().getX() + ", " + this.getStartPosition().getY() +
+				"), end(" + this.getEndPosition().getX() + ", " + this.getEndPosition().getY() + "\n";
+	}
 }
