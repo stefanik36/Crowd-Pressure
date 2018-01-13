@@ -11,11 +11,13 @@ import com.mass.crowdPressure.model.pedestrian.Pedestrian;
 public class Engine {
 
 	private final static COD cod = CODFactory.setLevelOfDepression(4);
+	private int step;
 
 	private Environment environment;
 
 	public Engine(Environment environment) {
 		this.environment = environment;
+		step = 0;
 	}
 
 //	public void start() {
@@ -35,7 +37,7 @@ public class Engine {
 		
 		for (Pedestrian p : environment.getPedestrians()) { // tu możnaby się pobawić wątkami
 			if (p.getPedestrianInformation().getVariableInformation().isFinished()) {
-				cod.i("PEDESTRIAN: " + p.getPedestrianInformation().getStaticInformation().getId() + " FINISHED");
+				cod.i("PEDESTRIAN: " + p.getPedestrianInformation().getStaticInformation().getId() + " FINISHED ON STEP: "+step);
 				continue;
 			}
 			p.prepareNextStep();
@@ -47,6 +49,7 @@ public class Engine {
 				iterator.remove();
 			} else {
 				p.nextStep();
+				step++;
 			}
 
 		}

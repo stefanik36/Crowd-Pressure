@@ -1,5 +1,7 @@
 package com.mass.crowdPressure;
 
+import com.app.COD;
+import com.app.CODFactory;
 import com.mass.crowdPressure.builders.PedestriansFactory;
 import com.mass.crowdPressure.model.Position;
 import com.mass.crowdPressure.model.map.Map;
@@ -24,16 +26,14 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 
 public class GUIController implements Initializable {
 
     private static final double COLOR_OPACITY = 1.0;
     private static final double COLOR_BLUE = 0.0;
+    private static final COD cod = CODFactory.getCOD();
 
     private int fps;
     private Symulation simulationType;
@@ -45,6 +45,8 @@ public class GUIController implements Initializable {
     private GraphicsContext gc;
     private Engine engine;
     private ArrayList<Double> wallPos = new ArrayList<>(2);
+    private PedestriansFactory pedestriansFactory;
+
 
     @FXML
     public MenuItem menuNew;
@@ -73,32 +75,40 @@ public class GUIController implements Initializable {
 
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        pedestriansFactory = new PedestriansFactory();
 
-        simulationType = Symulation.SYM_ROOM_OBSTACLE1;
-        engine = Initializer.createEngine(simulationType);
+        simulationType = Configuration.SYMULATION_TYPE;
+        engine = Initializer.createEngine(simulationType,pedestriansFactory);
         map = new Map(engine.getEnvironment().getMap().getWalls());
 
         wallPos.clear();
         destination = Configuration.DEFAULT_DESTINATION_POSITION;
         scaleValue = 10;
-        fps = 40;
+        fps = 100;
 
         cbAction.getItems().removeAll(cbAction.getItems());
         cbAction.getItems().addAll("Add wall", "Add Pedestrian");
         cbAction.getSelectionModel().select("Add Pedestrian");
 
         cbSym.getItems().removeAll(cbSym.getItems());
-        cbSym.getItems().addAll(
-                "SYM_P0_W0",
-                "SYM_P0_W1",
-                "SYM_P2_W0",
-                "SYM_P1_W1",
-                "SYM_P1_W2",
-                "SYM_ROOM",
-                "SYM_ROOM_OBSTACLE1",
-                "SYM_ROOM_PERP_WALL"
-        );
-        cbSym.getSelectionModel().select("SYM_ROOM_OBSTACLE1");
+
+        for(Symulation s : Symulation.values()){
+            cbSym.getItems().add(s.toString());
+        }
+//        cbSym.getItems().addAll(
+//                Symulation.SYM_P0_W0.toString(),
+//                Symulation.SYM_P0_W1.toString(),
+//                Symulation.SYM_P2_W0.toString(),
+//                Symulation.SYM_P1_W1.toString(),
+//                Symulation.SYM_P1_W2.toString(),
+//                Symulation.SYM_ROOM.toString(),
+//                Symulation.SYM_ROOM_OBSTACLE1.toString(),
+//                Symulation.SYM_ROOM_PERP_WALL.toString(),
+//                Symulation.SYM_PX_VS_P1_W0.toString(),
+//                Symulation.SYM_PX_VS_PX_W0.toString(),
+//                Symulation.SYM_PX_VS_PX_W2.toString()
+//        );
+        cbSym.getSelectionModel().select(simulationType.toString());
 
         btnPauseStart.setText("Start");
         fpsSlider.setValue(this.fps);
@@ -252,8 +262,15 @@ public class GUIController implements Initializable {
 
     private void setPedestrian(double posX, double posY) {
         gc.fillArc(posX, posY, 5, 5, 0, 360, ArcType.OPEN);
-        new PedestriansFactory().addPedestrian(
+
+        Pedestrian newP = pedestriansFactory.addPedestrian(
                 engine.getEnvironment(), new Position(descale(posX), descale(posY)), destination
+        );
+
+        cod.i("new Pedestrian (ID, Position, Destination): " + newP.getPedestrianInformation().getStaticInformation().getId(),
+                Arrays.asList(
+                        newP.getPedestrianInformation().getVariableInformation().getPosition(),
+                        newP.getPedestrianInformation().getVariableInformation().getDestinationPoint())
         );
     }
 
@@ -279,32 +296,50 @@ public class GUIController implements Initializable {
 
     private void setCbSymListener() {
         cbSym.valueProperty().addListener((ov, old_val, new_val) -> {
-            switch (new_val) {
-                case "SYM_P0_W0":
-                    changeSymType(Symulation.SYM_P0_W0);
+            for (Symulation s : Symulation.values()) {
+//                cod.i("s, n", Arrays.asList(s.toString(),new_val));
+                if (s.toString().equals(new_val)) {
+                    changeSymType(s);
+                    pedestriansFactory = new PedestriansFactory();
                     break;
-                case "SYM_P0_W1":
-                    changeSymType(Symulation.SYM_P0_W1);
-                    break;
-                case "SYM_P2_W0":
-                    changeSymType(Symulation.SYM_P2_W0);
-                    break;
-                case "SYM_P1_W1":
-                    changeSymType(Symulation.SYM_P1_W1);
-                    break;
-                case "SYM_P1_W2":
-                    changeSymType(Symulation.SYM_P1_W2);
-                    break;
-                case "SYM_ROOM":
-                    changeSymType(Symulation.SYM_ROOM);
-                    break;
-                case "SYM_ROOM_OBSTACLE1":
-                    changeSymType(Symulation.SYM_ROOM_OBSTACLE1);
-                    break;
-                case "SYM_ROOM_PERP_WALL":
-                    changeSymType(Symulation.SYM_ROOM_PERP_WALL);
-                    break;
+                }
             }
+
+//            switch (new_val) {
+//                case sSYM_P0_W0:
+//                    changeSymType(Symulation.SYM_P0_W0);
+//                    break;
+//                case Symulation.SYM_P0_W1.toString():
+//                    changeSymType(Symulation.SYM_P0_W1);
+//                    break;
+//                case Symulation.SYM_P2_W0.toString():
+//                    changeSymType(Symulation.SYM_P2_W0);
+//                    break;
+//                case Symulation.SYM_P1_W1.toString():
+//                    changeSymType(Symulation.SYM_P1_W1);
+//                    break;
+//                case Symulation.SYM_P1_W2.toString():
+//                    changeSymType(Symulation.SYM_P1_W2);
+//                    break;
+//                case Symulation.SYM_ROOM.toString():
+//                    changeSymType(Symulation.SYM_ROOM);
+//                    break;
+//                case Symulation.SYM_ROOM_OBSTACLE1.toString():
+//                    changeSymType(Symulation.SYM_ROOM_OBSTACLE1);
+//                    break;
+//                case Symulation.SYM_ROOM_PERP_WALL.toString():
+//                    changeSymType(Symulation.SYM_ROOM_PERP_WALL);
+//                    break;
+//                case Symulation.SYM_PX_VS_P1_W0.toString():
+//                    changeSymType(Symulation.SYM_PX_VS_P1_W0);
+//                    break;
+//                case Symulation.SYM_PX_VS_PX_W0.toString():
+//                    changeSymType(Symulation.SYM_PX_VS_PX_W0);
+//                    break;
+//                case Symulation.SYM_PX_VS_PX_W2.toString():
+//                    changeSymType(Symulation.SYM_PX_VS_PX_W2);
+//                    break;
+//            }
         });
     }
 
@@ -314,10 +349,10 @@ public class GUIController implements Initializable {
         btnNextStep.setDisable(false);
 
         this.simulationType = symType;
-        engine = Initializer.createEngine(this.simulationType);
+        engine = Initializer.createEngine(this.simulationType, pedestriansFactory);
         map = engine.getEnvironment().getMap();
         List<Pedestrian> pedestrians = engine.getEnvironment().getPedestrians();
-        if(pedestrians.size() > 0) {
+        if (pedestrians.size() > 0) {
             destination = engine.getEnvironment().getPedestrians().get(0).getPedestrianInformation().getVariableInformation().getDestinationPoint();
         } else {
             destination = Configuration.DEFAULT_DESTINATION_POSITION;

@@ -25,9 +25,23 @@ public class MapFactory {
 			return getRoomObstacle1();
 		} else if (sym.equals(Symulation.SYM_ROOM_PERP_WALL)) {
 			return getRoomPerpWall();
-
+		} else if (sym.equals(Symulation.SYM_PX_VS_PX_W2)) {
+			return getRoomTramWallMap();
 		}
+
 		return getEmpty();
+	}
+
+	public Map getRoomTramWallMap() {
+		 List<Wall> walls = new ArrayList<>();
+
+		walls.add(new StraightWall(new Position(50, 5), new Position(50, 45)));
+
+		walls.add(new StraightWall(new Position(50, 55), new Position(50, 85)));
+		Map map = new Map(walls);
+
+
+		return map;
 	}
 
 
@@ -120,5 +134,6 @@ public class MapFactory {
 		Map map = new Map(walls);
 		return map;
 	}
+
 
 }

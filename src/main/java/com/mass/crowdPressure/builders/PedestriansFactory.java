@@ -15,7 +15,12 @@ import java.util.Random;
 
 public class PedestriansFactory {
     private static final COD cod = CODFactory.getCOD();
-    private static int ID = 0;
+    private int id;
+
+    public PedestriansFactory(){
+        id = 0;
+    }
+
 
     public void addPedestrians(Environment environment, Symulation sym) {
         if (sym.equals(Symulation.SYM_P1_W1)) {
@@ -27,8 +32,10 @@ public class PedestriansFactory {
             addPedestrian(environment, new Position(30.5, 30.0), null);
         } else if (sym.equals(Symulation.SYM_PX_VS_PX_W0)) {
             addTwoPedestrainsGroups(environment);
-        } else if (sym.equals(Symulation.SYM_PX_VS_PX_W0)) {
+        } else if (sym.equals(Symulation.SYM_PX_VS_P1_W0)) {
             addPedestrainsGroupAndOnePedestrian(environment);
+        } else if (sym.equals(Symulation.SYM_PX_VS_PX_W2)) {
+            addTwoPedestrainsGroups(environment);
         } else if (sym.equals(Symulation.SYM_P0_W1)) {
             // none
         }
@@ -40,7 +47,7 @@ public class PedestriansFactory {
 
         int groupCount = 20;
         addGroup(environment, pointL, pointR, groupCount);
-        environment.getPedestrians().add(createPedestrian(ID++,environment,pointR,pointL));
+        environment.getPedestrians().add(createPedestrian(id++,environment,pointL,pointR));
     }
 
     private void addTwoPedestrainsGroups(Environment environment) {
@@ -59,7 +66,7 @@ public class PedestriansFactory {
             int ry = r.nextInt(10) - 5;
 
             Position positionR = new Position(position.getX() + rx, position.getY() + ry);
-            environment.getPedestrians().add(createPedestrian(ID++, environment, destinationPointL, positionR));
+            environment.getPedestrians().add(createPedestrian(id++, environment, destinationPointL, positionR));
 
         }
     }
@@ -69,15 +76,18 @@ public class PedestriansFactory {
         Position destinationPoint = new Position(5, 5);
         Position position = new Position(0, 0);
         for (int id = 0; id < initNoPedestrians; id++) {
-            environment.getPedestrians().add(createPedestrian(ID++, environment, destinationPoint, position));
+            Pedestrian newP = createPedestrian(this.id++, environment, destinationPoint, position);
+            environment.getPedestrians().add(newP);
         }
     }
 
-    public void addPedestrian(Environment environment, Position position, Position destiantionPosition) {
+    public Pedestrian addPedestrian(Environment environment, Position position, Position destiantionPosition) {
         if (destiantionPosition == null) {
             destiantionPosition = Configuration.DEFAULT_DESTINATION_POSITION;
         }
-        environment.getPedestrians().add(createPedestrian(ID++, environment, destiantionPosition, position));
+        Pedestrian newP = createPedestrian(id++, environment, destiantionPosition, position);
+        environment.getPedestrians().add(newP);
+        return newP;
     }
 
     public void addPedestrians2(Environment environment, int initNoPedestrians) {
