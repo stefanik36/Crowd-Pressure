@@ -10,13 +10,16 @@ public class Configuration {
 
 	// PEDESTRIAN
 	public static final double DEFAULT_PEDESTRIAN_MASS = 360.0;
-	public static final double DEFAULT_PEDESTRIAN_COMFORTABLE_SPEED = 0.2;
-	public static final double DEFAULT_PEDESTRIAN_VISION_ANGLE = 0.32;
+	public static final double DEFAULT_PEDESTRIAN_COMFORTABLE_SPEED = 0.1;
+	public static final double DEFAULT_PEDESTRIAN_VISION_ANGLE = 0.4;
 	public static final double DEFAULT_PEDESTRIAN_HORIZON_DISTANCE = 40;
 	public static final double DEFAULT_PEDESTRIAN_RELAXATION_TIME = 1;
 	public static final double MASS_RADIUS_RATIO = 320.0;
 	public static final Double MAX_ACCELERATION_VALUE = 0.5;
 	public static final Position DEFAULT_DESTINATION_POSITION =  new Position(45, 8);
+
+
+
 
 	// OTHER
 	public static final double ANGLE_GRANULATION = 0.1;
@@ -35,7 +38,7 @@ public class Configuration {
 
 	// SYMULATION
 	public static final int FPS = 60;
-	public static final Symulation SYMULATION_TYPE = Symulation.SYM_ROOM_OBSTACLE1;
+	public static final Symulation SYMULATION_TYPE = Symulation.SYM_PX_VS_PX_W0;
 	public static final double SCALE_VALUE = 10;
 	public static final boolean SHOW_VISION_RADIUS = false;
 

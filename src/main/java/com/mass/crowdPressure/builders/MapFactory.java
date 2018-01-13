@@ -25,9 +25,11 @@ public class MapFactory {
 			return getRoomObstacle1();
 		} else if (sym.equals(Symulation.SYM_ROOM_PERP_WALL)) {
 			return getRoomPerpWall();
+
 		}
 		return getEmpty();
 	}
+
 
 	private Map getRoomPerpWall() {
 		List<Wall> walls = getRoomWalls(6);

@@ -11,73 +11,110 @@ import com.mass.crowdPressure.model.pedestrian.PedestrianInformation;
 import com.mass.crowdPressure.model.pedestrian.StaticInformation;
 import com.mass.crowdPressure.model.pedestrian.VariableInformation;
 
+import java.util.Random;
+
 public class PedestriansFactory {
-	private static final COD cod = CODFactory.getCOD();
-	private static int ID = 0;
+    private static final COD cod = CODFactory.getCOD();
+    private static int ID = 0;
 
-	public void addPedestrians(Environment environment, Symulation sym) {
-		if (sym.equals(Symulation.SYM_P1_W1)) {
-			addPedestrians1(environment, 1);
-		} else if (sym.equals(Symulation.SYM_P1_W2)) {
-			addPedestrians2(environment, 1);
-		} else if (sym.equals(Symulation.SYM_P2_W0)) {
-			addPedestrian(environment, new Position(30.0, 5.0), null);
-			addPedestrian(environment, new Position(30.5, 30.0), null);
-		} else if (sym.equals(Symulation.SYM_P0_W1)) {
-			// none
-		}
-	}
+    public void addPedestrians(Environment environment, Symulation sym) {
+        if (sym.equals(Symulation.SYM_P1_W1)) {
+            addPedestrians1(environment, 1);
+        } else if (sym.equals(Symulation.SYM_P1_W2)) {
+            addPedestrians2(environment, 1);
+        } else if (sym.equals(Symulation.SYM_P2_W0)) {
+            addPedestrian(environment, new Position(30.0, 5.0), null);
+            addPedestrian(environment, new Position(30.5, 30.0), null);
+        } else if (sym.equals(Symulation.SYM_PX_VS_PX_W0)) {
+            addTwoPedestrainsGroups(environment);
+        } else if (sym.equals(Symulation.SYM_PX_VS_PX_W0)) {
+            addPedestrainsGroupAndOnePedestrian(environment);
+        } else if (sym.equals(Symulation.SYM_P0_W1)) {
+            // none
+        }
+    }
 
-	private void addPedestrians1(Environment environment, int initNoPedestrians) {
-		Position destinationPoint = new Position(5, 5);
-		Position position = new Position(0, 0);
-		for (int id = 0; id < initNoPedestrians; id++) {
-			environment.getPedestrians().add(createPedestrian(ID++, environment, destinationPoint, position));
-		}
-	}
+    private void addPedestrainsGroupAndOnePedestrian(Environment environment) {
+        Position pointL = new Position(20, 50);
+        Position pointR = new Position(80, 50);
 
-	public void addPedestrian(Environment environment, Position position, Position destiantionPosition) {
-		if (destiantionPosition == null) {
-			destiantionPosition = Configuration.DEFAULT_DESTINATION_POSITION;
-		}
-		environment.getPedestrians().add(createPedestrian(ID++, environment, destiantionPosition, position));
-	}
+        int groupCount = 20;
+        addGroup(environment, pointL, pointR, groupCount);
+        environment.getPedestrians().add(createPedestrian(ID++,environment,pointR,pointL));
+    }
 
-	public void addPedestrians2(Environment environment, int initNoPedestrians) {
-		double visionCenter = 0.25;
-		Position destinationPoint = new Position(23, 22);
-		Position position = new Position(13, 5);
-		for (int id = 0; id < initNoPedestrians; id++) {
-			environment.getPedestrians()
-					.add(createPedestrian(id, environment, visionCenter, destinationPoint, position));
-		}
-	}
+    private void addTwoPedestrainsGroups(Environment environment) {
+        Position destinationPointL = new Position(20, 50);
+        Position destinationPointR = new Position(80, 50);
 
-	private Pedestrian createPedestrian(int id, Environment environment, Position destinationPoint, Position position) {
+        int groupCount = 20;
+        addGroup(environment, destinationPointL, destinationPointR, groupCount);
+        addGroup(environment, destinationPointR, destinationPointL, groupCount);
+    }
 
-		StaticInformation staticInformation = new StaticInformation(id, Configuration.DEFAULT_PEDESTRIAN_MASS,
-				Configuration.DEFAULT_PEDESTRIAN_COMFORTABLE_SPEED, Configuration.DEFAULT_PEDESTRIAN_VISION_ANGLE,
-				Configuration.DEFAULT_PEDESTRIAN_HORIZON_DISTANCE, Configuration.DEFAULT_PEDESTRIAN_RELAXATION_TIME);
+    private void addGroup(Environment environment, Position position, Position destinationPointL, int groupCount) {
+        Random r = new Random();
+        for (int i = 0; i < groupCount; i++) {
+            int rx = r.nextInt(10) - 5;
+            int ry = r.nextInt(10) - 5;
 
-		VariableInformation variableInformation = new VariableInformation(destinationPoint, position);
+            Position positionR = new Position(position.getX() + rx, position.getY() + ry);
+            environment.getPedestrians().add(createPedestrian(ID++, environment, destinationPointL, positionR));
 
-		PedestrianInformation pedestrianInformation = new PedestrianInformation(staticInformation, variableInformation);
+        }
+    }
 
-		return new Pedestrian(pedestrianInformation, environment);
-	}
 
-	private Pedestrian createPedestrian(int id, Environment environment, double visionCenter, Position destinationPoint,
-			Position position) {
+    private void addPedestrians1(Environment environment, int initNoPedestrians) {
+        Position destinationPoint = new Position(5, 5);
+        Position position = new Position(0, 0);
+        for (int id = 0; id < initNoPedestrians; id++) {
+            environment.getPedestrians().add(createPedestrian(ID++, environment, destinationPoint, position));
+        }
+    }
 
-		StaticInformation staticInformation = new StaticInformation(id, Configuration.DEFAULT_PEDESTRIAN_MASS,
-				Configuration.DEFAULT_PEDESTRIAN_COMFORTABLE_SPEED, Configuration.DEFAULT_PEDESTRIAN_VISION_ANGLE,
-				Configuration.DEFAULT_PEDESTRIAN_HORIZON_DISTANCE, Configuration.DEFAULT_PEDESTRIAN_RELAXATION_TIME);
+    public void addPedestrian(Environment environment, Position position, Position destiantionPosition) {
+        if (destiantionPosition == null) {
+            destiantionPosition = Configuration.DEFAULT_DESTINATION_POSITION;
+        }
+        environment.getPedestrians().add(createPedestrian(ID++, environment, destiantionPosition, position));
+    }
 
-		VariableInformation variableInformation = new VariableInformation(visionCenter, destinationPoint, position);
+    public void addPedestrians2(Environment environment, int initNoPedestrians) {
+        double visionCenter = 0.25;
+        Position destinationPoint = new Position(23, 22);
+        Position position = new Position(13, 5);
+        for (int id = 0; id < initNoPedestrians; id++) {
+            environment.getPedestrians()
+                    .add(createPedestrian(id, environment, visionCenter, destinationPoint, position));
+        }
+    }
 
-		PedestrianInformation pedestrianInformation = new PedestrianInformation(staticInformation, variableInformation);
+    private Pedestrian createPedestrian(int id, Environment environment, Position destinationPoint, Position position) {
 
-		return new Pedestrian(pedestrianInformation, environment);
-	}
+        StaticInformation staticInformation = new StaticInformation(id, Configuration.DEFAULT_PEDESTRIAN_MASS,
+                Configuration.DEFAULT_PEDESTRIAN_COMFORTABLE_SPEED, Configuration.DEFAULT_PEDESTRIAN_VISION_ANGLE,
+                Configuration.DEFAULT_PEDESTRIAN_HORIZON_DISTANCE, Configuration.DEFAULT_PEDESTRIAN_RELAXATION_TIME);
+
+        VariableInformation variableInformation = new VariableInformation(destinationPoint, position);
+
+        PedestrianInformation pedestrianInformation = new PedestrianInformation(staticInformation, variableInformation);
+
+        return new Pedestrian(pedestrianInformation, environment);
+    }
+
+    private Pedestrian createPedestrian(int id, Environment environment, double visionCenter, Position destinationPoint,
+                                        Position position) {
+
+        StaticInformation staticInformation = new StaticInformation(id, Configuration.DEFAULT_PEDESTRIAN_MASS,
+                Configuration.DEFAULT_PEDESTRIAN_COMFORTABLE_SPEED, Configuration.DEFAULT_PEDESTRIAN_VISION_ANGLE,
+                Configuration.DEFAULT_PEDESTRIAN_HORIZON_DISTANCE, Configuration.DEFAULT_PEDESTRIAN_RELAXATION_TIME);
+
+        VariableInformation variableInformation = new VariableInformation(visionCenter, destinationPoint, position);
+
+        PedestrianInformation pedestrianInformation = new PedestrianInformation(staticInformation, variableInformation);
+
+        return new Pedestrian(pedestrianInformation, environment);
+    }
 
 }
