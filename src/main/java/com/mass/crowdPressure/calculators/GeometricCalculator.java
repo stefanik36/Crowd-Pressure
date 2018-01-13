@@ -55,6 +55,11 @@ public class GeometricCalculator {
 		Double alpha = angle * Math.PI;
 		double value = v.getValue();
 
+		if(angle == 2.0){
+			angle = 0.0;
+		}
+
+
 		if (angle < 0.5) {
 			return new VectorXY(value * Math.cos(alpha), value * Math.sin(alpha));
 		} else if (angle == 0.5) {

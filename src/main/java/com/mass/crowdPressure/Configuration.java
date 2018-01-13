@@ -35,7 +35,7 @@ public class Configuration {
 
 	// SYMULATION
 	public static final int FPS = 60;
-	public static final Symulation SYMULATION_TYPE = Symulation.SYM_ROOM_OBSTACLE1;
+	public static final Symulation SYMULATION_TYPE = Symulation.SYM_PX_VS_PX_W0;
 	public static final double SCALE_VALUE = 10;
 	public static final boolean SHOW_VISION_RADIUS = false;
 
