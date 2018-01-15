@@ -97,6 +97,11 @@ public class GeometricCalculator {
     public static BiFunction<Double, Double, Boolean> isBigger = (Double d1, Double d2) -> {
         return d1 < d2;
     };
+    public static BiFunction<Double, Double, Double> angleDiff = (Double a1, Double a2) -> {
+        double p1 = Math.abs(a1 - a2);
+        double p2 = 2.0 - p1;
+        return p1 < p2 ? p1 : p2;
+    };
 
     public static final VectorXY changeVector(Vector v) throws AngleOutOfRangeException {
         Double angle = v.getAngle();

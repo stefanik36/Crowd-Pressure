@@ -85,8 +85,8 @@ public class GUIController implements Initializable {
 
         wallPos.clear();
         destination = Configuration.DEFAULT_DESTINATION_POSITION;
-        scaleValue = 10;
-        fps = 100;
+        scaleValue = Configuration.SCALE_VALUE;
+        fps = Configuration.INITIAL_FPS;
 
         cbAction.getItems().removeAll(cbAction.getItems());
         cbAction.getItems().addAll("Add wall", "Add Pedestrian");
@@ -389,6 +389,11 @@ public class GUIController implements Initializable {
             double x = scale(p.getPedestrianInformation().getVariableInformation().getPosition().getX());
             double y = scale(p.getPedestrianInformation().getVariableInformation().getPosition().getY());
             double radius = scale(p.getPedestrianInformation().getStaticInformation().getRadius());
+            if(Configuration.SHOW_VISION_RADIUS){
+                double vision = scale(p.getPedestrianInformation().getStaticInformation().getHorizontDistance());
+                gc.strokeOval(x - vision, y - vision, vision * 2, vision * 2);
+            }
+
 
             gc.fillArc(x, y, 4, 3, 0, 360, ArcType.OPEN);
             gc.strokeOval(x - radius, y - radius, radius * 2, radius * 2);

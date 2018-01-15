@@ -94,4 +94,10 @@ public class GeometricCalculatorTest {
 		assertEquals(false, result.isPresent());
 	}
 
+	@Test
+	public void angleDiffTest() {
+		Double result = GeometricCalculator.angleDiff.apply(0.1,1.9);
+		assertEquals(0.2, result,0.01);
+	}
+
 }

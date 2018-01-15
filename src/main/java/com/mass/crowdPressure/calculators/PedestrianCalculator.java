@@ -1,6 +1,5 @@
 package com.mass.crowdPressure.calculators;
 
-import java.security.cert.PKIXRevocationChecker.Option;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -43,29 +42,79 @@ public class PedestrianCalculator {
     public DirectionInfo getDirectionInfo() throws AngleOutOfRangeException {
         List<DirectionInfo> directionInfos = getDestinationDistanceFunctionValues();
 
-        List<DirectionInfo> hasNotNotMovingObstacles = directionInfos.stream()
-                .filter(di -> !di.getCollisionDistance().getNotMovingObstacle().isPresent())
-                .collect(Collectors.toList());
+        Double destinationAngle = GeometricCalculator.calculateAngle.apply(
+                pedestrianInformation.getVariableInformation().getNextPosition(),
+                pedestrianInformation.getVariableInformation().getDestinationPoint()
+        );
 
-        if (hasNotNotMovingObstacles.isEmpty()) {
-//			cod.i("A " + pedestrianInformation.getVariableInformation().getVisionCenter());
-            if (getTrueInProbability(Configuration.PERCENT_PROBABLITY_OF_CHANGING_VISION_CENTER)) {
+
+        List<DirectionInfo> freeDestinationDirections = getNoNotMovingObstaclesDirections(directionInfos.stream().filter(di -> {
+                    return GeometricCalculator.angleDiff.apply(di.getAlpha(), destinationAngle) < Configuration.DESTINATION_ANGLE_RANGE;
+                }
+        ).collect(Collectors.toList()));
+
+        List<DirectionInfo> hasNotNotMovingObstacles = getNoNotMovingObstaclesDirections(directionInfos);
+
+//        if (!freeDestinationDirections.isEmpty()) {
+//            cod.i(pedestrianInformation.getStaticInformation().getId() + " X "
+//                    + pedestrianInformation.getVariableInformation().getVisionCenter());
+//            return getMinimumDestinationDistance(freeDestinationDirections);
+//        } else {
+//            cod.i(pedestrianInformation.getStaticInformation().getId() + " Y "
+//                    + pedestrianInformation.getVariableInformation().getVisionCenter());
+//            DirectionInfo minDist = getMinimumDestinationDistance(directionInfos);
+//
+//            Optional<Double> notMovingObstacleDirectionInfo = minDist.getCollisionDistance().getNotMovingObstacle();
+//            if (notMovingObstacleDirectionInfo.isPresent()) {
+//                cod.i(minDist.getCollisionDistance().getNotMovingObstacle().get());
+//                if (notMovingObstacleDirectionInfo.get() < 8.5) {
+//                    cod.i(pedestrianInformation.getStaticInformation().getId() + " Z "
+//                            + pedestrianInformation.getVariableInformation().getVisionCenter());
+//                    return getMinimumDestinationDistance(hasNotNotMovingObstacles);
+//                }
+//            }
+////            return minDist;
+//        }
+
+        if (!freeDestinationDirections.isEmpty()) {
+//            cod.i(pedestrianInformation.getStaticInformation().getId() + " X "
+//                    + pedestrianInformation.getVariableInformation().getVisionCenter());
+            return getMinimumDestinationDistance(freeDestinationDirections);
+        } else if (hasNotNotMovingObstacles.isEmpty()) {
+//            cod.i(pedestrianInformation.getStaticInformation().getId() + " A "
+//                    + pedestrianInformation.getVariableInformation().getVisionCenter());
+            if (getTrueInProbability(Configuration.PERCENT_PROBABILITY_OF_CHANGING_VISION_CENTER)) {
                 return changeVisionCenter(directionInfos);
             } else {
                 return getMinimumDestinationDistance(directionInfos);
             }
         } else if (hasNotNotMovingObstacles.size() < directionInfos.size()) {
-//			cod.i("B " + pedestrianInformation.getVariableInformation().getVisionCenter());
+            DirectionInfo minDist = getMinimumDestinationDistance(directionInfos);
 
-            if (getTrueInProbability(Configuration.PERCENT_PROBABLITY_OF_COMPUTE_NOT_FOR_WALLS)) {
-                return getMinimumDestinationDistance(hasNotNotMovingObstacles);
+            Optional<Double> notMovingObstacle = minDist.getCollisionDistance().getNotMovingObstacle();
+            if (notMovingObstacle.isPresent()) {
+                if (notMovingObstacle.get() < Configuration.WALL_DISTANCE_TO_CHANGE_DIRECTION) {
+//                    cod.i(pedestrianInformation.getStaticInformation().getId() + " Z "
+//                            + pedestrianInformation.getVariableInformation().getVisionCenter());
+                    return getMinimumDestinationDistance(hasNotNotMovingObstacles);
+                }
+            }
+
+            if (getTrueInProbability(Configuration.PERCENT_PROBABILITY_OF_COMPUTE_NOT_FOR_WALLS)) {
+                return minDist;
             } else {
                 return getMinimumDestinationDistance(directionInfos);
             }
         } else {
-//			cod.i("C " + pedestrianInformation.getVariableInformation().getVisionCenter());
+//            cod.e(pedestrianInformation.getStaticInformation().getId() + " C " + pedestrianInformation.getVariableInformation().getVisionCenter());
             return getMinimumDestinationDistance(directionInfos);
         }
+    }
+
+    private List<DirectionInfo> getNoNotMovingObstaclesDirections(List<DirectionInfo> directionInfos) {
+        return directionInfos.stream()
+                .filter(di -> !di.getCollisionDistance().getNotMovingObstacle().isPresent())
+                .collect(Collectors.toList());
     }
 
     private boolean getTrueInProbability(int probablity) {
@@ -85,7 +134,7 @@ public class PedestrianCalculator {
         double alpha = (double) rand.nextInt(RANDOM_POOL) / ((double) (RANDOM_POOL / 2));
         // cod.i("alpha: " + alpha);
         return new DirectionInfo(alpha, new MinimumDistance(Double.MAX_VALUE, Optional.empty()),
-				Double.MIN_VALUE);
+                Double.MIN_VALUE);
     }
 
     public DirectionInfo getMaximumCollisionDistance(List<DirectionInfo> directionInfos) {
