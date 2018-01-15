@@ -95,19 +95,6 @@ public class GUIController implements Initializable {
         for(Symulation s : Symulation.values()){
             cbSym.getItems().add(s.toString());
         }
-//        cbSym.getItems().addAll(
-//                Symulation.SYM_P0_W0.toString(),
-//                Symulation.SYM_P0_W1.toString(),
-//                Symulation.SYM_P2_W0.toString(),
-//                Symulation.SYM_P1_W1.toString(),
-//                Symulation.SYM_P1_W2.toString(),
-//                Symulation.SYM_ROOM.toString(),
-//                Symulation.SYM_ROOM_OBSTACLE1.toString(),
-//                Symulation.SYM_ROOM_PERP_WALL.toString(),
-//                Symulation.SYM_PX_VS_P1_W0.toString(),
-//                Symulation.SYM_PX_VS_PX_W0.toString(),
-//                Symulation.SYM_PX_VS_PX_W2.toString()
-//        );
         cbSym.getSelectionModel().select(simulationType.toString());
 
         btnPauseStart.setText("Start");
@@ -249,7 +236,6 @@ public class GUIController implements Initializable {
         });
     }
 
-    //FIXME
     private void setWall(Position pos1, Position pos2) {
         Wall newWall = new StraightWall(pos1, pos2);
         List<Wall> currentWalls = map.getWalls();
@@ -297,49 +283,12 @@ public class GUIController implements Initializable {
     private void setCbSymListener() {
         cbSym.valueProperty().addListener((ov, old_val, new_val) -> {
             for (Symulation s : Symulation.values()) {
-//                cod.i("s, n", Arrays.asList(s.toString(),new_val));
                 if (s.toString().equals(new_val)) {
                     changeSymType(s);
                     pedestriansFactory = new PedestriansFactory();
                     break;
                 }
             }
-
-//            switch (new_val) {
-//                case sSYM_P0_W0:
-//                    changeSymType(Symulation.SYM_P0_W0);
-//                    break;
-//                case Symulation.SYM_P0_W1.toString():
-//                    changeSymType(Symulation.SYM_P0_W1);
-//                    break;
-//                case Symulation.SYM_P2_W0.toString():
-//                    changeSymType(Symulation.SYM_P2_W0);
-//                    break;
-//                case Symulation.SYM_P1_W1.toString():
-//                    changeSymType(Symulation.SYM_P1_W1);
-//                    break;
-//                case Symulation.SYM_P1_W2.toString():
-//                    changeSymType(Symulation.SYM_P1_W2);
-//                    break;
-//                case Symulation.SYM_ROOM.toString():
-//                    changeSymType(Symulation.SYM_ROOM);
-//                    break;
-//                case Symulation.SYM_ROOM_OBSTACLE1.toString():
-//                    changeSymType(Symulation.SYM_ROOM_OBSTACLE1);
-//                    break;
-//                case Symulation.SYM_ROOM_PERP_WALL.toString():
-//                    changeSymType(Symulation.SYM_ROOM_PERP_WALL);
-//                    break;
-//                case Symulation.SYM_PX_VS_P1_W0.toString():
-//                    changeSymType(Symulation.SYM_PX_VS_P1_W0);
-//                    break;
-//                case Symulation.SYM_PX_VS_PX_W0.toString():
-//                    changeSymType(Symulation.SYM_PX_VS_PX_W0);
-//                    break;
-//                case Symulation.SYM_PX_VS_PX_W2.toString():
-//                    changeSymType(Symulation.SYM_PX_VS_PX_W2);
-//                    break;
-//            }
         });
     }
 
@@ -376,7 +325,6 @@ public class GUIController implements Initializable {
                 clearCanvas();
                 drawCoordinateSystem();
                 System.out.print("");
-//                drawMap(engine.getEnvironment().getMap());
                 drawMap(map);
                 drawPedestrians(engine.getEnvironment().getPedestrians());
                 drawDestination();
