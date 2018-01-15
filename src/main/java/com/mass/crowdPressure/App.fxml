@@ -86,7 +86,7 @@
         </AnchorPane>
         <HBox alignment="CENTER">
             <children>
-                <Label text="Label" />
+                <Label fx:id="lblInfo" text="Label" />
             <Region HBox.hgrow="ALWAYS" />
             <Button fx:id="btnPlus" maxHeight="30.0" maxWidth="30.0" minHeight="30.0" minWidth="30.0" mnemonicParsing="false" onAction="#enlargeView" prefHeight="30.0" prefWidth="30.0" text="+">
                <HBox.margin>

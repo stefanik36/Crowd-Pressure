@@ -72,6 +72,8 @@ public class GUIController implements Initializable {
     public Button btnPlus;
     @FXML
     public Button btnMinus;
+    @FXML
+    public Label lblInfo;
 
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -89,6 +91,7 @@ public class GUIController implements Initializable {
         cbAction.getItems().removeAll(cbAction.getItems());
         cbAction.getItems().addAll("Add wall", "Add Pedestrian");
         cbAction.getSelectionModel().select("Add Pedestrian");
+        lblInfo.setText("Clicking canvas adds a pedestrian");
 
         cbSym.getItems().removeAll(cbSym.getItems());
 
@@ -104,6 +107,7 @@ public class GUIController implements Initializable {
         setSliderListener();
         setCbSymListener();
         setCanvasListener();
+        setCbActionListener();
 
         drawCanvasSimulation();
     }
@@ -258,6 +262,17 @@ public class GUIController implements Initializable {
                         newP.getPedestrianInformation().getVariableInformation().getPosition(),
                         newP.getPedestrianInformation().getVariableInformation().getDestinationPoint())
         );
+    }
+
+    private void setCbActionListener() {
+        cbAction.valueProperty().addListener((ov, old_val, new_val) -> {
+            if (new_val.equals("Add pedestrian")) {
+                lblInfo.setText("Clicking canvas adds a pedestrian");
+            } else {
+                lblInfo.setText("Two clicks in different positions add a wall");
+            }
+        });
+
     }
 
     private void setSliderListener() {
