@@ -237,7 +237,7 @@ public class GUIController implements Initializable {
                     double posY1 = wallPos.get(1);
                     System.out.println(posX1 + " x " + posY1);
                     if ((posX1 != posX) || (posY1 != posY)) {
-                        setWall(new Position(posX, posY), new Position(posX1, posY1));
+                        setWall(new Position(descale(posX), descale(posY)), new Position(descale(posX1), descale(posY1)));
                     } else {
                         System.out.println("Need another click to create wall...");
                     }
