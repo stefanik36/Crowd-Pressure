@@ -3,9 +3,12 @@
 /build/
 /out/
 
+
+
+# eclipse files
+/.settings/
 .classpath
 .project
-org.eclipse.jdt.core.prefs
 
 # idea files
 /.idea/
