@@ -5,13 +5,13 @@
 
 .classpath
 .project
-Crowd-Pressure.iml
-Crowd-Pressure.ipr
-Crowd-Pressure.iws
-Crowd-Pressure.iml
-Crowd-Pressure_main.iml
-Crowd-Pressure_test.iml
 org.eclipse.jdt.core.prefs
+
+# idea files
+/.idea/
+*.iml
+*.ipr
+*.iws
 
 # Ignore Gradle GUI config
 gradle-app.setting
