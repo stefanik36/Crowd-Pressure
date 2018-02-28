@@ -1,5 +1,17 @@
 .gradle
+.idea
 /build/
+/out/
+
+.classpath
+.project
+Crowd-Pressure.iml
+Crowd-Pressure.ipr
+Crowd-Pressure.iws
+Crowd-Pressure.iml
+Crowd-Pressure_main.iml
+Crowd-Pressure_test.iml
+org.eclipse.jdt.core.prefs
 
 # Ignore Gradle GUI config
 gradle-app.setting
@@ -12,3 +24,4 @@ gradle-app.setting
 
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
+/bin/
